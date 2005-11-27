@@ -1,0 +1,27 @@
+ libwfut
+=========
+
+libwfut is a C++ implementation of the client side of WFUT (forge/tools/WFUT). The aim of this library is to provide update capabilities for C++ based clients.#
+This library used tinyxml (http://www.grinninglizard.com/tinyxml/) to parse the XML documents and libcurl (http://curl.haxx.se/) to download files.
+
+Currently this library is in its early stages with XML document parsing written, however file downloading is not yet complete.
+
+ Planned Architecture
+----------------------
+
+libwfut is planned to have a polling interface to allow background downloads. A few basic methods will download channels lists and file lists which can be used to queue files for downloading. Calling poll() will then download a portion of the current file before returning control back to the application.
+
+ Example Usage
+---------------
+
+WFUT::ChannelList channels = WFUT::getChannels("http://white.worldforge.org/downloads/WFUT/channels.xml);
+
+WFUT::FileList files = WFUT::getFiles("http://white.worldforge.org/downloads/WFUT/sear-media.xml");
+
+WFUT::queueFiles(files);
+
+while (WFUT::hasFiles()) {
+  WFUT::poll();
+}
+
+
