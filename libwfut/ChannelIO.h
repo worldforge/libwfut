@@ -7,9 +7,9 @@
 
 #include <string>
 
-namespace WFUT {
+#include <libwfut/types.h>
 
-class ChannelList;
+namespace WFUT {
 
 static const std::string TAG_name = "name";
 static const std::string TAG_description = "description";

@@ -3,8 +3,18 @@
 // Copyright (C) 2005 Simon Goodall
 
 #include "WFUT.h"
+#include "types.h"
+#include "IO.h"
+#include "FileIO.h"
+#include "ChannelIO.h"
 
 namespace WFUT {
+
+
+// Place holder function.
+std::string getFile(const std::string &url) {
+  return "";
+}
 
 int WFUT::init() {
   assert (m_initialised == false);
@@ -37,40 +47,44 @@ void WFUT::updateChannel(const FileList &updates) {
   assert (m_initialised == true);
   FileList::const_iterator I = updates.begin();
   while (I != updates.end()) {
-    File f = *I;
+    FileObject f = *I;
     // TODO  prepend root values
-    std::string filename = f.getFilename();
-    std::string url = g.getURL();
+    std::string filename = f.filename;
+    std::string url = filename;
     m_io->queueFile(filename, url);
   }
 }
 
 ChannelList WFUT::getChannelList(const std::string &url) {
   ChannelList channels;
-  ChannelParser parser;
   std::string fname = getFile(url);
-  parser.parseChannelList(fname, channels);
+  if (parseChannelList(fname, channels)) {
+    // Error
+  }
   return channels;
 }
 
 FileList WFUT::getFileList(const std::string &url) {
   FileList files;
-  FileParser parser;
   std::string fname = getFile(url);
-  parser.parseFileList(fname, files);
+  if (parseFileList(fname, files)) {
+    // Error
+  }
   return files;
 }
 
 FileList WFUT::getLocalList(const std::string &filename) {
   FileList files;
-  FileParser parser;
-  parser.parseFileList(filename, files);
+  if (parseFileList(filename, files)) {
+    // Error
+  }
   return files;
 }
 
 int WFUT::saveLocalList(const FileList &files, const std::string &filename) {
-  FileWriter writer;
-  write.writeFileList(files, filename);
+  if (writeFileList(filename, files)) {
+    // Error
+  }
   return 0;
 }
 

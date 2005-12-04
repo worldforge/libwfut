@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libwfut-0.1.la
 
-libwfut_0_1_la_LDFLAGS = -version-info =@LIBWFUT_VERSION_INFO@
+libwfut_0_1_la_LDFLAGS = -version-info @LIBWFUT_VERSION_INFO@
 
 INCLUDES=-I${top_srcdir}
 
@@ -11,7 +11,6 @@ endif
 libwfut_0_1_la_SOURCES = \
 	ChannelParser.cpp \
 	ChannelWriter.cpp \
-	crc32.cpp \
 	IO.cpp \
 	FileParser.cpp \
 	FileWriter.cpp \

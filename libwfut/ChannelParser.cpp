@@ -8,6 +8,8 @@
 
 #include "ChannelIO.h"
 
+namespace WFUT {
+
 static int parseChannel(TiXmlElement *element, ChannelObject &channel) {
   assert(element);
   TiXmlNode * node;
@@ -35,15 +37,15 @@ static int parseChannel(TiXmlElement *element, ChannelObject &channel) {
   return 0;
 }
 
-static int parseChannels(TiXmlElement *element, ChannelList &channels) {
+static int parseChannels(TiXmlNode *element, ChannelList &channels) {
   assert(element);
 
   TiXmlElement *e = element->FirstChildElement(TAG_channel);
-  while (node) {
-    ChannelObject channel = new ChannelObject();
+  while (e) {
+    ChannelObject channel;
     parseChannel(e, channel);
     channels.push_back(channel);
-    e = e->NextSibling();
+    e = e->NextSiblingElement();
   }
   return 0;
 }
@@ -55,7 +57,7 @@ int parseChannelList(const std::string &filename, ChannelList &channels) {
     return 1;
   }
 
-  TiXmlNode *node = doc.FirstChild(TAG_channelList);
+  TiXmlNode *node = doc.FirstChild(TAG_channellist);
 
   if (!node) {
     // missing root node
@@ -68,13 +70,13 @@ int parseChannelList(const std::string &filename, ChannelList &channels) {
 
 int parseChannelListXML(const std::string &xml, ChannelList &channels) {
 
-  TiXmlDocument doc();
+  TiXmlDocument doc;
 
   if (!doc.Parse(xml.c_str())) {
     return 1;
   }
 
-  TiXmlNode *node = doc.FirstChild(TAG_channelList);
+  TiXmlNode *node = doc.FirstChild(TAG_channellist);
 
   if (!node) {
     // missing root node
@@ -84,3 +86,5 @@ int parseChannelListXML(const std::string &xml, ChannelList &channels) {
   return parseChannels(node, channels);
 
 }
+
+} /* namespace WFUT */

@@ -2,10 +2,12 @@
 // the GNU Lesser General Public License (See COPYING for details).
 // Copyright (C) 2005 Simon Goodall
 
-#include "IO.h"
+#include "libwfut/IO.h"
+
+namespace WFUT {
 
 static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp)  {
-  DataStruct *ds = (DataStruct*)userp;
+  IO::DataStruct *ds = (IO::DataStruct*)userp;
   if (ds->fp == NULL) {
     ds->fp = fopen(ds->filename.c_str(), "wb");
   }
@@ -15,7 +17,7 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp)  {
 
 int IO::init() {
   assert (m_initialised == false);
-  curl_global_init();
+  curl_global_init(CURL_GLOBAL_ALL);
   m_mhandle = curl_multi_init();
   m_initialised = true;
 }
@@ -27,7 +29,7 @@ int IO::shutdown(){
   m_mhandle = NULL;
 
   while (!m_files.empty()) {
-    DataStruct *ds = m_files.begin()->first;
+    DataStruct *ds = m_files.begin()->second;
     if (ds->handle) {
       curl_easy_cleanup(ds->handle);
       ds->handle = NULL;
@@ -73,15 +75,36 @@ int IO::poll() {
   struct CURLMsg *msg = NULL;
   int msgs;
 
-  while ((msg = curl_mutli_info_read(m_mhandle, &msgs)) != NULL) {
+  while ((msg = curl_multi_info_read(m_mhandle, &msgs)) != NULL) {
+    DataStruct *ds = NULL;
+    if (curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, (char*)ds) != CURLE_OK) {
+      // Do something on error
+    }
     switch (msg->msg) {
-      case CURLMSG_DONE:
+      case CURLMSG_DONE: {
         // close file etc..
+        if (ds) {
+          fclose(ds->fp);
+          ds->fp = NULL;
+          DownloadComplete.emit(ds->url, ds->filename);
+          delete ds;
+        }
+        // Close handle	
+        curl_multi_remove_handle(m_mhandle, msg->easy_handle);
         break;
+        }
       default:
         //unhandled case
+	if (ds) {
+          fclose(ds->fp);
+	  DownloadFailed.emit(ds->url, ds->filename);
+          delete ds;
+        }
+        curl_multi_remove_handle(m_mhandle, msg->easy_handle);
     }
   }
 
   return num_handles;
 }
+
+} /* namespace WFUT */

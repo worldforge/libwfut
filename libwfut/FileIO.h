@@ -7,11 +7,11 @@
 
 #include <string>
 
+#include <libwfut/types.h>
+
 namespace WFUT {
 
-class FileList;
-
-static const std::string TAG_name = "name";
+static const std::string TAG_filename = "filename";
 static const std::string TAG_version = "version";
 static const std::string TAG_crc32 = "crc32";
 static const std::string TAG_size = "size";

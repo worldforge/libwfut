@@ -14,6 +14,10 @@
 
 #include <curl/curl.h>
 
+#include <sigc++/signal.h>
+
+#include <libwfut/types.h>
+
 namespace WFUT {
 
 class IO {
@@ -39,6 +43,9 @@ public:
  
   int poll();
   int queueFile(const std::string &filename, const std::string &url);
+
+  SigC::Signal2<void, const std::string&, const std::string&> DownloadComplete;
+  SigC::Signal2<void, const std::string&, const std::string&> DownloadFailed;
 
 private:
   bool m_initialised;

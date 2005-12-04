@@ -8,6 +8,7 @@
 
 #include <string>
 #include <cassert>
+#include <libwfut/types.h>
 
 namespace WFUT {
 
@@ -34,7 +35,7 @@ public:
 
 private:
   bool m_initialised;
-  IO m_io;
+  IO *m_io;
 };
 
 } /* namespace WFUT */

@@ -8,30 +8,32 @@
 
 #include "FileIO.h"
 
-static int writeFile(TiXmlElement *element, const File &file) {
+namespace WFUT {
+
+static int writeFile(TiXmlElement *element, const FileObject &file) {
   assert(element);
 
-  element->setAttribute(TAG_name, file.name);
-  element->setAttribute(TAG_version, file.version);
-  element->setAttribute(TAG_crc32, file.crc32);
-  element->setAttribute(TAG_size, file.size);
-  element->setAttribute(TAG_execute, file.execute);
+  element->SetAttribute(TAG_filename, file.filename);
+  element->SetAttribute(TAG_version, file.version);
+  element->SetAttribute(TAG_crc32, file.crc32);
+  element->SetAttribute(TAG_size, file.size);
+  element->SetAttribute(TAG_execute, file.execute);
 
   return 0;
 }
 
 int writeFileList(const std::string &filename, const FileList &files) {
   TiXmlDocument doc;
-  doc.InsertEndChild("1.0", "", "");
+  doc.InsertEndChild(TiXmlDeclaration("1.0", "", ""));
 
   TiXmlElement flist(TAG_filelist);
  
   FileList::const_iterator itr = files.begin();
   while (itr != files.end()) {
     TiXmlElement file(TAG_file);
-    writeFile(&file, *I);
+    writeFile(&file, *itr);
     flist.InsertEndChild(file);
-    ++I;
+    ++itr;
   }
 
   doc.InsertEndChild(flist);
@@ -41,3 +43,5 @@ int writeFileList(const std::string &filename, const FileList &files) {
   }
   return 0;
 }
+
+} /* namespace WFUT */

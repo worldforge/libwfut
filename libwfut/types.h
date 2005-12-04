@@ -26,6 +26,6 @@ typedef struct {
   bool execute;
 } FileObject;
 
-std::list<FileObject> FileList;
+typedef std::list<FileObject> FileList;
 
 #endif /* LIBWFUT_TYPES_H */

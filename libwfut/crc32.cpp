@@ -3,11 +3,12 @@
 // Copyright (C) 2005 Simon Goodall
 
 #include <zlib.h>
-
+#include <string>
+#include <stdio.h>
 long calcCRC32(const std::string &filename) {
   uLong crc = crc32(0L, Z_NULL,0);
 
-  File *fp = fopen(filename.c_str(), "rb");
+  FILE *fp = fopen(filename.c_str(), "rb");
   if (!fp) {
     // Error!
     return -1;

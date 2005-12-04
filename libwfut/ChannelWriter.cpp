@@ -8,6 +8,8 @@
 
 #include "ChannelIO.h"
 
+namespace WFUT {
+
 static int writeChannel(TiXmlElement *element, const ChannelObject &channel) {
   assert(element);
 
@@ -15,15 +17,15 @@ static int writeChannel(TiXmlElement *element, const ChannelObject &channel) {
   name.InsertEndChild(TiXmlText(channel.name));
   element->InsertEndChild(name);
 
-  TiXmlElement name(TAG_description);
+  TiXmlElement description(TAG_description);
   description.InsertEndChild(TiXmlText(channel.description));
   element->InsertEndChild(description);
 
-  TiXmlElement name(TAG_url);
+  TiXmlElement url(TAG_url);
   url.InsertEndChild(TiXmlText(channel.url));
   element->InsertEndChild(url);
 
-  TiXmlElement name(TAG_email);
+  TiXmlElement email(TAG_email);
   email.InsertEndChild(TiXmlText(channel.email));
   element->InsertEndChild(email);
 
@@ -36,16 +38,16 @@ static int writeChannel(TiXmlElement *element, const ChannelObject &channel) {
 
 int writeChannelList(const std::string &filename, const ChannelList &channels) {
   TiXmlDocument doc;
-  doc.InsertEndChild("1.0", "", "");
+  doc.InsertEndChild(TiXmlDeclaration("1.0", "", ""));
 
-  TiXmlElement clist(TAG_channelList);
+  TiXmlElement clist(TAG_channellist);
  
   ChannelList::const_iterator itr = channels.begin();
   while (itr != channels.end()) {
     TiXmlElement channel(TAG_channel);
-    writeFile(&channel, *I);
+    writeChannel(&channel, *itr);
     clist.InsertEndChild(channel);
-    ++I;
+    ++itr;
   }
 
   doc.InsertEndChild(clist);
@@ -55,3 +57,5 @@ int writeChannelList(const std::string &filename, const ChannelList &channels) {
   }
   return 0;
 }
+
+} /* namespace WFUT */
