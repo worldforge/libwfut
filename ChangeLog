@@ -1,5 +1,16 @@
 2006-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* libwfut/WFUT.cpp, libwfut/WFUT.h: Rename class to WFUTClient to avoid
+	  clashing with namespace. Change the updateChannel method to take a url
+	  and path prefix to add to the filenames and source URLS. Create some
+	  temporary callbacks to the IO::DownloadComplete and IO::DownloadFailed
+	  signals. Download channel and file lists to a location in /tmp (needs
+	  to be made platform independant) before parsing. Implement poll
+	  method. It is now possible to download a list of channels, a filelist
+	  for a given channel and download all the files into a given location.
+
+2006-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* libwfut/ChannelParser.cpp: Name is an attribute, not an element.
 
 	* libwfut/FileParser.cpp: CRC32 is a unsigned long. Fix some parsing

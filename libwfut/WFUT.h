@@ -1,6 +1,6 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 Simon Goodall
+// Copyright (C) 2005 - 2006 Simon Goodall
 
 
 #ifndef LIBWFUT_WFUT_H
@@ -14,18 +14,20 @@ namespace WFUT {
 
 class IO;
 
-class WFUT {
+class WFUTClient {
 public:
-  WFUT():
+  WFUTClient():
     m_initialised(false),
     m_io(NULL)
   {}
-  virtual ~WFUT() { assert(m_initialised == false); }
+  virtual ~WFUTClient() { assert(m_initialised == false); }
 
   int init();
   int shutdown();
 
-  void updateChannel(const FileList &updates);
+  void updateChannel(const FileList &updates, 
+                     const std::string &urlPrefix,
+                     const std::string &pathPrefix);
   ChannelList getChannelList(const std::string &url);
   FileList getFileList(const std::string &url);
   FileList getLocalList(const std::string &filename);
