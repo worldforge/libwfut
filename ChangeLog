@@ -1,4 +1,11 @@
-2005-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
+2006-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/types.h, libwfut/IO.h, libwfut/IO.cpp, libwfut/WFUT.cpp: Add
+	  checks for CRC32 value calculation. The IO::queueFile now takes the 
+	  expected CRC32 value of the downloaded file. Set to 0 to ignore the 
+	  calculated CRC32 value.
+
+2006-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
 
 	* libwfut/IO.cpp: Fix poll function so download failures are reported 
 	  as such. Fix queueFile to set DataStruct as private data for the 

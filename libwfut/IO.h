@@ -12,6 +12,8 @@
 
 #include <stdio.h>
 
+#include <zlib.h>
+
 #include <curl/curl.h>
 
 #include <sigc++/signal.h>
@@ -26,6 +28,8 @@ public:
     std::string filename;
     std::string url;
     FILE *fp;
+    uLong actual_crc32;
+    uLong expected_crc32;
     CURL *handle;
   } DataStruct;
 
@@ -42,7 +46,7 @@ public:
   int shutdown();
  
   int poll();
-  int queueFile(const std::string &filename, const std::string &url);
+  int queueFile(const std::string &filename, const std::string &url, uLong expected_crc32);
 
   SigC::Signal2<void, const std::string&, const std::string&> DownloadComplete;
   SigC::Signal2<void, const std::string&, const std::string&> DownloadFailed;

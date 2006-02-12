@@ -13,10 +13,21 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp) {
   assert(userp != NULL);
   IO::DataStruct *ds = reinterpret_cast<IO::DataStruct*>(userp);
   if (ds->fp == NULL) {
+    // Open File handle
     ds->fp = fopen(ds->filename.c_str(), "wb");
+    // TODO Check that filehandle is valid
+    if (ds->fp == NULL) {
+      fprintf(stderr, "Error opening file for writing\n");
+      return 0;
+    }
+    // Initialise CRC32 value
+    ds->actual_crc32 = crc32(0L, Z_NULL,  0);
   }
-  // TODO replace this assert with some error handler
+
   assert(ds->fp != NULL);
+  // Update crc32 value
+  ds->actual_crc32 = crc32(ds->actual_crc32, reinterpret_cast<Bytef*>(buffer), size * nmemb);
+  // Write data to file
   return fwrite(buffer, size, nmemb, ds->fp);
 }
 
@@ -55,7 +66,7 @@ int IO::shutdown(){
   return 0;
 }
 
-int IO::queueFile(const std::string &filename, const std::string &url) {
+int IO::queueFile(const std::string &filename, const std::string &url, uLong expected_crc32) {
   if (m_files.find(url) != m_files.end()) {
     fprintf(stderr, "Error file is alreay in queue\n");
     // Url already in queue
@@ -65,6 +76,7 @@ int IO::queueFile(const std::string &filename, const std::string &url) {
   ds->fp = NULL;
   ds->url = url;
   ds->filename = filename;
+  ds->expected_crc32 = expected_crc32;
   ds->handle = curl_easy_init();
 
   m_files[url] = ds;
@@ -99,14 +111,25 @@ int IO::poll() {
     switch (msg->msg) {
       case CURLMSG_DONE: {
         if (msg->data.result == CURLE_OK) {
-          failed = false;
+          assert(ds != NULL);
+          if (ds->expected_crc32 == 0L || 
+              ds->expected_crc32 == ds->actual_crc32) {
+            // Download success!
+            failed = false;
+          } else {
+            // CRC32 check failed
+            failed = true;
+            errormsg = "CRC32 mismatch";
+          }
         } else {
+          // Error downloading file
           failed = true;
           errormsg = "There was an error downloading the requested file";
         }
         break;
       }
       default:
+        // Something not too good with curl...
         failed = true;
         errormsg = "There was an unknown error downloading the requested file";
     }

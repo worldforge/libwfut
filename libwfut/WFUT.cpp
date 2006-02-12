@@ -1,6 +1,6 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 Simon Goodall
+// Copyright (C) 2005 - 2006 Simon Goodall
 
 #include "WFUT.h"
 #include "types.h"
@@ -51,7 +51,7 @@ void WFUT::updateChannel(const FileList &updates) {
     // TODO  prepend root values
     std::string filename = f.filename;
     std::string url = filename;
-    m_io->queueFile(filename, url);
+    m_io->queueFile(filename, url, f.crc32);
   }
 }
 
