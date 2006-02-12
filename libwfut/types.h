@@ -10,6 +10,8 @@
 
 #include <zlib.h>
 
+namespace WFUT {
+
 typedef struct {
   std::string name;
   std::string description;
@@ -29,5 +31,7 @@ typedef struct {
 } FileObject;
 
 typedef std::list<FileObject> FileList;
+
+} // namespace WFUT
 
 #endif /* LIBWFUT_TYPES_H */

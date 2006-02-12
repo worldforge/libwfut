@@ -1,5 +1,20 @@
 2006-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* libwfut/ChannelParser.cpp: Name is an attribute, not an element.
+
+	* libwfut/FileParser.cpp: CRC32 is a unsigned long. Fix some parsing
+	  problems.
+
+	* libwfut/types.h: Add WFUT namespace.
+
+	* libwfut/IO.cpp, libwfut/IO.h: Add function to create dirs if they 
+	  don't exist. Sets dir perms to 0700. DownloadFailed signal now takes
+	  a third string containing an error message. Added downloadFile to
+	  download a single file. This function blocks until the download
+	  completes or fails.
+
+2006-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* libwfut/types.h, libwfut/IO.h, libwfut/IO.cpp, libwfut/WFUT.cpp: Add
 	  checks for CRC32 value calculation. The IO::queueFile now takes the 
 	  expected CRC32 value of the downloaded file. Set to 0 to ignore the 

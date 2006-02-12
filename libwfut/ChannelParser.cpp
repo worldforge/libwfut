@@ -13,10 +13,10 @@ namespace WFUT {
 static int parseChannel(TiXmlElement *element, ChannelObject &channel) {
   assert(element);
   TiXmlNode * node;
-
-  node = element->FirstChildElement(TAG_name);
-  if (node) node = node->FirstChild();
-  if (node) channel.name = node->Value();
+  const char *name_val = element->Attribute(TAG_name);
+  if (name_val != NULL) {
+    channel.name = name_val;
+  }
 
   node = element->FirstChildElement(TAG_description);
   if (node) node = node->FirstChild();

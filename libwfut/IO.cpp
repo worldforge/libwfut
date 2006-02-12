@@ -2,11 +2,36 @@
 // the GNU Lesser General Public License (See COPYING for details).
 // Copyright (C) 2005 - 2006 Simon Goodall
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <errno.h>
+
 #include "libwfut/IO.h"
 
 namespace WFUT {
 
 static const bool debug = false;
+
+
+// Create the parent dir of the file.
+// TODO Does this work if the parent parent dir does not exist?
+int createParentDirs(const std::string &filename) {
+  int err = 1;
+  // TODO This function may not work correctly or be portable.
+  // Perhaps should only search for \\ on win32, / otherwise
+  std::string path = filename.substr(0, filename.find_last_of("\\/"));
+  // See if the directory already exists
+  DIR *d = opendir(path.c_str());
+  if (!d) {
+    // Make dir as it doesn' exist
+    err = mkdir(path.c_str(), 0700);
+  } else{
+    closedir(d);
+    err = 0;
+  }
+  return err;
+}
 
 // Callback function to write downloaded data to a file.
 static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp) {
@@ -14,6 +39,7 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp) {
   IO::DataStruct *ds = reinterpret_cast<IO::DataStruct*>(userp);
   if (ds->fp == NULL) {
     // Open File handle
+    if (createParentDirs(ds->filename) != 0) return 0;
     ds->fp = fopen(ds->filename.c_str(), "wb");
     // TODO Check that filehandle is valid
     if (ds->fp == NULL) {
@@ -66,6 +92,27 @@ int IO::shutdown(){
   return 0;
 }
 
+int IO::downloadFile(const std::string &filename, const std::string &url, uLong expected_crc32) {
+
+  DataStruct ds;
+  ds.fp = NULL;
+  ds.url = url;
+  ds.filename = filename;
+  ds.actual_crc32 = crc32(0L, Z_NULL,  0);
+  ds.expected_crc32 = expected_crc32;
+  ds.handle = curl_easy_init();
+
+  curl_easy_setopt(ds.handle, CURLOPT_URL, url.c_str());
+  curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
+  curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
+  CURLcode err = curl_easy_perform(ds.handle);
+  if (ds.fp) fclose(ds.fp);
+  curl_easy_cleanup(ds.handle);
+
+  // Zero on sucess
+  return err;
+}
+
 int IO::queueFile(const std::string &filename, const std::string &url, uLong expected_crc32) {
   if (m_files.find(url) != m_files.end()) {
     fprintf(stderr, "Error file is alreay in queue\n");
@@ -76,6 +123,7 @@ int IO::queueFile(const std::string &filename, const std::string &url, uLong exp
   ds->fp = NULL;
   ds->url = url;
   ds->filename = filename;
+  ds->actual_crc32 = crc32(0L, Z_NULL,  0);
   ds->expected_crc32 = expected_crc32;
   ds->handle = curl_easy_init();
 
@@ -138,7 +186,7 @@ int IO::poll() {
       ds->fp = NULL;
       if (failed) {
         if (debug) printf("Download Failed\n");
-        DownloadFailed.emit(ds->url, ds->filename);
+        DownloadFailed.emit(ds->url, ds->filename, errormsg);
       } else {
         if (debug) printf("Download Complete\n");
         DownloadComplete.emit(ds->url, ds->filename);
@@ -150,7 +198,6 @@ int IO::poll() {
     // Close handle	
     curl_multi_remove_handle(m_mhandle, msg->easy_handle);
   }
-
   return num_handles;
 }
 

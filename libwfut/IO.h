@@ -46,10 +46,13 @@ public:
   int shutdown();
  
   int poll();
+  int downloadFile(const std::string &filename, const std::string &url, uLong expected_crc32);
   int queueFile(const std::string &filename, const std::string &url, uLong expected_crc32);
 
-  SigC::Signal2<void, const std::string&, const std::string&> DownloadComplete;
-  SigC::Signal2<void, const std::string&, const std::string&> DownloadFailed;
+  // void yadda(url, filename)
+  sigc::signal<void, const std::string&, const std::string&> DownloadComplete;
+  // void yadda(url, filename, reason)
+  sigc::signal<void, const std::string&, const std::string&, const std::string&> DownloadFailed;
 
 private:
   bool m_initialised;

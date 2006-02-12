@@ -13,24 +13,24 @@ namespace WFUT {
 static int parseFile(TiXmlElement *element, FileObject &file) {
   assert(element);
 
-  // TODO: Possible NULL pointer errors here.
-  // Attribute returns null on missing atribute
-  file.filename = element->Attribute(TAG_filename);
+  const char *fname = element->Attribute(TAG_filename);
+  if (fname != NULL) {
+    file.filename = fname;
+  }
   sscanf(element->Attribute(TAG_version), "%d", &file.version);
-  sscanf(element->Attribute(TAG_crc32), "%ld", &file.crc32);
+  sscanf(element->Attribute(TAG_crc32), "%lu", &file.crc32);
   sscanf(element->Attribute(TAG_size), "%ld", &file.size);
-  char buf[4];
-  sscanf(element->Attribute(TAG_execute), "%4s", buf);
-  if (strncmp(buf, "true", 4)) file.execute = false;
+  const char *exec = element->Attribute(TAG_execute);
+  if (exec && strlen(exec) >= 4 && strncmp(exec, "true", 4)) file.execute = false;
   else file.execute = true;
 
   return 0;
 }
 
-static int parseFiles(TiXmlNode *element, FileList &files) {
-  assert(element);
+static int parseFiles(TiXmlNode *node, FileList &files) {
+  assert(node);
 
-  TiXmlElement *e = element->FirstChildElement(TAG_file);
+  TiXmlElement *e = node->FirstChildElement(TAG_file);
   while (e) {
     FileObject file;
     parseFile(e, file);
@@ -50,7 +50,7 @@ int parseFileList(const std::string &filename, FileList &files) {
     return 1;
   }
 
-  TiXmlNode *node = doc.FirstChild("fileList");
+  TiXmlNode *node = doc.FirstChild(TAG_filelist);
 
   if (!node) {
     // missing root node
