@@ -1,3 +1,10 @@
+2005-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/IO.cpp: Fix poll function so download failures are reported 
+	  as such. Fix queueFile to set DataStruct as private data for the 
+	  handle. The low-level file download code is now fairly complete,
+	  however some work is required for better error handling.
+
 2005-11-27  Simon Goodall  <libwfut@simongoodall.co.uk>
 
 	* Initial ChangeLog entry.
