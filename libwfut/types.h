@@ -7,6 +7,7 @@
 
 #include <string>
 #include <list>
+#include <map>
 
 #include <zlib.h>
 
@@ -31,6 +32,7 @@ typedef struct {
 } FileObject;
 
 typedef std::list<FileObject> FileList;
+typedef std::map<std::string, FileObject> FileMap;
 
 } // namespace WFUT
 

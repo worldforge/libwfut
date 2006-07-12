@@ -9,6 +9,7 @@
 #include <string>
 #include <cassert>
 #include <libwfut/types.h>
+#include <libwfut/ChannelFileList.h>
 
 namespace WFUT {
 
@@ -25,13 +26,13 @@ public:
   int init();
   int shutdown();
 
-  void updateChannel(const FileList &updates, 
+  void updateChannel(const ChannelFileList &updates, 
                      const std::string &urlPrefix,
                      const std::string &pathPrefix);
   ChannelList getChannelList(const std::string &url);
-  FileList getFileList(const std::string &url);
-  FileList getLocalList(const std::string &filename);
-  int saveLocalList(const FileList &files, const std::string &filename);
+  ChannelFileList getFileList(const std::string &url);
+  ChannelFileList getLocalList(const std::string &filename);
+  int saveLocalList(const ChannelFileList &files, const std::string &filename);
 
   int poll();
 

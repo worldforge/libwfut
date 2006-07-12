@@ -7,6 +7,7 @@
 #include <tinyxml/tinyxml.h>
 
 #include "FileIO.h"
+#include "ChannelFileList.h"
 
 namespace WFUT {
 
@@ -27,21 +28,26 @@ static int parseFile(TiXmlElement *element, FileObject &file) {
   return 0;
 }
 
-static int parseFiles(TiXmlNode *node, FileList &files) {
+static int parseFiles(TiXmlNode *node, ChannelFileList &files) {
   assert(node);
+
+  const char *dir = node->ToElement()->Attribute(TAG_dir);
+  if (dir) {
+    files.setName(dir);
+  } 
 
   TiXmlElement *e = node->FirstChildElement(TAG_file);
   while (e) {
     FileObject file;
     parseFile(e, file);
-    files.push_back(file);
+    files.addFile(file);
     e = e->NextSiblingElement();
   }
 
   return 0;
 }
 
-int parseFileList(const std::string &filename, FileList &files) {
+int parseFileList(const std::string &filename, ChannelFileList &files) {
 
   TiXmlDocument doc(filename);
 
@@ -60,7 +66,7 @@ int parseFileList(const std::string &filename, FileList &files) {
   return parseFiles(node, files);
 
 }
-int parseFileListXML(const std::string &xml, FileList &files) {
+int parseFileListXML(const std::string &xml, ChannelFileList &files) {
 
   TiXmlDocument doc;
 

@@ -1,6 +1,6 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 Simon Goodall
+// Copyright (C) 2005 - 2006 Simon Goodall
 
 #include "types.h"
 
@@ -8,10 +8,15 @@
 
 #include "FileIO.h"
 
+#include "ChannelFileList.h"
+
 namespace WFUT {
 
 static int writeFile(TiXmlElement *element, const FileObject &file) {
   assert(element);
+
+  // TODO need to convert numbers to string as tinyxml doesn'y support 
+  // unsigned lonfs
 
   element->SetAttribute(TAG_filename, file.filename);
   element->SetAttribute(TAG_version, file.version);
@@ -22,16 +27,18 @@ static int writeFile(TiXmlElement *element, const FileObject &file) {
   return 0;
 }
 
-int writeFileList(const std::string &filename, const FileList &files) {
+int writeFileList(const std::string &filename, const ChannelFileList &files) {
   TiXmlDocument doc;
   doc.InsertEndChild(TiXmlDeclaration("1.0", "", ""));
 
   TiXmlElement flist(TAG_filelist);
+  flist.SetAttribute(TAG_dir, files.getName());
  
-  FileList::const_iterator itr = files.begin();
-  while (itr != files.end()) {
+  const FileMap filemap = files.getFiles();
+  FileMap::const_iterator itr = filemap.begin();
+  while (itr != filemap.end()) {
     TiXmlElement file(TAG_file);
-    writeFile(&file, *itr);
+    writeFile(&file, itr->second);
     flist.InsertEndChild(file);
     ++itr;
   }

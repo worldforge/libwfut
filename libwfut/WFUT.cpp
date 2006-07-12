@@ -7,6 +7,7 @@
 #include "IO.h"
 #include "FileIO.h"
 #include "ChannelIO.h"
+#include "ChannelFileList.h"
 
 namespace WFUT {
 
@@ -15,6 +16,21 @@ void msg(const std::string &u, const std::string &f)  {
 }
 void msg2(const std::string &u, const std::string &f, const std::string &r)  {
   printf("Failed %s -> %s\n",u.c_str(), r.c_str());
+}
+
+void writeHeader(FILE *fp, const std::string &channel) {
+  assert(fp != NULL);
+  fprintf(fp, "<?xml version=\"1.0\"?>\n");
+  fprintf(fp, "<?xml-stylesheet type=\"text/xsl\" href=\"filelist.xsl\"?>\n");
+  fprintf(fp, "<fileList dir=\"%s\">\n", channel.c_str());
+}
+
+void writeTempList(const std::string &tmpfile, const std::string channel, const FileObject &fo) {
+  FILE *fp = fopen(tmpfile.c_str(), "wt");
+  if (fp == 0) {
+    // error opening file    
+    return;
+  }
 }
 
 int WFUTClient::init() {
@@ -26,7 +42,7 @@ int WFUTClient::init() {
     m_io = NULL;
     return 1;
   }
-
+  // TODO, these should really be installed by the client app
   m_io->DownloadComplete.connect(sigc::ptr_fun(msg));
   m_io->DownloadFailed.connect(sigc::ptr_fun(msg2));
 
@@ -47,16 +63,18 @@ int WFUTClient::shutdown() {
   return 0;
 }
 
-void WFUTClient::updateChannel(const FileList &updates,
+void WFUTClient::updateChannel(const ChannelFileList &updates,
                                const std::string &urlPrefix,
                                const std::string &pathPrefix) {
   assert (m_initialised == true);
-  FileList::const_iterator I = updates.begin();
-  while (I != updates.end()) {
-    FileObject f = *I++;
-    // TODO  prepend root values
+  const FileMap files = updates.getFiles();
+
+  FileMap::const_iterator I = files.begin();
+  while (I != files.end()) {
+    FileObject f = (I++)->second;
+
     std::string filename = pathPrefix + f.filename;
-    std::string url = urlPrefix + f.filename;
+    std::string url = urlPrefix + updates.getName() + "/" + f.filename;
     m_io->queueFile(filename, url, f.crc32);
   }
 }
@@ -87,9 +105,9 @@ ChannelList WFUTClient::getChannelList(const std::string &url) {
   return channels;
 }
 
-FileList WFUTClient::getFileList(const std::string &url) {
+ChannelFileList WFUTClient::getFileList(const std::string &url) {
   assert (m_initialised == true);
-  FileList files;
+  ChannelFileList files;
   // TODO: this is currently platform dependant!
   char filename[] = "/tmp/wfut.XXXXXX";
   int fd = mkstemp(filename);
@@ -112,16 +130,16 @@ FileList WFUTClient::getFileList(const std::string &url) {
   return files;
 }
 
-FileList WFUTClient::getLocalList(const std::string &filename) {
+ChannelFileList WFUTClient::getLocalList(const std::string &filename) {
   assert (m_initialised == true);
-  FileList files;
+  ChannelFileList files;
   if (parseFileList(filename, files)) {
     // Error
   }
   return files;
 }
 
-int WFUTClient::saveLocalList(const FileList &files, const std::string &filename) {
+int WFUTClient::saveLocalList(const ChannelFileList &files, const std::string &filename) {
   assert (m_initialised == true);
   if (writeFileList(filename, files)) {
     // Error

@@ -1,3 +1,22 @@
+2006-07-12  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* tinyxml/*: Add tinyxml to source. Make it part of the WFUT namespace
+	  to avoid potential namespace conflicts with other tinyxml versions.
+
+	* libwfut/ChannelFileList.h: Wrapper class around FileList to also
+	  contain channel name.
+
+	* libwfut/types.h: Create a FileMap type, mapping filename to a 
+	  FileObject.
+
+	* configure.ac, Makefile.am: Added extra dirs.
+
+	* libwfut/FileIO.h, libwfut/FileParser.cpp, libwfut/FileWriter.cpp,
+	  libwfut/WFUT.h, libwfut/WFUT.cpp, tests/test3.cpp: Update for
+	  ChannelFileList and read/write dir attribute.
+
+	* libwfut/crc32.cpp: Use zlib uLong type.
+
 2006-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
 
 	* libwfut/WFUT.cpp, libwfut/WFUT.h: Rename class to WFUTClient to avoid

@@ -1,6 +1,7 @@
 lib_LTLIBRARIES = libwfut-0.1.la
 
 libwfut_0_1_la_LDFLAGS = -version-info @LIBWFUT_VERSION_INFO@
+libwfut_0_1_la_LIBADD = ../tinyxml/libtinyxml.a
 
 INCLUDES=-I${top_srcdir}
 
@@ -16,11 +17,12 @@ libwfut_0_1_la_SOURCES = \
 	FileWriter.cpp \
 	WFUT.cpp
 
-libwfutdir = $(includedir)/libwfut
+libwfutdir = $(includedir)/libwfut-0.1/libwfut/
 
 libwfut_HEADERS = \
 	header.h \
 	ChannelIO.h \
 	FileIO.h \
 	IO.h \
-	WFUT.h
+	WFUT.h \
+	ChannelFileList.h

@@ -36,6 +36,8 @@ PKG_CHECK_MODULES(SIGC, sigc++-2.0 != 2.0.8,
             ])
     ])
 
+LIBWFUT_LIBS="$LIBWFUT_LIBS -lcurl"
+
 AC_LANG_POP(C++)
 
 AC_SUBST(CFLAGS)
@@ -71,6 +73,8 @@ AC_SUBST(BUILD_IT)
 
 AC_CONFIG_FILES([
 	Makefile
+	tinyxml/Makefile
 	libwfut/Makefile
+	tests/Makefile
 ])
 AC_OUTPUT
