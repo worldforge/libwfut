@@ -1,7 +1,6 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 - 2006 Simon Goodall
-
+// Copyright (C) 2005 - 2007 Simon Goodall
 
 #ifndef LIBWFUT_WFUT_H
 #define LIBWFUT_WFUT_H 1
@@ -29,10 +28,21 @@ public:
   void updateChannel(const ChannelFileList &updates, 
                      const std::string &urlPrefix,
                      const std::string &pathPrefix);
+
   ChannelList getChannelList(const std::string &url);
+
   ChannelFileList getFileList(const std::string &url);
+
   ChannelFileList getLocalList(const std::string &filename);
+
   int saveLocalList(const ChannelFileList &files, const std::string &filename);
+
+  int calculateUpdates(const ChannelFileList &server,
+                       const ChannelFileList &system,
+                       const ChannelFileList &local,
+                       ChannelFileList &updates,
+                       const std::string &prefix);
+
 
   int poll();
 

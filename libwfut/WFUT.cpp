@@ -1,6 +1,6 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 - 2006 Simon Goodall
+// Copyright (C) 2005 - 2007 Simon Goodall
 
 #include "WFUT.h"
 #include "types.h"
@@ -8,6 +8,7 @@
 #include "FileIO.h"
 #include "ChannelIO.h"
 #include "ChannelFileList.h"
+#include "crc32.h"
 
 namespace WFUT {
 
@@ -67,11 +68,11 @@ void WFUTClient::updateChannel(const ChannelFileList &updates,
                                const std::string &urlPrefix,
                                const std::string &pathPrefix) {
   assert (m_initialised == true);
-  const FileMap files = updates.getFiles();
+  const FileMap &files = updates.getFiles();
 
   FileMap::const_iterator I = files.begin();
   while (I != files.end()) {
-    FileObject f = (I++)->second;
+    const FileObject &f = (I++)->second;
 
     std::string filename = pathPrefix + f.filename;
     std::string url = urlPrefix + updates.getName() + "/" + f.filename;
@@ -150,6 +151,55 @@ int WFUTClient::saveLocalList(const ChannelFileList &files, const std::string &f
 int WFUTClient::poll() {
   assert (m_initialised == true);
   return m_io->poll();
+}
+
+int WFUTClient::calculateUpdates(const ChannelFileList &server, const ChannelFileList &system, const ChannelFileList &local, ChannelFileList &updates, const std::string &prefix) {
+  const FileMap &server_map = server.getFiles();
+  const FileMap &system_map = system.getFiles();
+  const FileMap &local_map = local.getFiles();
+
+  FileMap::const_iterator I = server_map.begin();
+  FileMap::const_iterator Iend = server_map.end();
+
+  for (; I !=  Iend; ++I) {
+    const FileObject &server_obj = I->second;
+    // find the matching local one
+    FileMap::const_iterator sys_iter = system_map.find(I->first);
+    FileMap::const_iterator loc_iter = local_map.find(I->first);
+
+    if (loc_iter == local_map.end()) {
+      if (sys_iter == system_map.end()) {
+printf("Adding %s as no local version\n", server_obj.filename.c_str());
+        updates.addFile(server_obj);
+      } else if (server_obj.version > sys_iter->second.version) {
+printf("Adding %s as server is newer than sys\n", server_obj.filename.c_str());
+        updates.addFile(server_obj);
+      } else {
+printf("No update for %s \n", server_obj.filename.c_str());
+        // Assume the sys location is valid, so no need to update
+      }
+    } else if (server_obj.version > loc_iter->second.version) {
+printf("Adding %s as server is newer than local\n", server_obj.filename.c_str());
+      updates.addFile(server_obj);
+    } else {
+printf("local of  %s  is good accoridng to xml\n", server_obj.filename.c_str());
+      // According to xml files, the local version is the same as the server
+      // Lets check that it exists and has a matching CRC value.
+      uLong crc32;
+      if (calcCRC32(prefix + loc_iter->second.filename.c_str(), crc32) == -1) {
+printf("Unable to calculate CRC of %s\n", loc_iter->second.filename.c_str());
+        updates.addFile(server_obj);
+      } else {
+        // Do a CRC check and warn user that the file is modified.
+        if (crc32 != server_obj.crc32) {
+          // Modified!
+          printf("File %s is modified\n", loc_iter->second.filename.c_str());
+          printf("%lu --> %lu\n", crc32, server_obj.crc32);
+        }
+      }
+    }
+  }
+  return 0;
 }
 
 }

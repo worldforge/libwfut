@@ -15,7 +15,8 @@ libwfut_0_1_la_SOURCES = \
 	IO.cpp \
 	FileParser.cpp \
 	FileWriter.cpp \
-	WFUT.cpp
+	WFUT.cpp \
+	crc32.cpp
 
 libwfutdir = $(includedir)/libwfut-0.1/libwfut/
 
@@ -25,4 +26,5 @@ libwfut_HEADERS = \
 	FileIO.h \
 	IO.h \
 	WFUT.h \
-	ChannelFileList.h
+	ChannelFileList.h \
+	crc32.h

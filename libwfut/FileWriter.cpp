@@ -22,6 +22,7 @@ static int writeFile(TiXmlElement *element, const FileObject &file) {
   element->SetAttribute(TAG_version, file.version);
   element->SetAttribute(TAG_crc32, file.crc32);
   element->SetAttribute(TAG_size, file.size);
+  // This also need to be converted to a string
   element->SetAttribute(TAG_execute, file.execute);
 
   return 0;
