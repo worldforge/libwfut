@@ -1,12 +1,12 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 Simon Goodall
+// Copyright (C) 2005 - 2007 Simon Goodall
 
-#include "types.h"
 
 #include <tinyxml/tinyxml.h>
 
-#include "ChannelIO.h"
+#include "libwfut/types.h"
+#include "libwfut/ChannelIO.h"
 
 namespace WFUT {
 

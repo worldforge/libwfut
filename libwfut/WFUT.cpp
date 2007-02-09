@@ -2,13 +2,13 @@
 // the GNU Lesser General Public License (See COPYING for details).
 // Copyright (C) 2005 - 2007 Simon Goodall
 
-#include "WFUT.h"
-#include "types.h"
-#include "IO.h"
-#include "FileIO.h"
-#include "ChannelIO.h"
-#include "ChannelFileList.h"
-#include "crc32.h"
+#include "libwfut/WFUT.h"
+#include "libwfut/types.h"
+#include "libwfut/IO.h"
+#include "libwfut/FileIO.h"
+#include "libwfut/ChannelIO.h"
+#include "libwfut/ChannelFileList.h"
+#include "libwfut/crc32.h"
 
 namespace WFUT {
 

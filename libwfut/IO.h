@@ -1,21 +1,17 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 Simon Goodall
+// Copyright (C) 2005 - 2007 Simon Goodall
 
 #ifndef LIBWFUT_IO_H
 #define LIBWFUT_IO_H 1
 
-#include  <cassert>
-
+#include <cassert>
 #include <string>
 #include <map>
-
 #include <stdio.h>
 
 #include <zlib.h>
-
 #include <curl/curl.h>
-
 #include <sigc++/signal.h>
 
 #include <libwfut/types.h>

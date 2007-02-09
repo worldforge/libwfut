@@ -2,13 +2,12 @@
 // the GNU Lesser General Public License (See COPYING for details).
 // Copyright (C) 2005 - 2007 Simon Goodall
 
-#include "types.h"
-
 #include <tinyxml/tinyxml.h>
 
-#include "FileIO.h"
-#include "ChannelFileList.h"
-#include "Encoder.h"
+#include "libwfut/types.h"
+#include "libwfut/FileIO.h"
+#include "libwfut/ChannelFileList.h"
+#include "libwfut/Encoder.h"
 
 namespace WFUT {
 

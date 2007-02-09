@@ -7,6 +7,6 @@
 
 namespace WFUT {
 
-extern int calcCRC32(const std::string &filename, uLong &crc);
+  extern int calcCRC32(const std::string &filename, uLong &crc);
 
 }

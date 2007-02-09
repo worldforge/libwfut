@@ -29,4 +29,5 @@ libwfut_HEADERS = \
 	WFUT.h \
 	ChannelFileList.h \
 	crc32.h \
-	Encoder.h
+	Encoder.h \
+	types.h

@@ -2,7 +2,7 @@
 // the GNU Lesser General Public License (See COPYING for details).
 // Copyright (C) 2007 Simon Goodall
 
-#include "Encoder.h"
+#include "libwfut/Encoder.h"
 
 namespace WFUT {
 
