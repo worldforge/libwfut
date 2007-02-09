@@ -1,5 +1,20 @@
 2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* configure.ac, Makefile.am, tools/Makefile.am: Added a tools subdir.
+
+	* tools/wfut.cpp: Added a basic command line updater program.
+
+	* libwfut/IO.cpp, libwfut/IO.h: Download files into a tmp file first,
+	  then copy to target location only on a successfull download. Fix
+	  createParentDirs so that it will recursively create the required dirs.
+	  Changed the download stucture to contain a path prefix and the
+	  filename relative to the path so the filename can be used as a key
+	  when passed in a signal.
+
+	* libwfut/WFUT.cpp: Updated for new queueFile syntax.
+
+2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* libwfut/WFUT.cpp, libwfut/WFUT.h: Change functions to return error
 	  codes and take Channel Lists as by ref arguments instead. Create a
 	  DownloadComplete and DownloadFailed signal for client apps to hook

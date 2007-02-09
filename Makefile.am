@@ -1,1 +1,1 @@
-SUBDIRS=tinyxml libwfut tests
+SUBDIRS=tinyxml libwfut tools

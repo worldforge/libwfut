@@ -75,6 +75,6 @@ AC_CONFIG_FILES([
 	Makefile
 	tinyxml/Makefile
 	libwfut/Makefile
-	tests/Makefile
+	tools/Makefile
 ])
 AC_OUTPUT

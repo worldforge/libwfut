@@ -74,9 +74,8 @@ void WFUTClient::updateChannel(const ChannelFileList &updates,
   while (I != files.end()) {
     const FileObject &f = (I++)->second;
 
-    std::string filename = pathPrefix + f.filename;
     std::string url = urlPrefix + updates.getName() + "/" + f.filename;
-    m_io->queueFile(filename, url, f.crc32);
+    m_io->queueFile(pathPrefix, f.filename, url, f.crc32);
   }
 }
 

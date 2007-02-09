@@ -26,6 +26,7 @@ class IO {
 public:
   typedef struct {
     std::string filename;
+    std::string path;
     std::string url;
     FILE *fp;
     uLong actual_crc32;
@@ -47,7 +48,7 @@ public:
  
   int poll();
   int downloadFile(const std::string &filename, const std::string &url, uLong expected_crc32);
-  int queueFile(const std::string &filename, const std::string &url, uLong expected_crc32);
+  int queueFile(const std::string &path, const std::string &filename, const std::string &url, uLong expected_crc32);
 
   // void yadda(url, filename)
   sigc::signal<void, const std::string&, const std::string&> DownloadComplete;

@@ -1,11 +1,12 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 - 2006 Simon Goodall
+// Copyright (C) 2005 - 2007 Simon Goodall
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
 #include <errno.h>
+#include <stdio.h>
 
 #include "libwfut/IO.h"
 
@@ -13,14 +14,18 @@ namespace WFUT {
 
 static const bool debug = false;
 
-
 // Create the parent dir of the file.
 // TODO Does this work if the parent parent dir does not exist?
 int createParentDirs(const std::string &filename) {
   int err = 1;
   // TODO This function may not work correctly or be portable.
   // Perhaps should only search for \\ on win32, / otherwise
-  std::string path = filename.substr(0, filename.find_last_of("\\/"));
+  size_t pos = filename.find_last_of("\\/");
+  if (pos == std::string::npos) return 0;
+
+  std::string path = filename.substr(0, pos);
+  // TODO Check return value
+  createParentDirs(path);
   // See if the directory already exists
   DIR *d = opendir(path.c_str());
   if (!d) {
@@ -33,14 +38,38 @@ int createParentDirs(const std::string &filename) {
   return err;
 }
 
+static int copy_file(FILE *fp, const std::string &target_filename) {
+  rewind(fp);
+
+  if (createParentDirs(target_filename)) {
+    // Error making dir structure
+    return 1;
+  }
+  FILE *tp = fopen(target_filename.c_str(), "wb");
+  if (!tp) {
+    // Error opening file to write
+    return 1;
+  }
+  char buf[1024];
+  size_t num;
+  while ((num = fread(buf, sizeof(char), 1024, fp)) != 0) {
+    fwrite(buf, sizeof(char), num, tp);
+  }
+  fclose(tp);
+
+  return 0;
+}
+
 // Callback function to write downloaded data to a file.
 static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp) {
   assert(userp != NULL);
   IO::DataStruct *ds = reinterpret_cast<IO::DataStruct*>(userp);
   if (ds->fp == NULL) {
     // Open File handle
-    if (createParentDirs(ds->filename) != 0) return 0;
-    ds->fp = fopen(ds->filename.c_str(), "wb");
+//    if (createParentDirs(ds->filename) != 0) return 0;
+    // TODO: this should be to a tmp file first!
+//    ds->fp = fopen(ds->filename.c_str(), "wb");
+    ds->fp = tmpfile();
     // TODO Check that filehandle is valid
     if (ds->fp == NULL) {
       fprintf(stderr, "Error opening file for writing\n");
@@ -106,6 +135,10 @@ int IO::downloadFile(const std::string &filename, const std::string &url, uLong 
   curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
   CURLcode err = curl_easy_perform(ds.handle);
+  if (err == 0) {
+    // TODO check return value
+    copy_file(ds.fp, ds.filename);
+  }
   if (ds.fp) fclose(ds.fp);
   curl_easy_cleanup(ds.handle);
 
@@ -113,7 +146,7 @@ int IO::downloadFile(const std::string &filename, const std::string &url, uLong 
   return err;
 }
 
-int IO::queueFile(const std::string &filename, const std::string &url, uLong expected_crc32) {
+int IO::queueFile(const std::string &path, const std::string &filename, const std::string &url, uLong expected_crc32) {
   if (m_files.find(url) != m_files.end()) {
     fprintf(stderr, "Error file is alreay in queue\n");
     // Url already in queue
@@ -123,6 +156,7 @@ int IO::queueFile(const std::string &filename, const std::string &url, uLong exp
   ds->fp = NULL;
   ds->url = url;
   ds->filename = filename;
+  ds->path = path;
   ds->actual_crc32 = crc32(0L, Z_NULL,  0);
   ds->expected_crc32 = expected_crc32;
   ds->handle = curl_easy_init();
@@ -164,6 +198,11 @@ int IO::poll() {
               ds->expected_crc32 == ds->actual_crc32) {
             // Download success!
             failed = false;
+            // Copy file to proper location
+            if (copy_file(ds->fp, ds->path + "/" + ds->filename)) {
+              errormsg = "Error copying file to target location\n";
+              failed = true;
+            }
           } else {
             // CRC32 check failed
             failed = true;
