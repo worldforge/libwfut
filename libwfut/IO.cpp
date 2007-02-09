@@ -29,7 +29,7 @@ int createParentDirs(const std::string &filename) {
   // See if the directory already exists
   DIR *d = opendir(path.c_str());
   if (!d) {
-    // Make dir as it doesn' exist
+    // Make dir as it doesn't exist
     err = mkdir(path.c_str(), 0700);
   } else{
     closedir(d);
@@ -142,13 +142,13 @@ int IO::downloadFile(const std::string &filename, const std::string &url, uLong 
   if (ds.fp) fclose(ds.fp);
   curl_easy_cleanup(ds.handle);
 
-  // Zero on sucess
+  // Zero on success
   return err;
 }
 
 int IO::queueFile(const std::string &path, const std::string &filename, const std::string &url, uLong expected_crc32) {
   if (m_files.find(url) != m_files.end()) {
-    fprintf(stderr, "Error file is alreay in queue\n");
+    fprintf(stderr, "Error file is already in queue\n");
     // Url already in queue
     return 1;
   }

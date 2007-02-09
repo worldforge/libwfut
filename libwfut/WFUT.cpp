@@ -170,29 +170,27 @@ int WFUTClient::calculateUpdates(const ChannelFileList &server, const ChannelFil
 printf("Adding %s as no local version\n", server_obj.filename.c_str());
         updates.addFile(server_obj);
       } else if (server_obj.version > sys_iter->second.version) {
-printf("Adding %s as server is newer than sys\n", server_obj.filename.c_str());
+printf("Updating %s as server is newer than sys\n", server_obj.filename.c_str());
         updates.addFile(server_obj);
       } else {
-printf("No update for %s \n", server_obj.filename.c_str());
         // Assume the sys location is valid, so no need to update
       }
     } else if (server_obj.version > loc_iter->second.version) {
-printf("Adding %s as server is newer than local\n", server_obj.filename.c_str());
+printf("Updating %s as server is newer than local\n", server_obj.filename.c_str());
       updates.addFile(server_obj);
     } else {
-printf("local of  %s  is good accoridng to xml\n", server_obj.filename.c_str());
       // According to xml files, the local version is the same as the server
       // Lets check that it exists and has a matching CRC value.
       uLong crc32;
       if (calcCRC32(prefix + loc_iter->second.filename.c_str(), crc32) == -1) {
-printf("Unable to calculate CRC of %s\n", loc_iter->second.filename.c_str());
+        // Can't read file, so lets add it
+printf("Adding %s as local is missing\n", server_obj.filename.c_str());
         updates.addFile(server_obj);
       } else {
         // Do a CRC check and warn user that the file is modified.
         if (crc32 != server_obj.crc32) {
           // Modified!
-          printf("File %s is modified\n", loc_iter->second.filename.c_str());
-          printf("%lu --> %lu\n", crc32, server_obj.crc32);
+          printf("File %s is modified. Remove to update.\n", loc_iter->second.filename.c_str());
         }
       }
     }
