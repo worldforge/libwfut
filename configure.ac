@@ -1,4 +1,4 @@
-AC_INIT(libwfut, 0.01, libwfut@simongoodall.co.uk)
+AC_INIT(libwfut, 0.0.1, libwfut@simongoodall.co.uk)
 
 AC_CONFIG_SRCDIR([libwfut/WFUT.cpp])
 AC_CONFIG_HEADERS([config.h])
@@ -25,15 +25,7 @@ PKG_CHECK_MODULES(SIGC, sigc++-2.0 != 2.0.8,
         LIBWFUT_REQUIRES="$LIBWFUT_REQUIRES sigc++-2.0"
     ],
     [
-        PKG_CHECK_MODULES(SIGC, sigc++-1.2 >= 1.2,
-            [
-                CPPFLAGS="$CPPFLAGS $SIGC_CFLAGS"
-                LDFLAGS="$LDFLAGS $SIGC_LIBS"
-                LIBWFUT_REQUIRES="$LIBWFUT_REQUIRES sigc++-1.2"
-            ],
-            [
-                AC_MSG_ERROR([Couldn't find sigc++ library!])
-            ])
+        AC_MSG_ERROR([Couldn't find sigc++ library!])
     ])
 
 LIBWFUT_LIBS="$LIBWFUT_LIBS -lcurl"

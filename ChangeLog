@@ -1,5 +1,24 @@
 2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* configure.ac: Fix version number, remove sigc 1.x check.
+
+	* libwfut/WFUT.cpp: Return error when failing parse local list.
+
+	* tools/wfut.cpp: Implement the use of a tmpfile to record files as they	  are updated.
+
+2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/IO.cpp: Fix some spelling errors.
+
+	* libwfut/WFUT.cpp: Change some of the textual output.
+
+	* tools/wfut.cpp: Added command line args to specify the
+	  system/reference location and a prefix/destination location. Added
+	  lots of comments. Actually save the correct file list (local list and
+	  successful updates) and make a note of errors.
+
+2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* libwfut/ChannelFileList.h, libwfut/ChannelIO.h,
 	  libwfut/ChannelParser.cpp, libwfut/ChannelWriter.cpp,
 	  libwfut/Encoder.cpp, libwfut/FileIO.h, libwfut/FileParser.cpp,

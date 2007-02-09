@@ -142,6 +142,7 @@ int WFUTClient::saveLocalList(const ChannelFileList &files, const std::string &f
   assert (m_initialised == true);
   if (writeFileList(filename, files)) {
     // Error
+    return 1;
   }
   return 0;
 }

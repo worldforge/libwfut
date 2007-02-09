@@ -7,6 +7,7 @@
 #include <sigc++/bind.h>
 
 #include <libwfut/WFUT.h>
+#include <libwfut/Encoder.h>
 
 using namespace WFUT;
 
@@ -17,6 +18,7 @@ static struct option long_options [] =
 {
   { "update", 1, 0, 'u' },
   { "system", 1, 0, 's' },
+  { "server", 1, 0, 'S' },
   { "prefix", 1, 0, 'p' },
   { "version", 0, 0, 'v' },
 
@@ -24,7 +26,7 @@ static struct option long_options [] =
 
 // getopt short argument struct. One char per command
 // follow by a : to indicate that an argument it required
-static char short_options [] = "u:s:p:v";
+static char short_options [] = "u:s:p:vS:";
 
 // Function to check to see if a file exists or not.
 // TODO: we could replace this as the loader functions return 1 when they are
@@ -37,9 +39,32 @@ static bool file_exists(const std::string &filename) {
 
 }
 
+static void recordUpdate(const FileObject &fo, const std::string &tmpfile) {
+  FILE *fp = 0;
+  if (!file_exists(tmpfile)) {
+    // Write header 
+    fp = fopen(tmpfile.c_str(), "wt");
+    if (!fp) {
+      //error
+      return;
+    }
+    fprintf(fp, "<?xml version=\"1.0\"?>\n");
+    fprintf(fp, "<fileList dir=\"\">\n");
+  } else {
+    fp = fopen(tmpfile.c_str(), "at");
+    if (!fp) {
+      //error
+      return;
+    }
+  }
+  fprintf(fp, "<file filename=\"%s\" version=\"%d\" crc32=\"%lu\" size=\"%ld\" execute=\"%s\"/>\n", Encoder::encode(fo.filename).c_str(), fo.version, fo.crc32, fo.size, (fo.execute) ? ("true") : ("false"));
+  fclose(fp);
+
+}
+
 // Signal handler called when a file is sicessfully downloaded
 // We use this to update the local file list with the updated details
-void onDownloadComplete(const std::string &u, const std::string &f, const ChannelFileList &updates, ChannelFileList *local)  {
+void onDownloadComplete(const std::string &u, const std::string &f, const ChannelFileList &updates, ChannelFileList *local, const std::string &tmpfile)  {
   printf("Downloaded %s\n", f.c_str());
 
   const WFUT::FileMap &ulist = updates.getFiles();
@@ -53,6 +78,7 @@ void onDownloadComplete(const std::string &u, const std::string &f, const Channe
 
   // TODO: We should store in a tmp file the fact that we sucessfully downloaded
   // this file, incase of a crash.
+  recordUpdate(I->second, tmpfile);
 }
 
 // Signal handler called when a download fails.
@@ -67,6 +93,7 @@ int main(int argc, char *argv[]) {
   // Set some default values which we can override with command line parameters.
   std::string server_root = "http://white.worldforge.org/downloads/WFUT/";
   std::string channel_file = "wfut.xml";
+  std::string tmpfile = "tempwfut.xml";
 
   std::string channel = ".";
   std::string local_path = "./";
@@ -76,7 +103,6 @@ int main(int argc, char *argv[]) {
     int opt_index = 0;
     int c = getopt_long(argc, argv, short_options, long_options, &opt_index);
     if (c == -1) break;
-printf("%c -- %s\n", c, optarg);
     switch (c) {
       case 'v':
         fprintf(stderr, "WFUT Version: %s\n", "No Version");
@@ -102,6 +128,14 @@ printf("%c -- %s\n", c, optarg);
           fprintf(stderr, "Missing prefix\n");
         }
         break;
+       case 'S':
+        if (optarg) {
+          server_root = optarg;
+        } else {
+          fprintf(stderr, "Missing system path\n");
+        }
+        break;
+ 
       default:
         fprintf(stderr, "Unknown command: %c\n", c);
     }
@@ -116,7 +150,7 @@ printf("%c -- %s\n", c, optarg);
   wfut.init();
 
   // Define the channelfilelist objects we will use
-  ChannelFileList local, system, server, updates;
+  ChannelFileList local, system, server, updates, tmplist;
 
 
   // Look for local wfut file.
@@ -130,6 +164,25 @@ printf("%c -- %s\n", c, optarg);
       return 1;
     } else {
       if (channel == ".") channel = local.getName();
+    }
+  }
+
+  // Look for tmpwfut file. If it exists, update the local files list.
+  const std::string &tmp_wfut = local_path  + "/" + tmpfile;
+  if (debug) printf("Tmp wfut: %s\n", tmp_wfut.c_str());
+
+  if (file_exists(tmp_wfut)) {
+    if (wfut.getLocalList(tmp_wfut, tmplist)) {
+      fprintf(stderr, "Error reading tmpwfut.xml file\n");
+      wfut.shutdown();
+      return 1;
+    } else {
+      const FileMap &fm = tmplist.getFiles();
+      FileMap::const_iterator I = fm.begin();
+      FileMap::const_iterator Iend = fm.end();
+      for (; I != Iend; ++I) {
+        local.addFile(I->second);
+      }
     }
   }
 
@@ -147,6 +200,7 @@ printf("%c -- %s\n", c, optarg);
       if (channel == ".") channel = system.getName();
     }
   }
+
   // By now we should have a proper channel name. If not, then there is nothing 
   // we can do to find the server updates.
   if (channel.empty() || channel == ".") {
@@ -166,6 +220,8 @@ printf("%c -- %s\n", c, optarg);
 
   if (debug) printf("Local Root: %s\n", local_root.c_str());
 
+  printf("Updating Channel: %s\n", channel.c_str());
+
   // Now we have loaded all our data files, lets find out what we really need
   // to download
   if (wfut.calculateUpdates(server, system, local, updates, local_root)) {
@@ -178,14 +234,13 @@ printf("%c -- %s\n", c, optarg);
   local.setName(server.getName());
 
   // Queue the list of files to download
-  printf("Updating Channel: %s\n", channel.c_str());
   wfut.updateChannel(updates, server_root + "/" + channel, local_root);
 
   // error counts the number of download failures. This is incremented in the
-  //  download failed signal handler
+  // download failed signal handler
   int error = 0;
   // Connect up the signal handlers
-  wfut.DownloadComplete.connect(sigc::bind(sigc::ptr_fun(onDownloadComplete), updates, &local));
+  wfut.DownloadComplete.connect(sigc::bind(sigc::ptr_fun(onDownloadComplete), updates, &local, tmp_wfut));
   wfut.DownloadFailed.connect(sigc::bind(sigc::ptr_fun(onDownloadFailed), &error));
 
   // Keep polling to download some more file bits.
