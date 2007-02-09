@@ -1,5 +1,12 @@
 2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* libwfut/WFUT.cpp, libwfut/WFUT.h: Change functions to return error
+	  codes and take Channel Lists as by ref arguments instead. Create a
+	  DownloadComplete and DownloadFailed signal for client apps to hook
+	  into.
+
+2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* libwfut/Makefile.am, libwfut/Encoder.cpp, libwfut/Encoder.h: Added
 	  some function to encode and decode strings so they are suitable for
 	  storage in XML files.

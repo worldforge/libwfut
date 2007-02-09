@@ -7,6 +7,10 @@
 
 #include <string>
 #include <cassert>
+
+#include <sigc++/signal.h>
+
+
 #include <libwfut/types.h>
 #include <libwfut/ChannelFileList.h>
 
@@ -29,11 +33,11 @@ public:
                      const std::string &urlPrefix,
                      const std::string &pathPrefix);
 
-  ChannelList getChannelList(const std::string &url);
+  int getChannelList(const std::string &url, ChannelList &channels);
 
-  ChannelFileList getFileList(const std::string &url);
+  int getFileList(const std::string &url, ChannelFileList &files);
 
-  ChannelFileList getLocalList(const std::string &filename);
+  int getLocalList(const std::string &filename, ChannelFileList &files);
 
   int saveLocalList(const ChannelFileList &files, const std::string &filename);
 
@@ -46,7 +50,16 @@ public:
 
   int poll();
 
+   // void yadda(url, filename)
+  sigc::signal<void, const std::string&, const std::string&> DownloadComplete;
+  // void yadda(url, filename, reason)
+  sigc::signal<void, const std::string&, const std::string&, const std::string&> DownloadFailed;
+
+
 private:
+  void onDownloadComplete(const std::string &url, const std::string &filename);
+  void onDownloadFailed(const std::string &url, const std::string &filename, const std::string &reason);
+
   bool m_initialised;
   IO *m_io;
 };

@@ -12,11 +12,11 @@
 
 namespace WFUT {
 
-void msg(const std::string &u, const std::string &f)  {
-  printf("Downloaded %s  -> %s\n", u.c_str(), f.c_str());
+void WFUTClient::onDownloadComplete(const std::string &u, const std::string &f)  {
+  DownloadComplete.emit(u, f);
 }
-void msg2(const std::string &u, const std::string &f, const std::string &r)  {
-  printf("Failed %s -> %s\n",u.c_str(), r.c_str());
+void WFUTClient::onDownloadFailed(const std::string &u, const std::string &f, const std::string &r)  {
+  DownloadFailed.emit(u,f,r);
 }
 
 void writeHeader(FILE *fp, const std::string &channel) {
@@ -44,8 +44,8 @@ int WFUTClient::init() {
     return 1;
   }
   // TODO, these should really be installed by the client app
-  m_io->DownloadComplete.connect(sigc::ptr_fun(msg));
-  m_io->DownloadFailed.connect(sigc::ptr_fun(msg2));
+  m_io->DownloadComplete.connect(sigc::mem_fun(this, &WFUTClient::onDownloadComplete));
+  m_io->DownloadFailed.connect(sigc::mem_fun(this, &WFUTClient::onDownloadFailed));
 
   m_initialised = true;
 
@@ -80,9 +80,8 @@ void WFUTClient::updateChannel(const ChannelFileList &updates,
   }
 }
 
-ChannelList WFUTClient::getChannelList(const std::string &url) {
+int WFUTClient::getChannelList(const std::string &url, ChannelList &channels) {
   assert (m_initialised == true);
-  ChannelList channels;
   // TODO: this is currently platform dependant!
   char filename[] = "/tmp/wfut.XXXXXX";
   int fd = mkstemp(filename);
@@ -92,23 +91,22 @@ ChannelList WFUTClient::getChannelList(const std::string &url) {
     fprintf(stderr, "Error downloading channel list\n");
     close(fd);
     unlink(filename);
-    return channels;
+    return 1;
   }
   if (parseChannelList(filename, channels)) {
     // Error
     fprintf(stderr, "Error parsing channel list\n");
     close(fd);
     unlink(filename);
-    return channels;
+    return 2;
   }
   close(fd);
   unlink(filename);
-  return channels;
+  return 0;
 }
 
-ChannelFileList WFUTClient::getFileList(const std::string &url) {
+int WFUTClient::getFileList(const std::string &url, ChannelFileList &files) {
   assert (m_initialised == true);
-  ChannelFileList files;
   // TODO: this is currently platform dependant!
   char filename[] = "/tmp/wfut.XXXXXX";
   int fd = mkstemp(filename);
@@ -117,7 +115,7 @@ ChannelFileList WFUTClient::getFileList(const std::string &url) {
     fprintf(stderr, "Error downloading file list\n");
     close(fd);
     unlink(filename);
-    return files;
+    return 1;
   }
 
   if (parseFileList(filename, files)) {
@@ -125,19 +123,20 @@ ChannelFileList WFUTClient::getFileList(const std::string &url) {
     fprintf(stderr, "Error parsing file list\n");
     close(fd);
     unlink(filename);
+    return 2;
   }
   close(fd);
   unlink(filename);
-  return files;
+  return 0;
 }
 
-ChannelFileList WFUTClient::getLocalList(const std::string &filename) {
+int WFUTClient::getLocalList(const std::string &filename, ChannelFileList &files) {
   assert (m_initialised == true);
-  ChannelFileList files;
   if (parseFileList(filename, files)) {
-    // Error
+    printf("Error parsing local file list\n");
+    return 1;
   }
-  return files;
+  return 0;
 }
 
 int WFUTClient::saveLocalList(const ChannelFileList &files, const std::string &filename) {
