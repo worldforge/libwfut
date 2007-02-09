@@ -1,6 +1,6 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 Simon Goodall
+// Copyright (C) 2005 - 2007 Simon Goodall
 
 #include "types.h"
 
@@ -8,6 +8,7 @@
 
 #include "FileIO.h"
 #include "ChannelFileList.h"
+#include "Encoder.h"
 
 namespace WFUT {
 
@@ -16,7 +17,7 @@ static int parseFile(TiXmlElement *element, FileObject &file) {
 
   const char *fname = element->Attribute(TAG_filename);
   if (fname != NULL) {
-    file.filename = fname;
+    file.filename = Encoder::decode(fname);
   }
   sscanf(element->Attribute(TAG_version), "%d", &file.version);
   sscanf(element->Attribute(TAG_crc32), "%lu", &file.crc32);

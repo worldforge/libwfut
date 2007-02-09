@@ -1,3 +1,12 @@
+2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/Makefile.am, libwfut/Encoder.cpp, libwfut/Encoder.h: Added
+	  some function to encode and decode strings so they are suitable for
+	  storage in XML files.
+
+	* libwfut/FileParser.cpp, libwfut/FileWriter.cpp: Use the encode and
+	  decode functions.
+
 2007-02-07  Simon Goodall  <libwfut@simongoodall.co.uk>
 
 	* libwfut/Makefile.am: Add crc32 files to build.
