@@ -1,0 +1,17 @@
+INSTALL
+Makefile
+Makefile.in
+aclocal.m4
+autom4te*
+config.guess
+config.h
+config.h.in
+config.log
+config.sub
+configure
+depcomp
+install-sh
+libtool
+ltmain.sh
+missing
+stamp-h1
