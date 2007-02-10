@@ -19,40 +19,25 @@ void WFUTClient::onDownloadFailed(const std::string &u, const std::string &f, co
   DownloadFailed.emit(u,f,r);
 }
 
-void writeHeader(FILE *fp, const std::string &channel) {
-  assert(fp != NULL);
-  fprintf(fp, "<?xml version=\"1.0\"?>\n");
-  fprintf(fp, "<?xml-stylesheet type=\"text/xsl\" href=\"filelist.xsl\"?>\n");
-  fprintf(fp, "<fileList dir=\"%s\">\n", channel.c_str());
-}
-
-void writeTempList(const std::string &tmpfile, const std::string channel, const FileObject &fo) {
-  FILE *fp = fopen(tmpfile.c_str(), "wt");
-  if (fp == 0) {
-    // error opening file    
-    return;
-  }
-}
-
-int WFUTClient::init() {
+WFUTError WFUTClient::init() {
   assert (m_initialised == false);
 
   m_io = new IO();
   if (m_io->init()) {
     delete m_io;
     m_io = NULL;
-    return 1;
+    return WFUT_GENERAL_ERROR;
   }
-  // TODO, these should really be installed by the client app
+ 
   m_io->DownloadComplete.connect(sigc::mem_fun(this, &WFUTClient::onDownloadComplete));
   m_io->DownloadFailed.connect(sigc::mem_fun(this, &WFUTClient::onDownloadFailed));
 
   m_initialised = true;
 
-  return 0;
+  return WFUT_NO_ERROR;
 }
 
-int WFUTClient::shutdown() {
+WFUTError WFUTClient::shutdown() {
   assert (m_initialised == true);
 
   m_io->shutdown();
@@ -61,7 +46,7 @@ int WFUTClient::shutdown() {
 
   m_initialised = false;
 
-  return 0;
+  return WFUT_NO_ERROR;
 }
 
 void WFUTClient::updateChannel(const ChannelFileList &updates,
@@ -71,15 +56,16 @@ void WFUTClient::updateChannel(const ChannelFileList &updates,
   const FileMap &files = updates.getFiles();
 
   FileMap::const_iterator I = files.begin();
-  while (I != files.end()) {
+  FileMap::const_iterator Iend = files.end();
+  while (I != Iend) {
     const FileObject &f = (I++)->second;
 
-    std::string url = urlPrefix + updates.getName() + "/" + f.filename;
+    const std::string &url = urlPrefix + updates.getName() + "/" + f.filename;
     m_io->queueFile(pathPrefix, f.filename, url, f.crc32);
   }
 }
 
-int WFUTClient::getChannelList(const std::string &url, ChannelList &channels) {
+WFUTError WFUTClient::getChannelList(const std::string &url, ChannelList &channels) {
   assert (m_initialised == true);
   // TODO: this is currently platform dependant!
   char filename[] = "/tmp/wfut.XXXXXX";
@@ -90,21 +76,21 @@ int WFUTClient::getChannelList(const std::string &url, ChannelList &channels) {
     fprintf(stderr, "Error downloading channel list\n");
     close(fd);
     unlink(filename);
-    return 1;
+    return WFUT_DOWNLOAD_ERROR;
   }
   if (parseChannelList(filename, channels)) {
     // Error
     fprintf(stderr, "Error parsing channel list\n");
     close(fd);
     unlink(filename);
-    return 2;
+    return WFUT_PARSE_ERROR;
   }
   close(fd);
   unlink(filename);
-  return 0;
+  return WFUT_NO_ERROR;
 }
 
-int WFUTClient::getFileList(const std::string &url, ChannelFileList &files) {
+WFUTError WFUTClient::getFileList(const std::string &url, ChannelFileList &files) {
   assert (m_initialised == true);
   // TODO: this is currently platform dependant!
   char filename[] = "/tmp/wfut.XXXXXX";
@@ -114,7 +100,7 @@ int WFUTClient::getFileList(const std::string &url, ChannelFileList &files) {
     fprintf(stderr, "Error downloading file list\n");
     close(fd);
     unlink(filename);
-    return 1;
+    return WFUT_DOWNLOAD_ERROR;
   }
 
   if (parseFileList(filename, files)) {
@@ -122,29 +108,29 @@ int WFUTClient::getFileList(const std::string &url, ChannelFileList &files) {
     fprintf(stderr, "Error parsing file list\n");
     close(fd);
     unlink(filename);
-    return 2;
+    return WFUT_PARSE_ERROR;
   }
   close(fd);
   unlink(filename);
-  return 0;
+  return WFUT_NO_ERROR;
 }
 
-int WFUTClient::getLocalList(const std::string &filename, ChannelFileList &files) {
+WFUTError WFUTClient::getLocalList(const std::string &filename, ChannelFileList &files) {
   assert (m_initialised == true);
   if (parseFileList(filename, files)) {
     printf("Error parsing local file list\n");
-    return 1;
+    return WFUT_PARSE_ERROR;
   }
-  return 0;
+  return WFUT_NO_ERROR;
 }
 
-int WFUTClient::saveLocalList(const ChannelFileList &files, const std::string &filename) {
+WFUTError WFUTClient::saveLocalList(const ChannelFileList &files, const std::string &filename) {
   assert (m_initialised == true);
   if (writeFileList(filename, files)) {
     // Error
-    return 1;
+    return WFUT_WRITE_ERROR;
   }
-  return 0;
+  return WFUT_NO_ERROR;
 }
 
 int WFUTClient::poll() {
@@ -152,7 +138,7 @@ int WFUTClient::poll() {
   return m_io->poll();
 }
 
-int WFUTClient::calculateUpdates(const ChannelFileList &server, const ChannelFileList &system, const ChannelFileList &local, ChannelFileList &updates, const std::string &prefix) {
+WFUTError WFUTClient::calculateUpdates(const ChannelFileList &server, const ChannelFileList &system, const ChannelFileList &local, ChannelFileList &updates, const std::string &prefix) {
   const FileMap &server_map = server.getFiles();
   const FileMap &system_map = system.getFiles();
   const FileMap &local_map = local.getFiles();
@@ -196,7 +182,7 @@ printf("Adding %s as local is missing\n", server_obj.filename.c_str());
       }
     }
   }
-  return 0;
+  return WFUT_NO_ERROR;
 }
 
 }
