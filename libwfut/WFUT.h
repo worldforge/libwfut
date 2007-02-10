@@ -65,11 +65,18 @@ public:
    * side file location. The poll function must be called to perform the 
    * downloading and the DownloadComplete and DownloadFailed signals can be used
    * to track the result of each file download.
+   * The updates channel name is appended to the urlPrefix. 
    */
   void updateChannel(const ChannelFileList &updates, 
                      const std::string &urlPrefix,
                      const std::string &pathPrefix);
 
+  /** This function is similar to updateChannel, except it takes a single 
+   * FileObject, rather than a whole list.
+   */
+  void updateFile(const FileObject &file, 
+                  const std::string &urlPrefix,
+                  const std::string &pathPrefix);
 
   /** This function directly download and parses a channel listings file from 
    * the specified URL. This function will block until complete. This is the

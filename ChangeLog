@@ -1,5 +1,12 @@
 2007-02-10  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* libwfut/WFUT.cpp, libwut/WFUT.h: Added a function to queue a single
+	  FileObject for updating.
+
+	* libwfut/IO.cpp: Some cleanups.
+
+2007-02-10  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* libwfut/WFUT.cpp, libwfut/WFUT.h: Commented the header file. Added an
 	  enum to describe the returned error codes.
 

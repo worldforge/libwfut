@@ -65,6 +65,16 @@ void WFUTClient::updateChannel(const ChannelFileList &updates,
   }
 }
 
+
+void WFUTClient::updateFile(const FileObject &file,
+                            const std::string &urlPrefix,
+                            const std::string &pathPrefix) {
+  assert (m_initialised == true);
+
+  const std::string &url = urlPrefix + "/" + file.filename;
+  m_io->queueFile(pathPrefix, file.filename, url, file.crc32);
+}
+
 WFUTError WFUTClient::getChannelList(const std::string &url, ChannelList &channels) {
   assert (m_initialised == true);
   // TODO: this is currently platform dependant!

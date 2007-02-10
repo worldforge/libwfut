@@ -23,7 +23,7 @@ int createParentDirs(const std::string &filename) {
   size_t pos = filename.find_last_of("\\/");
   if (pos == std::string::npos) return 0;
 
-  std::string path = filename.substr(0, pos);
+  const std::string &path = filename.substr(0, pos);
   // TODO Check return value
   createParentDirs(path);
   // See if the directory already exists
@@ -66,9 +66,6 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp) {
   IO::DataStruct *ds = reinterpret_cast<IO::DataStruct*>(userp);
   if (ds->fp == NULL) {
     // Open File handle
-//    if (createParentDirs(ds->filename) != 0) return 0;
-    // TODO: this should be to a tmp file first!
-//    ds->fp = fopen(ds->filename.c_str(), "wb");
     ds->fp = tmpfile();
     // TODO Check that filehandle is valid
     if (ds->fp == NULL) {
