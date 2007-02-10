@@ -25,10 +25,22 @@ PKG_CHECK_MODULES(SIGC, sigc++-2.0 != 2.0.8,
         LIBWFUT_REQUIRES="$LIBWFUT_REQUIRES sigc++-2.0"
     ],
     [
-        AC_MSG_ERROR([Couldn't find sigc++ library!])
-    ])
+        AC_MSG_ERROR([Couldn't find sigc++ library, or an invalid version was found. Please see http://libsigc.sourceforge.net/ and obtain sigc++ 2.0.])
+    ]
+)
 
-LIBWFUT_LIBS="$LIBWFUT_LIBS -lcurl"
+CURL_VERSION=7.15.0
+PKG_CHECK_MODULES(CURL, libcurl >= $CURL_VERSION,
+    [
+        CXXFLAGS="$CXXFLAGS $CURL_CFLAGS"
+        LDFLAGS="$LDFLAGS $CURL_LIBS"
+        LIBWFUT_REQUIRES="$LIBWFUT_REQUIRES libcurl"
+    ],
+    [
+        AC_MSG_ERROR([Couldn't find curl library. Please see http://curl.haxx.se/ and obtain a curl version greater than $CURL_VERSION])
+    ]
+)
+
 
 AC_LANG_POP(C++)
 
