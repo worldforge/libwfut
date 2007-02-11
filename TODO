@@ -1,0 +1,10 @@
+TODO
+====
+
+ * Various non-debugging printfs should be moved into some way of conveying this
+   information back to the client application.
+
+ * The various curl settings should be exposed to the client application.
+
+ * We could include the server-side functionality fairly easily
+

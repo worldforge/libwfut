@@ -89,9 +89,13 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp) {
 
 int IO::init() {
   assert (m_initialised == false);
+
   curl_global_init(CURL_GLOBAL_ALL);
+
   m_mhandle = curl_multi_init();
+
   m_initialised = true;
+
   return 0;
 }
 
@@ -242,6 +246,11 @@ int IO::poll() {
         failed = true;
         errormsg = "There was an unknown error downloading the requested file";
     }
+
+    if (debug) printf("Removing Handle\n");
+    // Close handle	
+    curl_multi_remove_handle(m_mhandle, msg->easy_handle);
+
     if (ds) {
       if (ds->fp) fclose(ds->fp);
       ds->fp = NULL;
@@ -253,11 +262,9 @@ int IO::poll() {
         DownloadComplete.emit(ds->url, ds->filename);
       }
       m_files.erase(m_files.find(ds->url));
+      curl_easy_cleanup(ds->handle);
       delete ds;
     }
-    if (debug) printf("Removing Handle\n");
-    // Close handle	
-    curl_multi_remove_handle(m_mhandle, msg->easy_handle);
   }
   return num_handles;
 }

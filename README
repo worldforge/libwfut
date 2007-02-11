@@ -1,27 +1,12 @@
  libwfut
 =========
 
-libwfut is a C++ implementation of the client side of WFUT (forge/tools/WFUT). The aim of this library is to provide update capabilities for C++ based clients.#
+libwfut is a C++ implementation of the client side of WFUT (forge/tools/WFUT). The aim of this library is to provide update capabilities for C++ based clients. As an example of library usage, a command line update tool is also provided.
+
 This library used tinyxml (http://www.grinninglizard.com/tinyxml/) to parse the XML documents and libcurl (http://curl.haxx.se/) to download files.
+Tinyxml is embedded in the library, with the source being kept in the tinyxml subdir. The only difference between this version and the original version is the addition of the WFUT namespace to avoid potential conflicts with other embedded tinyxml versions.
 
-Currently this library is in its early stages with XML document parsing written, however file downloading is not yet complete.
-
- Planned Architecture
-----------------------
-
-libwfut is planned to have a polling interface to allow background downloads. A few basic methods will download channels lists and file lists which can be used to queue files for downloading. Calling poll() will then download a portion of the current file before returning control back to the application.
-
- Example Usage
----------------
-
-WFUT::ChannelList channels = WFUT::getChannels("http://white.worldforge.org/downloads/WFUT/channels.xml);
-
-WFUT::FileList files = WFUT::getFiles("http://white.worldforge.org/downloads/WFUT/sear-media.xml");
-
-WFUT::queueFiles(files);
-
-while (WFUT::hasFiles()) {
-  WFUT::poll();
-}
-
+libwfut is split up into a number of classes. There are a number of XML reading and writing classes (FileParser, FileWriter and ChannelParser). These perform the basic I/O operations on the file listings. The IO class handles all of the file downloading. This wraps round the curl library. The final main class is the WFUTClient class which wraps up the other classes and manages determining what files to update.
+libwfut allows two modes of file download. The first mode is a blocking download. A call to WFUTClient::downloadFile with a source URL and destination filename.This function will return when the download completes successfully, or fails for some reason.
+The second mode places multiple files in a download queue. The queue is processed a bit at a time  by calling the poll function. Signals are fired when a download completes successfully or fails for some reason.
 
