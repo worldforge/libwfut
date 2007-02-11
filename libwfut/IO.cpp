@@ -30,7 +30,11 @@ int createParentDirs(const std::string &filename) {
   DIR *d = opendir(path.c_str());
   if (!d) {
     // Make dir as it doesn't exist
+#if defined (WIN32) || defined (_WIN32) || defined( __WIN32__)
+    err = mkdir(path.c_str());
+#else
     err = mkdir(path.c_str(), 0700);
+#endif
   } else{
     closedir(d);
     err = 0;
