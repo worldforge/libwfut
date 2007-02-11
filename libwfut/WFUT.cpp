@@ -77,51 +77,73 @@ void WFUTClient::updateFile(const FileObject &file,
 
 WFUTError WFUTClient::getChannelList(const std::string &url, ChannelList &channels) {
   assert (m_initialised == true);
-  // TODO: this is currently platform dependant!
-  char filename[] = "/tmp/wfut.XXXXXX";
-  int fd = mkstemp(filename);
 
-  if (m_io->downloadFile(filename, url, 0)) {
+  FILE *fp = tmpfile();
+  if (!fp) {
+    return WFUT_GENERAL_ERROR;
+  }
+
+  if (m_io->downloadFile(fp, url, 0)) {
     // error
-    fprintf(stderr, "Error downloading channel list\n");
-    close(fd);
-    unlink(filename);
+    fprintf(stderr, "Error downloading file list\n");
+    fclose(fp);
     return WFUT_DOWNLOAD_ERROR;
   }
-  if (parseChannelList(filename, channels)) {
+
+  std::string xml;
+  // Pre-allocate string memory
+  xml.reserve(ftell(fp));
+  rewind(fp);
+  char buf[1024];
+  size_t n;
+  while ((n = fread(buf, sizeof(char), 1024, fp) ) > 0) {
+    xml.append(buf, n);  
+  }
+
+  fclose(fp);
+
+  if (parseChannelListXML(xml, channels)) {
     // Error
-    fprintf(stderr, "Error parsing channel list\n");
-    close(fd);
-    unlink(filename);
+    fprintf(stderr, "Error parsing file list\n");
     return WFUT_PARSE_ERROR;
   }
-  close(fd);
-  unlink(filename);
+
   return WFUT_NO_ERROR;
 }
 
 WFUTError WFUTClient::getFileList(const std::string &url, ChannelFileList &files) {
   assert (m_initialised == true);
-  // TODO: this is currently platform dependant!
-  char filename[] = "/tmp/wfut.XXXXXX";
-  int fd = mkstemp(filename);
-  if (m_io->downloadFile(filename, url, 0)) {
+
+  FILE *fp = tmpfile();
+  if (!fp) {
+    return WFUT_GENERAL_ERROR;
+  }
+
+  if (m_io->downloadFile(fp, url, 0)) {
     // error
     fprintf(stderr, "Error downloading file list\n");
-    close(fd);
-    unlink(filename);
+    fclose(fp);
     return WFUT_DOWNLOAD_ERROR;
   }
 
-  if (parseFileList(filename, files)) {
+  std::string xml;
+  // Pre-allocate string memory
+  xml.reserve(ftell(fp));
+  rewind(fp);
+  char buf[1024];
+  size_t n;
+  while ((n = fread(buf, sizeof(char), 1024, fp) ) > 0) {
+    xml.append(buf, n);  
+  }
+
+  fclose(fp);
+
+  if (parseFileListXML(xml, files)) {
     // Error
     fprintf(stderr, "Error parsing file list\n");
-    close(fd);
-    unlink(filename);
     return WFUT_PARSE_ERROR;
   }
-  close(fd);
-  unlink(filename);
+
   return WFUT_NO_ERROR;
 }
 

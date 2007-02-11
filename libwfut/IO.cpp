@@ -147,6 +147,27 @@ int IO::downloadFile(const std::string &filename, const std::string &url, uLong 
   return err;
 }
 
+int IO::downloadFile(FILE *fp, const std::string &url, uLong expected_crc32) {
+
+  DataStruct ds;
+  ds.fp = fp;
+  ds.url = url;
+  ds.filename = "";
+  ds.actual_crc32 = crc32(0L, Z_NULL,  0);
+  ds.expected_crc32 = expected_crc32;
+  ds.handle = curl_easy_init();
+
+  curl_easy_setopt(ds.handle, CURLOPT_URL, url.c_str());
+  curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
+  curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
+  CURLcode err = curl_easy_perform(ds.handle);
+
+  curl_easy_cleanup(ds.handle);
+
+  // Zero on success
+  return err;
+}
+
 int IO::queueFile(const std::string &path, const std::string &filename, const std::string &url, uLong expected_crc32) {
   if (m_files.find(url) != m_files.end()) {
     fprintf(stderr, "Error file is already in queue\n");

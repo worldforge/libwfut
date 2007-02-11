@@ -1,5 +1,15 @@
 2007-02-11  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* libwfut/IO.cpp, libwfut/IO.h: Added new downloadFile function which
+	  takes a FILE * instead of a filename.
+
+	* libwfut/WFUT.cpp: Reworked the getFileList and getChannelList
+	  functions to use more cross-platform functions. The files are now 
+	  downloaded into a tmpfile and then read into memory before parsing.
+	  This avoids using *nix only functions.
+
+2007-02-11  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* libwfut/IO.cpp: Add in win32 check for different usage of mkdir on 
 	  win32 platforms.
 
