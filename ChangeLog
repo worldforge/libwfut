@@ -1,5 +1,9 @@
 2007-02-11  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* configure.ac: Added check for zlib.
+
+2007-02-11  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* libwfut/IO.cpp, libwfut/IO.h: Added new downloadFile function which
 	  takes a FILE * instead of a filename.
 
