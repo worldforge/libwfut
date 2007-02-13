@@ -1,5 +1,16 @@
 2007-02-13  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* libwfut/Makefile.am, libwfut/platform.cpp, libwfut/platform.h,
+	  libwfut/IO.cpp, libwfut/WFUT.cpp: Created a platform class with
+	  platform specific code. Currently provides a wrapper for mkdir and a
+	  fake tmpfile implementation for win32 as the default one only works 
+	  for administrator accounts.
+
+	* configure.ac: Remove -ansi as this stops some win32 functions being
+	  defined.
+
+2007-02-13  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* Makefile.am: Install pkg-config file.
 
 2007-02-13  Simon Goodall  <libwfut@simongoodall.co.uk>

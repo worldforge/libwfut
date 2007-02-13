@@ -9,6 +9,7 @@
 #include "libwfut/ChannelIO.h"
 #include "libwfut/ChannelFileList.h"
 #include "libwfut/crc32.h"
+#include "libwfut/platform.h"
 
 namespace WFUT {
 
@@ -78,7 +79,7 @@ void WFUTClient::updateFile(const FileObject &file,
 WFUTError WFUTClient::getChannelList(const std::string &url, ChannelList &channels) {
   assert (m_initialised == true);
 
-  FILE *fp = tmpfile();
+  FILE *fp = os_create_tmpfile();
   if (!fp) {
     return WFUT_GENERAL_ERROR;
   }
@@ -86,7 +87,7 @@ WFUTError WFUTClient::getChannelList(const std::string &url, ChannelList &channe
   if (m_io->downloadFile(fp, url, 0)) {
     // error
     fprintf(stderr, "Error downloading file list\n");
-    fclose(fp);
+    os_free_tmpfile(fp);
     return WFUT_DOWNLOAD_ERROR;
   }
 
@@ -100,7 +101,7 @@ WFUTError WFUTClient::getChannelList(const std::string &url, ChannelList &channe
     xml.append(buf, n);  
   }
 
-  fclose(fp);
+  os_free_tmpfile(fp);
 
   if (parseChannelListXML(xml, channels)) {
     // Error
@@ -114,15 +115,17 @@ WFUTError WFUTClient::getChannelList(const std::string &url, ChannelList &channe
 WFUTError WFUTClient::getFileList(const std::string &url, ChannelFileList &files) {
   assert (m_initialised == true);
 
-  FILE *fp = tmpfile();
+  FILE *fp = os_create_tmpfile();
   if (!fp) {
+    fprintf(stderr, "Unable to create temporary file\n");
+     perror("");
     return WFUT_GENERAL_ERROR;
   }
 
   if (m_io->downloadFile(fp, url, 0)) {
     // error
     fprintf(stderr, "Error downloading file list\n");
-    fclose(fp);
+    os_free_tmpfile(fp);
     return WFUT_DOWNLOAD_ERROR;
   }
 
@@ -136,7 +139,7 @@ WFUTError WFUTClient::getFileList(const std::string &url, ChannelFileList &files
     xml.append(buf, n);  
   }
 
-  fclose(fp);
+  os_free_tmpfile(fp);
 
   if (parseFileListXML(xml, files)) {
     // Error

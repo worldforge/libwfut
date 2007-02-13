@@ -18,6 +18,7 @@ libwfut_0_1_la_SOURCES = \
 	FileParser.cpp \
 	FileWriter.cpp \
 	WFUT.cpp \
+	platform.cpp\
 	tinystr.cpp tinyxml.cpp tinyxmlerror.cpp tinyxmlparser.cpp \
 	tinystr.h tinyxml.h
 
@@ -32,4 +33,5 @@ libwfut_HEADERS = \
 	FileIO.h \
 	types.h \
 	IO.h \
-	WFUT.h
+	WFUT.h \
+	platform.h

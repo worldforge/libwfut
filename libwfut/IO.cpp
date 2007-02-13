@@ -9,6 +9,7 @@
 #include <stdio.h>
 
 #include "libwfut/IO.h"
+#include "libwfut/platform.h"
 
 namespace WFUT {
 
@@ -30,11 +31,7 @@ int createParentDirs(const std::string &filename) {
   DIR *d = opendir(path.c_str());
   if (!d) {
     // Make dir as it doesn't exist
-#if defined (WIN32) || defined (_WIN32) || defined( __WIN32__)
-    err = mkdir(path.c_str());
-#else
-    err = mkdir(path.c_str(), 0700);
-#endif
+    err = os_mkdir(path);
   } else{
     closedir(d);
     err = 0;
@@ -70,7 +67,7 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp) {
   IO::DataStruct *ds = reinterpret_cast<IO::DataStruct*>(userp);
   if (ds->fp == NULL) {
     // Open File handle
-    ds->fp = tmpfile();
+    ds->fp = os_create_tmpfile();
     // TODO Check that filehandle is valid
     if (ds->fp == NULL) {
       fprintf(stderr, "Error opening file for writing\n");
@@ -252,7 +249,7 @@ int IO::poll() {
     curl_multi_remove_handle(m_mhandle, msg->easy_handle);
 
     if (ds) {
-      if (ds->fp) fclose(ds->fp);
+      if (ds->fp) os_free_tmpfile(ds->fp);
       ds->fp = NULL;
       if (failed) {
         if (debug) printf("Download Failed\n");
