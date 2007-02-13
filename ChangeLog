@@ -1,5 +1,9 @@
 2007-02-13  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* Makefile.am: Install pkg-config file.
+
+2007-02-13  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* libwfut/Makefile.am, libwfut/tinyxml.cpp, libwfut/tinystr.cpp,
 	  libwfut/tinyxmlerror.cpp, libwfut/tinyxmlparser.cpp, 
 	  libwfut/tinystr.h, libwfut/tinyxml.h: Added tinyxml to the main source
