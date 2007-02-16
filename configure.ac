@@ -82,5 +82,7 @@ AC_CONFIG_FILES([
 	Makefile
 	libwfut/Makefile
 	tools/Makefile
+	man/Makefile
+	man/man1/Makefile
 ])
 AC_OUTPUT

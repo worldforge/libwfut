@@ -1,5 +1,10 @@
 2007-02-16  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* man/man1/wfut.1, configure.ac, Makefile.am, man/Makefile.am,
+	  man/man1/Makefile.am: Added initial man page for wfut.
+
+2007-02-16  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* libwfut/Encoder.cpp, libwfut/Encoder.h: Renamed encode/decode to
 	  encodeString and decodeString. Added an encodeURL method to encode
 	  strings for suitable use as a URL.

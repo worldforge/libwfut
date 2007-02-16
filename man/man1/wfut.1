@@ -1,0 +1,48 @@
+.TH wfut 1 "Febuary 16, 2007"
+.SH NAME
+wfut
+
+.SH SYNOPSIS
+.B wfut
+[ options ]
+-u 
+.I channel_name
+
+.SH DESCRIPTION
+wfut is a command-line update tool intended for use with WorldForge systems. It provides the client side update functionality. Server-side functionality is still at present only available in the Java version of WFUT.
+
+.SH OPTIONS
+.TP
+.BI \-u " channel_name" "\fR,\fP \-\-update=" channel_name
+Update the channel
+.I channel_name.
+This can be a period, ., if the current directory (or prefix) is the full path to a channel.
+
+.TP
+.BI \-p " local_root" "\fR,\fP \-\-prefix=" local_root
+Use the directory
+.I local_root
+instead of the current working directory to search for local updates.
+
+.TP
+.BI \-s " system_root" "\fR,\fP \-\-system=" system_root
+Look in
+.I system_root
+for read-only / package installed channel data.
+
+.TP
+.BI \-S " server_root" "\fR,\fP \-\-server=" server_root
+Use
+.I server_root
+as the base URL on the server in which channels are kept.
+
+.SH EXAMPLES
+The following command will update the channel
+.I sear-media.
+This will look for a directory called sear-media in $HOME/.wfut/, or create one if necessary and download updates into there. It will also look in /usr/share/wfut/sear-media for existing files.
+
+wfut -s /usr/share/wfut/ -p $HOME/.wfut/ -u sear-media
+
+.SH NOTES
+wfut uses curl internally.
+
