@@ -81,7 +81,6 @@ AC_SUBST(BUILD_IT)
 AC_CONFIG_FILES([
 	libwfut-0.1.pc
 	Makefile
-	tinyxml/Makefile
 	libwfut/Makefile
 	tools/Makefile
 ])
