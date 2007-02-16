@@ -4,7 +4,7 @@
 
 #include "types.h"
 
-#include <tinyxml/tinyxml.h>
+#include "tinyxml.h"
 
 #include "libwfut/ChannelIO.h"
 

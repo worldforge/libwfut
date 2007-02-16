@@ -1,3 +1,10 @@
+2007-02-16  Kai Blin  <kai.blin@gmail.com>
+	* configure.ac: Fix installing the wfut binary.
+
+	* libwfut/FileWriter.cpp, libwfut/FileParser.cpp, 
+	  libwfut/ChannelWriter.cpp, libwfut/ChannelParser.cpp: Fix tinyxml
+	  include now that tinyxml is in the main source.
+
 2007-02-16  Simon Goodall  <libwfut@simongoodall.co.uk>
 
 	* configure.ac: Removed tinyxml Makefile from generated files list.
