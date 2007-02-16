@@ -1,3 +1,13 @@
+2007-02-16  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/Encoder.cpp, libwfut/Encoder.h: Renamed encode/decode to
+	  encodeString and decodeString. Added an encodeURL method to encode
+	  strings for suitable use as a URL.
+
+	* libwfut/FileParser.cpp, libwfut/FileWriter.cpp, libwfut/IO.cpp,
+	  tools/wfut.cpp: Updated calls to encode/decode. Make sure urls are
+	  properly encoded before storing/using them.
+
 2007-02-16  Kai Blin  <kai.blin@gmail.com>
 	* configure.ac: Fix installing the wfut binary.
 

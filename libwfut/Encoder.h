@@ -11,8 +11,11 @@ namespace WFUT {
 
 class Encoder {
 public:
-  static std::string encode(const std::string &str);
-  static std::string decode(const std::string &str);
+  // Encode/Decode string values to store in an XML file
+  static std::string encodeString(const std::string &str);
+  static std::string decodeString(const std::string &str);
+  // Encode strings so they can be used in URLs
+  static std::string encodeURL(const std::string &str);
 };
 
 } /* namespace WFUT */

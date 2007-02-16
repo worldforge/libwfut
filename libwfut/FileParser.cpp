@@ -16,7 +16,7 @@ static int parseFile(TiXmlElement *element, FileObject &file) {
 
   const char *fname = element->Attribute(TAG_filename);
   if (fname != NULL) {
-    file.filename = Encoder::decode(fname);
+    file.filename = Encoder::decodeString(fname);
   }
   sscanf(element->Attribute(TAG_version), "%d", &file.version);
   sscanf(element->Attribute(TAG_crc32), "%lu", &file.crc32);

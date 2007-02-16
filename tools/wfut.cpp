@@ -2,6 +2,10 @@
 // the GNU Lesser General Public License (See COPYING for details).
 // Copyright (C) 2005 - 2007 Simon Goodall
 
+#ifdef HAVE_CONFIG_H 1
+  #include "config.h"
+#endif
+
 #include <getopt.h>
 
 #include <sigc++/bind.h>
@@ -57,7 +61,7 @@ static void recordUpdate(const FileObject &fo, const std::string &tmpfile) {
       return;
     }
   }
-  fprintf(fp, "<file filename=\"%s\" version=\"%d\" crc32=\"%lu\" size=\"%ld\" execute=\"%s\"/>\n", Encoder::encode(fo.filename).c_str(), fo.version, fo.crc32, fo.size, (fo.execute) ? ("true") : ("false"));
+  fprintf(fp, "<file filename=\"%s\" version=\"%d\" crc32=\"%lu\" size=\"%ld\" execute=\"%s\"/>\n", Encoder::encodeString(fo.filename).c_str(), fo.version, fo.crc32, fo.size, (fo.execute) ? ("true") : ("false"));
   fclose(fp);
 
 }
@@ -105,7 +109,8 @@ int main(int argc, char *argv[]) {
     if (c == -1) break;
     switch (c) {
       case 'v':
-        fprintf(stderr, "WFUT Version: %s\n", "No Version");
+        fprintf(stderr, "WFUT Version: %s\n", VERSION);
+        exit (0);
         break;
       case 'u':
         if (optarg) {
@@ -188,6 +193,7 @@ int main(int argc, char *argv[]) {
 
 
   // Look for a system wfut file
+  if (!system_path.empty()) {
   const std::string &system_wfut = system_path + "/" + channel + "/" + channel_file; 
   if (debug) printf("System wfut: %s\n", system_wfut.c_str());
 
@@ -200,7 +206,7 @@ int main(int argc, char *argv[]) {
       if (channel == ".") channel = system.getName();
     }
   }
-
+  }
   // By now we should have a proper channel name. If not, then there is nothing 
   // we can do to find the server updates.
   if (channel.empty() || channel == ".") {

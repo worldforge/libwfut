@@ -9,6 +9,7 @@
 #include <stdio.h>
 
 #include "libwfut/IO.h"
+#include "libwfut/Encoder.h"
 #include "libwfut/platform.h"
 
 namespace WFUT {
@@ -127,13 +128,13 @@ int IO::downloadFile(const std::string &filename, const std::string &url, uLong 
 
   DataStruct ds;
   ds.fp = NULL;
-  ds.url = url;
+  ds.url = Encoder::encodeURL(url);
   ds.filename = filename;
   ds.actual_crc32 = crc32(0L, Z_NULL,  0);
   ds.expected_crc32 = expected_crc32;
   ds.handle = curl_easy_init();
 
-  curl_easy_setopt(ds.handle, CURLOPT_URL, url.c_str());
+  curl_easy_setopt(ds.handle, CURLOPT_URL, ds.url.c_str());
   curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
   CURLcode err = curl_easy_perform(ds.handle);
@@ -152,13 +153,13 @@ int IO::downloadFile(FILE *fp, const std::string &url, uLong expected_crc32) {
 
   DataStruct ds;
   ds.fp = fp;
-  ds.url = url;
+  ds.url = Encoder::encodeURL(url);
   ds.filename = "";
   ds.actual_crc32 = crc32(0L, Z_NULL,  0);
   ds.expected_crc32 = expected_crc32;
   ds.handle = curl_easy_init();
 
-  curl_easy_setopt(ds.handle, CURLOPT_URL, url.c_str());
+  curl_easy_setopt(ds.handle, CURLOPT_URL, ds.url.c_str());
   curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
   CURLcode err = curl_easy_perform(ds.handle);
@@ -177,16 +178,16 @@ int IO::queueFile(const std::string &path, const std::string &filename, const st
   }
   DataStruct *ds = new DataStruct();
   ds->fp = NULL;
-  ds->url = url;
+  ds->url = Encoder::encodeURL(url);
   ds->filename = filename;
   ds->path = path;
   ds->actual_crc32 = crc32(0L, Z_NULL,  0);
   ds->expected_crc32 = expected_crc32;
   ds->handle = curl_easy_init();
 
-  m_files[url] = ds;
+  m_files[ds->url] = ds;
 
-  curl_easy_setopt(ds->handle, CURLOPT_URL, url.c_str());
+  curl_easy_setopt(ds->handle, CURLOPT_URL, ds->url.c_str());
   curl_easy_setopt(ds->handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds->handle, CURLOPT_WRITEDATA, ds);
   curl_easy_setopt(ds->handle, CURLOPT_PRIVATE, ds);

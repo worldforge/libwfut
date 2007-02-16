@@ -18,7 +18,7 @@ static int writeFile(TiXmlElement *element, const FileObject &file) {
   // TODO need to convert numbers to string as tinyxml doesn'y support 
   // unsigned lonfs
 
-  element->SetAttribute(TAG_filename, Encoder::encode(file.filename));
+  element->SetAttribute(TAG_filename, Encoder::encodeString(file.filename));
   element->SetAttribute(TAG_version, file.version);
   element->SetAttribute(TAG_crc32, file.crc32);
   element->SetAttribute(TAG_size, file.size);
