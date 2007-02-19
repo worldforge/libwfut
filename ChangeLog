@@ -1,3 +1,8 @@
+2007-02-19  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/platform.cpp: Check %TMP%, %TEMP% then "." as possible tmp
+	  file locations. Delete Win32 temp files on close.
+
 2007-02-16  Simon Goodall  <libwfut@simongoodall.co.uk>
 
 	* tools/wfut.cpp: Fix compiler warning.
