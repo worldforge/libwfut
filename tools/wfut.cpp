@@ -17,7 +17,7 @@ using namespace WFUT;
 
 static const bool debug = true;
 
-// getopt long argument struct
+// getopt long argument struct. 
 static struct option long_options [] =
 {
   { "update", 1, 0, 'u' },
@@ -81,7 +81,7 @@ void onDownloadComplete(const std::string &u, const std::string &f, const Channe
   // filename
   local->addFile(I->second);
 
-  // TODO: We should store in a tmp file the fact that we sucessfully downloaded
+  // We store in a tmp file the fact that we sucessfully downloaded
   // this file, incase of a crash.
   recordUpdate(I->second, tmpfile);
 }
@@ -95,9 +95,8 @@ void onDownloadFailed(const std::string &u, const std::string &f, const std::str
 
 void print_usage(const char *name) {
   printf("WFUT Version: %s\n", VERSION);
-  printf("Usage:\n");
-  printf("%s [options]\n", name);
-  printf("Options:\n");
+  printf("Usage: %s [options]\n", name);
+  printf("\nOptions:\n");
   printf("\t-p, --prefix channel_name -- The destination directory. (Optional)\n");
   printf("\t-s, --system channel_name -- The system channels directory. (Optional)\n");
   printf("\t-S, --server channel_name -- The URL to the update server.(Optional)\n");
@@ -208,7 +207,6 @@ int main(int argc, char *argv[]) {
       }
     }
   }
-
 
   // Look for a system wfut file
   if (!system_path.empty()) {

@@ -26,8 +26,11 @@ int createParentDirs(const std::string &filename) {
   if (pos == std::string::npos) return 0;
 
   const std::string &path = filename.substr(0, pos);
-  // TODO Check return value
-  createParentDirs(path);
+
+  if (err = createParentDirs(path)) {
+    // There was an error creating the parent path.
+    return err;
+  }
   // See if the directory already exists
   DIR *d = opendir(path.c_str());
   if (!d) {
@@ -45,6 +48,7 @@ static int copy_file(FILE *fp, const std::string &target_filename) {
 
   if (createParentDirs(target_filename)) {
     // Error making dir structure
+    fprintf(stderr, "There was an error creating the required directory tree for %s.\n", target_filename.c_str());
     return 1;
   }
   FILE *tp = fopen(target_filename.c_str(), "wb");
@@ -138,15 +142,18 @@ int IO::downloadFile(const std::string &filename, const std::string &url, uLong 
   curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
   CURLcode err = curl_easy_perform(ds.handle);
+  int error = 1;
   if (err == 0) {
-    // TODO check return value
-    copy_file(ds.fp, ds.filename);
+    if (copy_file(ds.fp, ds.filename) == 0) {
+      error = 0;
+    }
   }
+
   if (ds.fp) fclose(ds.fp);
   curl_easy_cleanup(ds.handle);
 
   // Zero on success
-  return err;
+  return error;
 }
 
 int IO::downloadFile(FILE *fp, const std::string &url, uLong expected_crc32) {
@@ -167,7 +174,7 @@ int IO::downloadFile(FILE *fp, const std::string &url, uLong expected_crc32) {
   curl_easy_cleanup(ds.handle);
 
   // Zero on success
-  return err;
+  return (err != 0);
 }
 
 int IO::queueFile(const std::string &path, const std::string &filename, const std::string &url, uLong expected_crc32) {
@@ -210,6 +217,7 @@ int IO::poll() {
     if (err  != CURLE_OK) {
       // Do something on error
       fprintf(stderr, "Got some error on curl_easy_getinfo (%d)\n", err);
+      continue;
     }
 
     bool failed = true; 
@@ -224,7 +232,7 @@ int IO::poll() {
             failed = false;
             // Copy file to proper location
             if (copy_file(ds->fp, ds->path + "/" + ds->filename)) {
-              errormsg = "Error copying file to target location\n";
+              errormsg = "Error copying file to target location.\n";
               failed = true;
             }
           } else {
