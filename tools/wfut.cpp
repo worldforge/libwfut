@@ -25,12 +25,13 @@ static struct option long_options [] =
   { "server", 1, 0, 'S' },
   { "prefix", 1, 0, 'p' },
   { "version", 0, 0, 'v' },
+  { "help", 0, 0, 'h' },
 
 };
 
 // getopt short argument struct. One char per command
 // follow by a : to indicate that an argument it required
-static char short_options [] = "u:s:p:vS:";
+static char short_options [] = "u:s:p:vS:h";
 
 // Function to check to see if a file exists or not.
 // TODO: we could replace this as the loader functions return 1 when they are
@@ -69,7 +70,7 @@ static void recordUpdate(const FileObject &fo, const std::string &tmpfile) {
 // Signal handler called when a file is sicessfully downloaded
 // We use this to update the local file list with the updated details
 void onDownloadComplete(const std::string &u, const std::string &f, const ChannelFileList &updates, ChannelFileList *local, const std::string &tmpfile)  {
-  printf("Downloaded %s\n", f.c_str());
+  printf("Downloaded: %s\n", f.c_str());
 
   const WFUT::FileMap &ulist = updates.getFiles();
   WFUT::FileMap::const_iterator I = ulist.find(f);
@@ -87,9 +88,22 @@ void onDownloadComplete(const std::string &u, const std::string &f, const Channe
 
 // Signal handler called when a download fails.
 void onDownloadFailed(const std::string &u, const std::string &f, const std::string &r, int *error)  {
-  fprintf(stderr,"Error downloading %s\n", u.c_str());
+  fprintf(stderr, "Error downloading: %s\n", u.c_str());
   // Increment error count
   ++error;
+}
+
+void print_usage(const char *name) {
+  printf("WFUT Version: %s\n", VERSION);
+  printf("Usage:\n");
+  printf("%s [options]\n", name);
+  printf("Options:\n");
+  printf("\t-p, --prefix channel_name -- The destination directory. (Optional)\n");
+  printf("\t-s, --system channel_name -- The system channels directory. (Optional)\n");
+  printf("\t-S, --server channel_name -- The URL to the update server.(Optional)\n");
+  printf("\t-u, --update channel_name -- The name of the channel to update.\n");
+  printf("\t-v, --version -- Display the version information.\n");
+  printf("\t-h, --help -- Display this message.\n");
 }
 
 int main(int argc, char *argv[]) {
@@ -108,9 +122,13 @@ int main(int argc, char *argv[]) {
     int c = getopt_long(argc, argv, short_options, long_options, &opt_index);
     if (c == -1) break;
     switch (c) {
+      case 'h':
+	print_usage(argv[0]);
+	return 0;
+	break;
       case 'v':
         fprintf(stderr, "WFUT Version: %s\n", VERSION);
-        exit (0);
+	return 0;
         break;
       case 'u':
         if (optarg) {

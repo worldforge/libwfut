@@ -1,3 +1,7 @@
+2007-02-20  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* tools/wfut.cpp: Added simple usage information.
+
 2007-02-19  Simon Goodall  <libwfut@simongoodall.co.uk>
 
 	* libwfut/platform.cpp: Check %TMP%, %TEMP% then "." as possible tmp
