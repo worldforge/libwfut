@@ -62,7 +62,7 @@ void WFUTClient::updateChannel(const ChannelFileList &updates,
     const FileObject &f = (I++)->second;
 
     const std::string &url = urlPrefix + updates.getName() + "/" + f.filename;
-    m_io->queueFile(pathPrefix, f.filename, url, f.crc32);
+    m_io->queueFile(pathPrefix, f.filename, url, f.crc32, f.execute);
   }
 }
 
@@ -73,7 +73,7 @@ void WFUTClient::updateFile(const FileObject &file,
   assert (m_initialised == true);
 
   const std::string &url = urlPrefix + "/" + file.filename;
-  m_io->queueFile(pathPrefix, file.filename, url, file.crc32);
+  m_io->queueFile(pathPrefix, file.filename, url, file.crc32, false);
 }
 
 WFUTError WFUTClient::getChannelList(const std::string &url, ChannelList &channels) {

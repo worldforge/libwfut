@@ -24,6 +24,7 @@ public:
     std::string filename;
     std::string path;
     std::string url;
+    bool executable;
     FILE *fp;
     uLong actual_crc32;
     uLong expected_crc32;
@@ -45,7 +46,7 @@ public:
   int poll();
   int downloadFile(const std::string &filename, const std::string &url, uLong expected_crc32);
   int downloadFile(FILE *fp, const std::string &url, uLong expected_crc32);
-  int queueFile(const std::string &path, const std::string &filename, const std::string &url, uLong expected_crc32);
+  int queueFile(const std::string &path, const std::string &filename, const std::string &url, uLong expected_crc32, bool executable);
 
   // void yadda(url, filename)
   sigc::signal<void, const std::string&, const std::string&> DownloadComplete;

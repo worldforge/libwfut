@@ -1,5 +1,15 @@
 2007-03-04  Simon Goodall  <libwfut@simongoodall.co.uk>
 
+	* libwfut/IO.cpp, libwfut/IO.h: Fix compiler warning. Added an
+	  executable flag to DataStruct and to the queueFile function to set the
+	  executable permissions of a file on sucessful download.
+
+	* libwfut/platform.cpp: Fix error in os_set_executable.
+
+	* libwftut/WFUT.cpp: Update to new queueFile signature.
+
+2007-03-04  Simon Goodall  <libwfut@simongoodall.co.uk>
+
 	* libwfut/IO.cpp: Bug fix from Erik where where paths such as /home
 	  would fail in the createParentDirs function.
 

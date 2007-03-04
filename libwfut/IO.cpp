@@ -29,7 +29,7 @@ int createParentDirs(const std::string &filename) {
 
   const std::string &path = filename.substr(0, pos);
 
-  if (err = createParentDirs(path)) {
+  if ((err = createParentDirs(path))) {
     // There was an error creating the parent path.
     return err;
   }
@@ -136,6 +136,7 @@ int IO::downloadFile(const std::string &filename, const std::string &url, uLong 
   ds.fp = NULL;
   ds.url = Encoder::encodeURL(url);
   ds.filename = filename;
+  ds.executable = false;
   ds.actual_crc32 = crc32(0L, Z_NULL,  0);
   ds.expected_crc32 = expected_crc32;
   ds.handle = curl_easy_init();
@@ -163,6 +164,7 @@ int IO::downloadFile(FILE *fp, const std::string &url, uLong expected_crc32) {
   DataStruct ds;
   ds.fp = fp;
   ds.url = Encoder::encodeURL(url);
+  ds.executable = false;
   ds.filename = "";
   ds.actual_crc32 = crc32(0L, Z_NULL,  0);
   ds.expected_crc32 = expected_crc32;
@@ -179,7 +181,7 @@ int IO::downloadFile(FILE *fp, const std::string &url, uLong expected_crc32) {
   return (err != 0);
 }
 
-int IO::queueFile(const std::string &path, const std::string &filename, const std::string &url, uLong expected_crc32) {
+int IO::queueFile(const std::string &path, const std::string &filename, const std::string &url, uLong expected_crc32, bool executable) {
   if (m_files.find(url) != m_files.end()) {
     fprintf(stderr, "Error file is already in queue\n");
     // Url already in queue
@@ -190,6 +192,7 @@ int IO::queueFile(const std::string &path, const std::string &filename, const st
   ds->url = Encoder::encodeURL(url);
   ds->filename = filename;
   ds->path = path;
+  ds->executable = executable;
   ds->actual_crc32 = crc32(0L, Z_NULL,  0);
   ds->expected_crc32 = expected_crc32;
   ds->handle = curl_easy_init();
@@ -236,6 +239,9 @@ int IO::poll() {
             if (copy_file(ds->fp, ds->path + "/" + ds->filename)) {
               errormsg = "Error copying file to target location.\n";
               failed = true;
+            }
+            if (ds->executable) {
+              os_set_executable(ds->path + "/" + ds->filename);
             }
           } else {
             // CRC32 check failed
