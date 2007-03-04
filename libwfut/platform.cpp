@@ -73,4 +73,29 @@ int os_mkdir(const std::string &dir) {
 #endif
 }
 
+bool os_exists(const std::string &file) {
+//#ifdef PLATORM_WIN32
+  
+//#else
+  struct stat info;
+  if (::stat(file.c_str(), &info) == 0) {
+    return true;
+  } else {
+    return false;
+  }
+//#endif
+}
+
+int os_set_executable(const std::string &file) {
+#ifdef PLATFORM_WIN32
+  // nothing to do for windows
+  return 0;
+#else
+  // TODO: Should we restrict these permissions some more?
+  //        E.g., only user?
+  return chmod(file.c_str(), S_IXGRP | SIXOTH | S_IEXEC);
+#endif
+}
+
+
 } /* namespace WFUT */

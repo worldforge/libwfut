@@ -23,7 +23,9 @@ int createParentDirs(const std::string &filename) {
   // TODO This function may not work correctly or be portable.
   // Perhaps should only search for \\ on win32, / otherwise
   size_t pos = filename.find_last_of("\\/");
-  if (pos == std::string::npos) return 0;
+  // Return if no separator is found, or if it is the first
+  // character, e.g. /home
+  if (pos == std::string::npos || pos == 0) return 0;
 
   const std::string &path = filename.substr(0, pos);
 

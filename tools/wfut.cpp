@@ -8,10 +8,16 @@
 
 #include <getopt.h>
 
+#include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+
 #include <sigc++/bind.h>
 
 #include <libwfut/WFUT.h>
 #include <libwfut/Encoder.h>
+#include <libwfut/platform.h>
 
 using namespace WFUT;
 
@@ -33,20 +39,9 @@ static struct option long_options [] =
 // follow by a : to indicate that an argument it required
 static char short_options [] = "u:s:p:vS:h";
 
-// Function to check to see if a file exists or not.
-// TODO: we could replace this as the loader functions return 1 when they are
-// unable to open a file and 2 on failure to parse.
-static bool file_exists(const std::string &filename) {
-  FILE * fp = fopen(filename.c_str(), "r");
-  if (fp == 0) return false;
-  fclose(fp);
-  return true;
-
-}
-
 static void recordUpdate(const FileObject &fo, const std::string &tmpfile) {
   FILE *fp = 0;
-  if (!file_exists(tmpfile)) {
+  if (!os_exists(tmpfile)) {
     // Write header 
     fp = fopen(tmpfile.c_str(), "wt");
     if (!fp) {
@@ -115,19 +110,25 @@ int main(int argc, char *argv[]) {
   std::string channel = ".";
   std::string local_path = "./";
   std::string system_path = "";
+
+  if (argc == 1) {
+    print_usage(argv[0]);
+    return 0;
+  }
  
   while (true) {
     int opt_index = 0;
     int c = getopt_long(argc, argv, short_options, long_options, &opt_index);
     if (c == -1) break;
     switch (c) {
+      case '?':
       case 'h':
-	print_usage(argv[0]);
-	return 0;
-	break;
+        print_usage(argv[0]);
+        return 0;
+        break;
       case 'v':
         fprintf(stderr, "WFUT Version: %s\n", VERSION);
-	return 0;
+        return 0;
         break;
       case 'u':
         if (optarg) {
@@ -179,7 +180,7 @@ int main(int argc, char *argv[]) {
   const std::string &local_wfut = local_path  + "/" + channel + "/" + channel_file;
   if (debug) printf("Local wfut: %s\n", local_wfut.c_str());
 
-  if (file_exists(local_wfut)) {
+  if (os_exists(local_wfut)) {
     if (wfut.getLocalList(local_wfut, local)) {
       fprintf(stderr, "Error reading local wfut.xml file\n");
       wfut.shutdown();
@@ -193,7 +194,7 @@ int main(int argc, char *argv[]) {
   const std::string &tmp_wfut = local_path  + "/" + tmpfile;
   if (debug) printf("Tmp wfut: %s\n", tmp_wfut.c_str());
 
-  if (file_exists(tmp_wfut)) {
+  if (os_exists(tmp_wfut)) {
     if (wfut.getLocalList(tmp_wfut, tmplist)) {
       fprintf(stderr, "Error reading tmpwfut.xml file\n");
       wfut.shutdown();
@@ -213,7 +214,7 @@ int main(int argc, char *argv[]) {
   const std::string &system_wfut = system_path + "/" + channel + "/" + channel_file; 
   if (debug) printf("System wfut: %s\n", system_wfut.c_str());
 
-  if (file_exists(system_wfut)) {
+  if (os_exists(system_wfut)) {
     if (wfut.getLocalList(system_wfut, system)) {
       fprintf(stderr, "Error reading system wfut.xml file\n");
       wfut.shutdown();
@@ -270,6 +271,9 @@ int main(int argc, char *argv[]) {
 
   // Save the completed download list
   wfut.saveLocalList(local, local_wfut);
+  // Delete tmpwut.xml if we get here. We only keep it around in case of 
+  // an abnormal exit and the real wfut.xml has not been saved.
+  if (os_exists(tmp_wfut)) unlink(tmp_wfut.c_str());
 
   // Clean up WFUT. Closes curl handles
   wfut.shutdown();
@@ -277,6 +281,7 @@ int main(int argc, char *argv[]) {
   if (error) {
     fprintf(stderr, "%d files failed to download.\n", error);
   }
+
 
   // Return error. Will be 0 on success
   return error;

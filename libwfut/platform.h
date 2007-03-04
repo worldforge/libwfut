@@ -13,6 +13,8 @@ FILE *os_create_tmpfile();
 void os_free_tmpfile(FILE *fp);
 
 int os_mkdir(const std::string &dir);
+bool os_exists(const std::string &file);
+int os_set_executable(const std::string &file);
 
 } /* namespace WFUT */
 

@@ -1,3 +1,15 @@
+2007-03-04  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/IO.cpp: Bug fix from Erik where where paths such as /home
+	  would fail in the createParentDirs function.
+
+	* libwfut/platform.cpp, libwfut/platform.h: Added functions to check for
+	  file existance and setting world executable permissions.
+
+	* tools/wfut.cpp: Display usage when no arguments are specified. Delete
+	  the tempwfut.xml after the real wfut.xml file has been saved. Use
+	  os_exists instead of the local file_exists function.
+
 2007-02-20  Simon Goodall  <libwfut@simongoodall.co.uk>
 
 	* libwfut/IO.cpp: Added some more error checks.
