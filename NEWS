@@ -1,0 +1,2 @@
+2007-03-17 libwfut 0.1.0 Released
+This is the first release of libefut, a C++ implementation of WFUT. It is intended for use with WorldForge clients to provide integrated media update capabilities.

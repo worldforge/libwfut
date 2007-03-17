@@ -1,3 +1,9 @@
+2007-03-17  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* configure.ac: Bump version numbers.
+
+	* Release version 0.1.0
+
 2007-03-04  Simon Goodall  <libwfut@simongoodall.co.uk>
 
 	* libwfut/IO.cpp, libwfut/IO.h: Fix compiler warning. Added an

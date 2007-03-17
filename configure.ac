@@ -1,4 +1,4 @@
-AC_INIT(libwfut, 0.0.1, libwfut@simongoodall.co.uk)
+AC_INIT(libwfut, 0.1.0, libwfut@simongoodall.co.uk)
 
 AC_CONFIG_SRCDIR([libwfut/WFUT.cpp])
 AC_CONFIG_HEADERS([config.h])
@@ -8,7 +8,7 @@ AC_CANONICAL_HOST
 AM_INIT_AUTOMAKE()
 
 LIBWFUT_CURRENT=0
-LIBWFUT_REVISION=0
+LIBWFUT_REVISION=1
 LIBWFUT_AGE=0
 
 AC_PROG_CXX
