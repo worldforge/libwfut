@@ -93,7 +93,7 @@ int os_set_executable(const std::string &file) {
 #else
   // TODO: Should we restrict these permissions some more?
   //        E.g., only user?
-  return chmod(file.c_str(), S_IXGRP | S_IXOTH | S_IEXEC);
+  return chmod(file.c_str(), S_IXGRP | S_IXOTH | S_IEXEC | S_IRUSR | S_IRGRP | S_IROTH | S_IWUSR);
 #endif
 }
 

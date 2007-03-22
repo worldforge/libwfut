@@ -86,7 +86,7 @@ WFUTError WFUTClient::getChannelList(const std::string &url, ChannelList &channe
 
   if (m_io->downloadFile(fp, url, 0)) {
     // error
-    fprintf(stderr, "Error downloading file list\n");
+//    fprintf(stderr, "Error downloading file list\n");
     os_free_tmpfile(fp);
     return WFUT_DOWNLOAD_ERROR;
   }
@@ -105,7 +105,7 @@ WFUTError WFUTClient::getChannelList(const std::string &url, ChannelList &channe
 
   if (parseChannelListXML(xml, channels)) {
     // Error
-    fprintf(stderr, "Error parsing file list\n");
+//    fprintf(stderr, "Error parsing file list\n");
     return WFUT_PARSE_ERROR;
   }
 
@@ -117,14 +117,14 @@ WFUTError WFUTClient::getFileList(const std::string &url, ChannelFileList &files
 
   FILE *fp = os_create_tmpfile();
   if (!fp) {
-    fprintf(stderr, "Unable to create temporary file\n");
-     perror("");
+//    fprintf(stderr, "Unable to create temporary file\n");
+//    perror("");
     return WFUT_GENERAL_ERROR;
   }
 
   if (m_io->downloadFile(fp, url, 0)) {
     // error
-    fprintf(stderr, "Error downloading file list\n");
+//    fprintf(stderr, "Error downloading file list\n");
     os_free_tmpfile(fp);
     return WFUT_DOWNLOAD_ERROR;
   }
@@ -143,7 +143,7 @@ WFUTError WFUTClient::getFileList(const std::string &url, ChannelFileList &files
 
   if (parseFileListXML(xml, files)) {
     // Error
-    fprintf(stderr, "Error parsing file list\n");
+//    fprintf(stderr, "Error parsing file list\n");
     return WFUT_PARSE_ERROR;
   }
 
@@ -153,7 +153,7 @@ WFUTError WFUTClient::getFileList(const std::string &url, ChannelFileList &files
 WFUTError WFUTClient::getLocalList(const std::string &filename, ChannelFileList &files) {
   assert (m_initialised == true);
   if (parseFileList(filename, files)) {
-    printf("Error parsing local file list\n");
+//    printf("Error parsing local file list\n");
     return WFUT_PARSE_ERROR;
   }
   return WFUT_NO_ERROR;
@@ -189,16 +189,18 @@ WFUTError WFUTClient::calculateUpdates(const ChannelFileList &server, const Chan
 
     if (loc_iter == local_map.end()) {
       if (sys_iter == system_map.end()) {
-printf("Adding %s as no local version\n", server_obj.filename.c_str());
+        UpdateReason.emit(server_obj.filename, WFUT_UPDATE_NO_LOCAL);
         updates.addFile(server_obj);
       } else if (server_obj.version > sys_iter->second.version) {
-printf("Updating %s as server is newer than sys\n", server_obj.filename.c_str());
+        UpdateReason.emit(server_obj.filename, WFUT_UPDATE_SERVER_SYSTEM);
         updates.addFile(server_obj);
       } else {
         // Assume the sys location is valid, so no need to update
+        // No update required
+        UpdateReason.emit(server_obj.filename, WFUT_UPDATE_NONE);
       }
     } else if (server_obj.version > loc_iter->second.version) {
-printf("Updating %s as server is newer than local\n", server_obj.filename.c_str());
+        UpdateReason.emit(server_obj.filename, WFUT_UPDATE_SERVER_LOCAL);
       updates.addFile(server_obj);
     } else {
       // According to xml files, the local version is the same as the server
@@ -206,13 +208,16 @@ printf("Updating %s as server is newer than local\n", server_obj.filename.c_str(
       uLong crc32;
       if (calcCRC32(prefix + loc_iter->second.filename.c_str(), crc32) == -1) {
         // Can't read file, so lets add it
-printf("Adding %s as local is missing\n", server_obj.filename.c_str());
+        UpdateReason.emit(server_obj.filename, WFUT_UPDATE_MISSING);
         updates.addFile(server_obj);
       } else {
         // Do a CRC check and warn user that the file is modified.
         if (crc32 != server_obj.crc32) {
           // Modified!
-          printf("File %s is modified. Remove to update.\n", loc_iter->second.filename.c_str());
+          UpdateReason.emit(server_obj.filename, WFUT_UPDATE_MODIFIED);
+        } else {
+          // No update required
+          UpdateReason.emit(server_obj.filename, WFUT_UPDATE_NONE);
         }
       }
     }

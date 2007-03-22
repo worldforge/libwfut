@@ -27,6 +27,15 @@ typedef enum {
   WFUT_WRITE_ERROR     // An error happened trying to write a file.
 } WFUTError;
 
+typedef enum {
+  WFUT_UPDATE_NONE = 0,      // No update required
+  WFUT_UPDATE_NO_LOCAL,      // No local version of the file
+  WFUT_UPDATE_SERVER_SYSTEM, // Server copy is newer than system version
+  WFUT_UPDATE_SERVER_LOCAL,  // Server copy is newer than local version
+  WFUT_UPDATE_MISSING,       // Local copy is missing
+  WFUT_UPDATE_MODIFIED       // Local copy is modified
+} WFUTUpdateReason;
+
 /** The WFUTClient class should be the main class that client applications use.
  * It wraps up the underlying function calls. The IO class may be of more 
  * interest to those looking for more direct control of downloads. The channel
@@ -138,6 +147,14 @@ public:
     * indicating a general reason why the download failed.
     */
   sigc::signal<void, const std::string&, const std::string&, const std::string&> DownloadFailed;
+
+  /** The UpdateReason signal is fired every time a FileObject is processed
+   * in the calculateUpdates function. If WFUT_UPDATE_MODIFIED is passed as a
+   * reason code, then this file has not been added to the updates list because
+   * there are modifications to the local file. If an update is required, this
+   * file can be manually added to the updates list.
+   */
+  sigc::signal<void, const std::string&, const WFUTUpdateReason> UpdateReason;
 
 private:
   void onDownloadComplete(const std::string &url, const std::string &filename);

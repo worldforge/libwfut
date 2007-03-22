@@ -88,6 +88,12 @@ void onDownloadFailed(const std::string &u, const std::string &f, const std::str
   ++error;
 }
 
+void onUpdateReason(const std::string &filename, const WFUT::WFUTUpdateReason wu) {
+  if (wu == WFUT::WFUT_UPDATE_MODIFIED) {
+    printf("%s has been modified, will not update.\n", filename.c_str());
+  }
+}
+
 void print_usage(const char *name) {
   printf("WFUT Version: %s\n", VERSION);
   printf("Usage: %s [options]\n", name);
@@ -247,6 +253,7 @@ int main(int argc, char *argv[]) {
 
   // Now we have loaded all our data files, lets find out what we really need
   // to download
+  wfut.UpdateReason.connect(sigc::ptr_fun(onUpdateReason));
   if (wfut.calculateUpdates(server, system, local, updates, local_root)) {
     printf("Error determining file to update\n");
     wfut.shutdown();

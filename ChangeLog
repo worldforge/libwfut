@@ -1,3 +1,13 @@
+2007-03-22  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/WFUT.cpp, libwfut/WFUT.h: Added a new signal, UpdateReasons,
+	  which is fired during the caclulateUpdates function. This feeds back
+	  reasons why (or not) a file is updated to the client application.
+
+	* libwfut/platform.cpp: Fixed the permissions set for executable files.
+
+	* tools/wfut.cpp: Added callback for UpdateReason
+
 2007-03-17  Simon Goodall  <libwfut@simongoodall.co.uk>
 
 	* configure.ac: Bump version numbers.
