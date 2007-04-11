@@ -1,3 +1,7 @@
+2007-04-11  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac, AUTHORS: Change contact email.
+
 2007-03-22  Simon Goodall  <libwfut@simongoodall.co.uk>
 
 	* libwfut/WFUT.cpp, libwfut/WFUT.h: Added a new signal, UpdateReasons,
