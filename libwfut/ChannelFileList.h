@@ -26,6 +26,8 @@ public:
     if (I != m_fileMap.end()) m_fileMap.erase(I);
   }
 
+  void clear() { m_fileMap.clear(); }
+
 private:
   std::string m_name;
   std::map<std::string, FileObject> m_fileMap;

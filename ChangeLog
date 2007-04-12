@@ -1,3 +1,7 @@
+2007-04-12  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/ChannelFileList.h: Added a clear method to clear the map.
+
 2007-04-11  Simon Goodall  <simon@worldforge.org>
 
 	* configure.ac, AUTHORS: Change contact email.
