@@ -87,6 +87,11 @@ public:
                   const std::string &urlPrefix,
                   const std::string &pathPrefix);
 
+  /** This function retrieves a list of mirrors from the given url.
+   * These mirrors will be the root url.
+   */
+  WFUTError getMirrorList(const std::string &url, MirrorList &mirrors);
+
   /** This function directly download and parses a channel listings file from 
    * the specified URL. This function will block until complete. This is the
    * file that lists all the channels that are available at a that location.

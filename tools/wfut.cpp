@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <algorithm>
 
 #include <sigc++/bind.h>
 
@@ -110,6 +111,7 @@ int main(int argc, char *argv[]) {
 
   // Set some default values which we can override with command line parameters.
   std::string server_root = "http://white.worldforge.org/downloads/WFUT/";
+  std::string mirror_file = "mirrors.xml";
   std::string channel_file = "wfut.xml";
   std::string tmpfile = "tempwfut.xml";
 
@@ -177,6 +179,22 @@ int main(int argc, char *argv[]) {
   WFUTClient wfut;
   // Initialise wfut. This does the curl setup.
   wfut.init();
+
+  // Get the list of mirrors
+  MirrorList mirrors;
+  const std::string mirror_url = server_root + "/" + mirror_file;
+  wfut.getMirrorList(mirror_url, mirrors);
+ 
+  // Randomly select a mirror to use. 
+  if (mirrors.empty() == false) {
+    // Initialise random number generators. random_shuffle could use either
+    srand((unsigned)time(NULL)); 
+    srand48((unsigned)time(NULL)); 
+    // Shuffle mirror list
+    std::random_shuffle(mirrors.begin(), mirrors.end());
+    // Pick first mirror
+    server_root = (*mirrors.begin()).url;
+  }
 
   // Define the channelfilelist objects we will use
   ChannelFileList local, system, server, updates, tmplist;

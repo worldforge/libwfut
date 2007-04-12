@@ -17,6 +17,7 @@ libwfut_0_1_la_SOURCES = \
 	IO.cpp \
 	FileParser.cpp \
 	FileWriter.cpp \
+	MirrorParser.cpp \
 	WFUT.cpp \
 	platform.cpp\
 	tinystr.cpp tinyxml.cpp tinyxmlerror.cpp tinyxmlparser.cpp \

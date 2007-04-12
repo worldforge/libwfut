@@ -8,6 +8,7 @@
 #include <string>
 #include <list>
 #include <map>
+#include <vector>
 
 #include <zlib.h>
 
@@ -33,6 +34,14 @@ typedef struct {
 
 typedef std::list<FileObject> FileList;
 typedef std::map<std::string, FileObject> FileMap;
+
+
+typedef struct {
+  std::string name;
+  std::string url;
+} MirrorObject;
+
+typedef std::vector<MirrorObject> MirrorList;
 
 } // namespace WFUT
 

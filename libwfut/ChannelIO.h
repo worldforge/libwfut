@@ -18,6 +18,8 @@ static const std::string TAG_email = "email";
 static const std::string TAG_logo = "logo";
 static const std::string TAG_channel = "channel";
 static const std::string TAG_channellist = "channelList";
+static const std::string TAG_mirror = "mirror";
+static const std::string TAG_mirrorlist = "mirrorList";
 
 /**
  * Parse an XML document from a file and return the Channels in a 
@@ -46,6 +48,27 @@ int parseChannelListXML(const std::string &xml, ChannelList &channels);
  * @return 0 on success, error otherwise
  */
 int writeChannelList(const std::string &filename, const ChannelList &channels);
+
+/**
+ * Parse an XML document from a file and return the Mirrors in a 
+ * MirrorList object
+ * @param filename The filename of the XML file.
+ * @param mirrors A MirrorList object to add parsed mirrors to.
+ * @return 0 on success, error otherwise
+ */
+int parseMirrorList(const std::string &filename, MirrorList &mirrors);
+
+
+/**
+ * Parse an XML document from a string and return the Mirrors in a 
+ * MirrorList object
+ * @param xml The string object containing the XML.
+ * @param mirrors A MirrorList object to add parsed mirrors to.
+ * @return 0 on success, error otherwise
+ */
+int parseMirrorListXML(const std::string &xml, MirrorList &mirrors);
+
+
 
 } /* namespace WFUT */
 

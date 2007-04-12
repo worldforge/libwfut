@@ -1,5 +1,13 @@
 2007-04-12  Simon Goodall  <simon@worldforge.org>
 
+	* libwfut/MirrorParser.cpp, libwfut/ChannelIO.h, libwfut/types.h,
+	  libwfut/WFUT.cpp, libwfut/WFUT.h, libwfut/Makefile.am: Allow a list of
+	  mirrors to be specified.
+
+	* tools/wfut.cpp: Randomly select a mirror from the mirror list.
+
+2007-04-12  Simon Goodall  <simon@worldforge.org>
+
 	* libwfut/ChannelFileList.h: Added a clear method to clear the map.
 
 2007-04-11  Simon Goodall  <simon@worldforge.org>

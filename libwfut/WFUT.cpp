@@ -76,6 +76,43 @@ void WFUTClient::updateFile(const FileObject &file,
   m_io->queueFile(pathPrefix, file.filename, url, file.crc32, false);
 }
 
+WFUTError WFUTClient::getMirrorList(const std::string &url, MirrorList &mirrors) {
+  assert (m_initialised == true);
+
+  FILE *fp = os_create_tmpfile();
+  if (!fp) {
+    return WFUT_GENERAL_ERROR;
+  }
+
+  if (m_io->downloadFile(fp, url, 0)) {
+    // error
+//    fprintf(stderr, "Error downloading file list\n");
+    os_free_tmpfile(fp);
+    return WFUT_DOWNLOAD_ERROR;
+  }
+
+  std::string xml;
+  // Pre-allocate string memory
+  xml.reserve(ftell(fp));
+  rewind(fp);
+  char buf[1024];
+  size_t n;
+  while ((n = fread(buf, sizeof(char), 1024, fp) ) > 0) {
+    xml.append(buf, n);  
+  }
+
+  os_free_tmpfile(fp);
+
+  if (parseMirrorListXML(xml, mirrors)) {
+    // Error
+//    fprintf(stderr, "Error parsing file list\n");
+    return WFUT_PARSE_ERROR;
+  }
+
+  return WFUT_NO_ERROR;
+}
+
+
 WFUTError WFUTClient::getChannelList(const std::string &url, ChannelList &channels) {
   assert (m_initialised == true);
 
