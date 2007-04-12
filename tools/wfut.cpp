@@ -189,7 +189,10 @@ int main(int argc, char *argv[]) {
   if (mirrors.empty() == false) {
     // Initialise random number generators. random_shuffle could use either
     srand((unsigned)time(NULL)); 
+#if defined (WIN32) || defined (_WIN32) || defined( __WIN32__) 
+#else
     srand48((unsigned)time(NULL)); 
+#endif
     // Shuffle mirror list
     std::random_shuffle(mirrors.begin(), mirrors.end());
     // Pick first mirror

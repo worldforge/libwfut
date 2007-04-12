@@ -1,5 +1,9 @@
 2007-04-12  Simon Goodall  <simon@worldforge.org>
 
+	* tools/wfut.cpp: Add a win32 check around the srand48 call.
+
+2007-04-12  Simon Goodall  <simon@worldforge.org>
+
 	* libwfut/MirrorParser.cpp, libwfut/ChannelIO.h, libwfut/types.h,
 	  libwfut/WFUT.cpp, libwfut/WFUT.h, libwfut/Makefile.am: Allow a list of
 	  mirrors to be specified.
