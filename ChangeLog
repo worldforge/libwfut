@@ -1,3 +1,12 @@
+2007-05-02  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/FileWriter.cpp: Fix bug where unsigned longs were being 
+	  written as signed values into XML file.
+
+	* libwfut/IO.cpp: Fix bug where empty files could cause a segfault.
+
+	* tools/wfut.cpp: Print reason for download failure.
+
 2007-04-12  Simon Goodall  <simon@worldforge.org>
 
 	* tools/wfut.cpp: Add a win32 check around the srand48 call.

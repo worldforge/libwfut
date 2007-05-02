@@ -46,7 +46,6 @@ int createParentDirs(const std::string &filename) {
 }
 
 static int copy_file(FILE *fp, const std::string &target_filename) {
-  rewind(fp);
 
   if (createParentDirs(target_filename)) {
     // Error making dir structure
@@ -58,10 +57,17 @@ static int copy_file(FILE *fp, const std::string &target_filename) {
     // Error opening file to write
     return 1;
   }
-  char buf[1024];
-  size_t num;
-  while ((num = fread(buf, sizeof(char), 1024, fp)) != 0) {
-    fwrite(buf, sizeof(char), num, tp);
+
+  if (fp) {
+    rewind(fp);
+    char buf[1024];
+    size_t num;
+    while ((num = fread(buf, sizeof(char), 1024, fp)) != 0) {
+      fwrite(buf, sizeof(char), num, tp);
+    }
+  } else {
+    // No fp? we should only get here if the file was empty
+    // so all this function will do is create an empty file.
   }
   fclose(tp);
 

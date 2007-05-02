@@ -2,6 +2,7 @@
 // the GNU Lesser General Public License (See COPYING for details).
 // Copyright (C) 2005 - 2007 Simon Goodall
 
+#include  <sstream>
 
 #include "tinyxml.h"
 
@@ -15,13 +16,17 @@ namespace WFUT {
 static int writeFile(TiXmlElement *element, const FileObject &file) {
   assert(element);
 
-  // TODO need to convert numbers to string as tinyxml doesn'y support 
-  // unsigned lonfs
+  // TODO need to convert numbers to string as tinyxml doesn't support 
+  // unsigned longs
+  std::stringstream ss_crc32, ss_size;
+  ss_crc32 << file.crc32;
+  ss_size  << file.size;
+
 
   element->SetAttribute(TAG_filename, Encoder::encodeString(file.filename));
   element->SetAttribute(TAG_version, file.version);
-  element->SetAttribute(TAG_crc32, file.crc32);
-  element->SetAttribute(TAG_size, file.size);
+  element->SetAttribute(TAG_crc32, ss_crc32.str());
+  element->SetAttribute(TAG_size, ss_size.str());
   // This also need to be converted to a string
   element->SetAttribute(TAG_execute, file.execute);
 

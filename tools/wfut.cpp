@@ -84,7 +84,7 @@ void onDownloadComplete(const std::string &u, const std::string &f, const Channe
 
 // Signal handler called when a download fails.
 void onDownloadFailed(const std::string &u, const std::string &f, const std::string &r, int *error)  {
-  fprintf(stderr, "Error downloading: %s\n", u.c_str());
+  fprintf(stderr, "Error downloading: %s - %s\n", u.c_str(), r.c_str());
   // Increment error count
   ++error;
 }
