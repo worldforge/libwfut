@@ -27,6 +27,7 @@ public:
   }
 
   void clear() { m_fileMap.clear(); }
+  size_t size() const { return m_fileMap.size(); }
 
 private:
   std::string m_name;

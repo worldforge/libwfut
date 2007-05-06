@@ -1,3 +1,8 @@
+2007-05-06  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/ChannelFileList.h: Added a size() method to return the number
+	  of files being stored.
+
 2007-05-02  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/FileWriter.cpp: Fix bug where unsigned longs were being 
