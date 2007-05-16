@@ -1,3 +1,8 @@
+2007-05-16  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/IO.cpp: Cause curl to return an error instead of error pages
+	  e.g. for a 404.
+
 2007-05-06  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/ChannelFileList.h: Added a size() method to return the number

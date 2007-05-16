@@ -150,6 +150,8 @@ int IO::downloadFile(const std::string &filename, const std::string &url, uLong 
   curl_easy_setopt(ds.handle, CURLOPT_URL, ds.url.c_str());
   curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
+  curl_easy_setopt(ds.handle, CURLOPT_FAILONERROR, 1);
+
   CURLcode err = curl_easy_perform(ds.handle);
   int error = 1;
   if (err == 0) {
@@ -179,6 +181,7 @@ int IO::downloadFile(FILE *fp, const std::string &url, uLong expected_crc32) {
   curl_easy_setopt(ds.handle, CURLOPT_URL, ds.url.c_str());
   curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
+  curl_easy_setopt(ds.handle, CURLOPT_FAILONERROR, 1);
   CURLcode err = curl_easy_perform(ds.handle);
 
   curl_easy_cleanup(ds.handle);
@@ -209,6 +212,7 @@ int IO::queueFile(const std::string &path, const std::string &filename, const st
   curl_easy_setopt(ds->handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds->handle, CURLOPT_WRITEDATA, ds);
   curl_easy_setopt(ds->handle, CURLOPT_PRIVATE, ds);
+  curl_easy_setopt(ds->handle, CURLOPT_FAILONERROR, 1);
   curl_multi_add_handle(m_mhandle, ds->handle);
 
   return 0;
@@ -225,7 +229,7 @@ int IO::poll() {
 
     DataStruct *ds = NULL;
     int err = curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, &ds);
-    if (err  != CURLE_OK) {
+    if (err != CURLE_OK) {
       // Do something on error
       fprintf(stderr, "Got some error on curl_easy_getinfo (%d)\n", err);
       continue;
