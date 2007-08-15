@@ -18,7 +18,7 @@ static const bool debug = false;
 
 // Create the parent dir of the file.
 // TODO Does this work if the parent parent dir does not exist?
-int createParentDirs(const std::string &filename) {
+static int createParentDirs(const std::string &filename) {
   int err = 1;
   // TODO This function may not work correctly or be portable.
   // Perhaps should only search for \\ on win32, / otherwise
@@ -153,6 +153,10 @@ int IO::downloadFile(const std::string &filename, const std::string &url, uLong 
   curl_easy_setopt(ds.handle, CURLOPT_FAILONERROR, 1);
 
   CURLcode err = curl_easy_perform(ds.handle);
+  // TODO: Report back the error message
+  //       Either convert code to message
+  //       Or set CURLOPT_ERRORBUFFER using curl_easy_setopt 
+  //       to record the message.
   int error = 1;
   if (err == 0) {
     if (copy_file(ds.fp, ds.filename) == 0) {
@@ -185,6 +189,11 @@ int IO::downloadFile(FILE *fp, const std::string &url, uLong expected_crc32) {
   CURLcode err = curl_easy_perform(ds.handle);
 
   curl_easy_cleanup(ds.handle);
+
+  // TODO: Report back the error message
+  //       Either convert code to message
+  //       Or set CURLOPT_ERRORBUFFER using curl_easy_setopt 
+  //       to record the message.
 
   // Zero on success
   return (err != 0);
@@ -261,7 +270,8 @@ int IO::poll() {
         } else {
           // Error downloading file
           failed = true;
-          errormsg = "There was an error downloading the requested file";
+          errormsg = "There was an error downloading the requested file: "
+                   + std::string(curl_easy_strerror(msg->data.result));
         }
         break;
       }

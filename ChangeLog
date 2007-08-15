@@ -1,3 +1,8 @@
+2007-08-15  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/IO.cpp: Include curl error reason in error message when a
+	  file fails to download during polling.
+
 2007-05-16  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/IO.cpp: Cause curl to return an error instead of error pages
