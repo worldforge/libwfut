@@ -17,9 +17,6 @@
 #include <libwfut/types.h>
 
 namespace WFUT {
-
-class IO {
-public:
   typedef struct {
     std::string filename;
     std::string path;
@@ -31,6 +28,9 @@ public:
     CURL *handle;
   } DataStruct;
 
+
+class IO {
+public:
   IO() :
      m_initialised(false),
      m_mhandle(NULL)

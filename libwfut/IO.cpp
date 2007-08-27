@@ -77,7 +77,7 @@ static int copy_file(FILE *fp, const std::string &target_filename) {
 // Callback function to write downloaded data to a file.
 static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp) {
   assert(userp != NULL);
-  IO::DataStruct *ds = reinterpret_cast<IO::DataStruct*>(userp);
+  DataStruct *ds = reinterpret_cast<DataStruct*>(userp);
   if (ds->fp == NULL) {
     // Open File handle
     ds->fp = os_create_tmpfile();
@@ -146,7 +146,7 @@ int IO::downloadFile(const std::string &filename, const std::string &url, uLong 
   ds.actual_crc32 = crc32(0L, Z_NULL,  0);
   ds.expected_crc32 = expected_crc32;
   ds.handle = curl_easy_init();
-
+  curl_easy_setopt(ds.handle, CURLOPT_FOLLOWLOCATION, 1);
   curl_easy_setopt(ds.handle, CURLOPT_URL, ds.url.c_str());
   curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
@@ -182,6 +182,7 @@ int IO::downloadFile(FILE *fp, const std::string &url, uLong expected_crc32) {
   ds.expected_crc32 = expected_crc32;
   ds.handle = curl_easy_init();
 
+  curl_easy_setopt(ds.handle, CURLOPT_FOLLOWLOCATION, 1);
   curl_easy_setopt(ds.handle, CURLOPT_URL, ds.url.c_str());
   curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
@@ -217,6 +218,7 @@ int IO::queueFile(const std::string &path, const std::string &filename, const st
 
   m_files[ds->url] = ds;
 
+  curl_easy_setopt(ds->handle, CURLOPT_FOLLOWLOCATION, 1);
   curl_easy_setopt(ds->handle, CURLOPT_URL, ds->url.c_str());
   curl_easy_setopt(ds->handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds->handle, CURLOPT_WRITEDATA, ds);

@@ -110,7 +110,7 @@ void print_usage(const char *name) {
 int main(int argc, char *argv[]) {
 
   // Set some default values which we can override with command line parameters.
-  std::string server_root = "http://white.worldforge.org/downloads/WFUT/";
+  std::string server_root = "http://white.worldforgedev.org/WFUT/";
   std::string mirror_file = "mirrors.xml";
   std::string channel_file = "wfut.xml";
   std::string tmpfile = "tempwfut.xml";

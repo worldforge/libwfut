@@ -1,3 +1,10 @@
+2007-08-27  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/IO.cpp, libwfut.h: Follow 301 server redirects. Move
+	  DataStruct declaration outside of the IO class namespace.
+
+	* tools/wfut.cpp: Update default update server URL.
+
 2007-08-15  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/IO.cpp: Include curl error reason in error message when a
