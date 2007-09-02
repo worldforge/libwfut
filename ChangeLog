@@ -1,3 +1,12 @@
+2007-09-02  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/IO.cpp, libwfut/IO.h: Move the common curl options to a
+	  separate function. Limit the number of files being downloaded
+	  simultaneously. Use IO::get/setMaxDownloads to control this value.
+	  It defaults to a value of one, meaning sequential file downloading.
+	  This will avoid swamping a web server with connection requests for
+	  every single file queued at once.
+
 2007-08-27  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/IO.cpp, libwfut.h: Follow 301 server redirects. Move

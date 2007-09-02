@@ -8,7 +8,8 @@
 #include <cassert>
 #include <string>
 #include <map>
-#include <stdio.h>
+#include <queue>
+#include <cstdio>
 
 #include <zlib.h>
 #include <curl/curl.h>
@@ -33,7 +34,8 @@ class IO {
 public:
   IO() :
      m_initialised(false),
-     m_mhandle(NULL)
+     m_mhandle(NULL),
+     m_num_to_process(1)
   {}
 
   virtual ~IO() {
@@ -53,10 +55,15 @@ public:
   // void yadda(url, filename, reason)
   sigc::signal<void, const std::string&, const std::string&, const std::string&> DownloadFailed;
 
+  int getMaxDownloads() const { return m_num_to_process; }
+  void setMaxDownloads(int i) { m_num_to_process = i; }
+
 private:
   bool m_initialised;
   CURLM *m_mhandle;
   std::map<std::string, DataStruct*> m_files;
+  std::queue<CURL*> m_handles;
+  int m_num_to_process;
 };
 
 } /* namespace WFUT */

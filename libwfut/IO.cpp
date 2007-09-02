@@ -15,7 +15,6 @@
 namespace WFUT {
 
 static const bool debug = false;
-
 // Create the parent dir of the file.
 // TODO Does this work if the parent parent dir does not exist?
 static int createParentDirs(const std::string &filename) {
@@ -97,12 +96,21 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp) {
   return fwrite(buffer, size, nmemb, ds->fp);
 }
 
+static int setDefaultOpts(CURL *handle) {
+  curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1);
+  curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
+  curl_easy_setopt(handle, CURLOPT_FAILONERROR, 1);
+  return 0;
+}
+
+
 int IO::init() {
   assert (m_initialised == false);
 
   curl_global_init(CURL_GLOBAL_ALL);
 
   m_mhandle = curl_multi_init();
+  curl_multi_setopt(m_mhandle, CURLMOPT_PIPELINING, 1);
 
   m_initialised = true;
 
@@ -146,11 +154,10 @@ int IO::downloadFile(const std::string &filename, const std::string &url, uLong 
   ds.actual_crc32 = crc32(0L, Z_NULL,  0);
   ds.expected_crc32 = expected_crc32;
   ds.handle = curl_easy_init();
-  curl_easy_setopt(ds.handle, CURLOPT_FOLLOWLOCATION, 1);
+
+  setDefaultOpts(ds.handle);
   curl_easy_setopt(ds.handle, CURLOPT_URL, ds.url.c_str());
-  curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
-  curl_easy_setopt(ds.handle, CURLOPT_FAILONERROR, 1);
 
   CURLcode err = curl_easy_perform(ds.handle);
   // TODO: Report back the error message
@@ -182,11 +189,9 @@ int IO::downloadFile(FILE *fp, const std::string &url, uLong expected_crc32) {
   ds.expected_crc32 = expected_crc32;
   ds.handle = curl_easy_init();
 
-  curl_easy_setopt(ds.handle, CURLOPT_FOLLOWLOCATION, 1);
+  setDefaultOpts(ds.handle);
   curl_easy_setopt(ds.handle, CURLOPT_URL, ds.url.c_str());
-  curl_easy_setopt(ds.handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds.handle, CURLOPT_WRITEDATA, &ds);
-  curl_easy_setopt(ds.handle, CURLOPT_FAILONERROR, 1);
   CURLcode err = curl_easy_perform(ds.handle);
 
   curl_easy_cleanup(ds.handle);
@@ -217,14 +222,15 @@ int IO::queueFile(const std::string &path, const std::string &filename, const st
   ds->handle = curl_easy_init();
 
   m_files[ds->url] = ds;
-
-  curl_easy_setopt(ds->handle, CURLOPT_FOLLOWLOCATION, 1);
+  setDefaultOpts(ds->handle);
   curl_easy_setopt(ds->handle, CURLOPT_URL, ds->url.c_str());
-  curl_easy_setopt(ds->handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(ds->handle, CURLOPT_WRITEDATA, ds);
   curl_easy_setopt(ds->handle, CURLOPT_PRIVATE, ds);
-  curl_easy_setopt(ds->handle, CURLOPT_FAILONERROR, 1);
-  curl_multi_add_handle(m_mhandle, ds->handle);
+
+  // Add handle to our queue instead of to curl directly so that
+  // we can limit the number of connections we make to the server.
+  m_handles.push(ds->handle);
+//  curl_multi_add_handle(m_mhandle, ds->handle);
 
   return 0;
 }
@@ -302,6 +308,20 @@ int IO::poll() {
       delete ds;
     }
   }
+
+  // Spare capacity? Lets queue some more items.
+  int diff = m_num_to_process - num_handles;
+  if (diff > 0) {
+    while (diff--) {
+      if (!m_handles.empty()) {
+        // This is where we tell curl about our downloads.
+        curl_multi_add_handle(m_mhandle, m_handles.front());
+        m_handles.pop();
+        ++num_handles;
+      }
+    }
+  }
+
   return num_handles;
 }
 
