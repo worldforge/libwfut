@@ -1,0 +1,9 @@
+.deps
+.libs
+Makefile
+Makefile.in
+WFUT.cxx
+WFUT.py
+*.la
+*.lo
+*.pyc

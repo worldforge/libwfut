@@ -60,6 +60,42 @@ AC_SUBST(LIBWFUT_LIBS)
 AC_SUBST(LIBWFUT_REQUIRES)
 AC_SUBST(LIBWFUT_VERSION_INFO)
 
+
+# make python binding?
+AC_ARG_WITH([python], AS_HELP_STRING([--without-python], [build without Python bindings (default: test)]))
+
+if test "x$with_python" != "xno"; then
+  AM_PATH_PYTHON(2.2,,
+    [with_python=no
+     AC_MSG_WARN([Python not found; disabling Python binding])])
+fi
+
+if test "x$with_python" != "xno"; then
+  AM_CHECK_PYTHON_HEADERS(,
+    [with_python=no
+     AC_MSG_WARN([Python headers not found])])
+fi
+
+# need SWIG too
+if test "x$with_python" != "xno"; then
+  AC_CHECK_PROG(HAVE_SWIG, swig, [yes])
+  
+  if test "x$HAVE_SWIG" != "xyes"; then
+    with_python=no
+    AC_MSG_WARN([SWIG not found; disabling Python binding])
+  else
+    with_python=yes
+  fi
+fi
+
+if test "x$with_python" = "xyes"; then
+  AM_CONDITIONAL(HAVE_PYTHON, true)
+else
+  AM_CONDITIONAL(HAVE_PYTHON, false)
+fi
+
+
+
 if test "$enable_shared" = yes; then
   if test "x$CYGWIN" = xyes -o "x$MINGW32" = xyes; then
     LIBWFUT_DLL=libwfut$LIBWFUT_LIB_SUFFIX.dll
@@ -84,5 +120,6 @@ AC_CONFIG_FILES([
 	tools/Makefile
 	man/Makefile
 	man/man1/Makefile
+	python/Makefile
 ])
 AC_OUTPUT

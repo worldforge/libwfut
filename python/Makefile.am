@@ -1,0 +1,29 @@
+SUFFIXES: .cxx .i .lo .la .cpp .o  .obj
+
+.i.cxx:
+	swig -python -c++ -interface py$(@:.cxx=) -I$(top_srcdir) -o $@ $<
+
+INCLUDES = -I${top_srcdir} @PYTHON_INCLUDES@
+
+pythonfvsdir = $(pyexecdir)/libwfut
+EXTRA_pythonfvsdir = $(pyexecdir)/libwfut
+
+if HAVE_PYTHON
+EXTRA_pythonfvs_PYTHON = WFUT.py __init__.py
+EXTRA_pythonfvs_LTLIBRARIES = pyWFUT.la
+else
+EXTRA_pythonfvs_PYTHON=
+EXTRA_pythonfvs_LTLIBRARIES=
+endif
+
+pythonfvs_PYTHON =
+pythonfvs_LTLIBRARIES = 
+
+pyWFUT_la_LDFLAGS = -module -avoid-version
+pyWFUT_la_LIBADD = ../libwfut/libwfut-0.1.la @LIBWFUT_LIBS@
+pyWFUT_la_SOURCES = WFUT.cxx 
+
+CLEANFILES = \
+	WFUT.cxx WFUT.py
+
+EXTRA_DIST = __init__.py WFUT.i
