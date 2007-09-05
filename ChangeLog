@@ -1,3 +1,13 @@
+2007-09-05  Simon Goodall  <simon@worldforge.org>
+
+	* acinclude.m4: Include extra python detection macros.
+
+2007-09-03  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac, Makefile.am, python/Makefile.am, python/WFUT.i,
+	  python/__init__.py: Use swig to generate python bindings for
+	  libwfut.
+
 2007-09-02  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/IO.cpp, libwfut/IO.h: Move the common curl options to a
