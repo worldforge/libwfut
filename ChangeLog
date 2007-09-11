@@ -1,3 +1,8 @@
+2007-09-11  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/ChannelParser.cpp: Fix includes for make distcheck.
+
+
 2007-09-05  Simon Goodall  <simon@worldforge.org>
 
 	* acinclude.m4: Include extra python detection macros.
