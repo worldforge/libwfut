@@ -41,6 +41,12 @@ PKG_CHECK_MODULES(CURL, libcurl >= $CURL_VERSION,
     ]
 )
 
+PKG_CHECK_MODULES(CURL, libcurl >= 7.16.0,
+[
+	AC_DEFINE(HAVE_CURL_MULTI_PIPELINING, 1, [Define if curl is recent enough to have the pipelining option.])
+]
+)
+
 
 AC_LANG_POP(C++)
 

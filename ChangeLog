@@ -1,7 +1,11 @@
 2007-09-11  Simon Goodall  <simon@worldforge.org>
 
-	* libwfut/ChannelParser.cpp: Fix includes for make distcheck.
+	* configure.ac, libwfut/IO.cpp: Add a configure check to make sure
+	  that curl is recent enough to support CURLMOPT_PIPELINING.
 
+2007-09-11  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/ChannelParser.cpp: Fix includes for make distcheck.
 
 2007-09-05  Simon Goodall  <simon@worldforge.org>
 

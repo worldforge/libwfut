@@ -12,6 +12,10 @@
 #include "libwfut/Encoder.h"
 #include "libwfut/platform.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 namespace WFUT {
 
 static const bool debug = false;
@@ -110,7 +114,9 @@ int IO::init() {
   curl_global_init(CURL_GLOBAL_ALL);
 
   m_mhandle = curl_multi_init();
+#ifdef HAVE_CURL_MULTI_PIPELINING
   curl_multi_setopt(m_mhandle, CURLMOPT_PIPELINING, 1);
+#endif
 
   m_initialised = true;
 
