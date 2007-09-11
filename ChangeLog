@@ -1,5 +1,9 @@
 2007-09-11  Simon Goodall  <simon@worldforge.org>
 
+	* configure.ac: Fix second curl check.
+
+2007-09-11  Simon Goodall  <simon@worldforge.org>
+
 	* libwfut/WFUT.h: Call shutdown in the destructor if required.
 
 2007-09-11  Simon Goodall  <simon@worldforge.org>
