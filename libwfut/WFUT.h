@@ -56,7 +56,9 @@ public:
     m_initialised(false),
     m_io(NULL)
   {}
-  virtual ~WFUTClient() { assert(m_initialised == false); }
+  virtual ~WFUTClient() { 
+    if (m_initialised) shutdown(); 
+  }
 
   /** Initialise the WFUT object. This in turn will call IO::init which will 
    * initialise curl.
@@ -144,6 +146,7 @@ public:
     * is the filename from the FileObject.
     */
   sigc::signal<void, const std::string&, const std::string&> DownloadComplete;
+
    /** The DownloadFailed signal is fired when there was a problem downloading 
     * a file. This could happen due to a broken url, or a problem saving the
     * file in the temp location, or copying it from the tmp location to the
