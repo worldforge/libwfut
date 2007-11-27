@@ -1,5 +1,9 @@
 2007-11-27  Simon Goodall  <simon@worldforge.org>
 
+	* libwfut/Encoder.h, libwfut/IO.h: Added some doxygen comments.
+
+2007-11-27  Simon Goodall  <simon@worldforge.org>
+
 	* libwfut/ChannelFileList.h: Make getFile return a const ref. Added
 	  some comments for doxygen.
 
