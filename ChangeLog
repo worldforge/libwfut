@@ -1,5 +1,12 @@
 2007-11-27  Simon Goodall  <simon@worldforge.org>
 
+	* libwfut/types.h, libwfut/FileIO.h, libwfut/FileParser.cpp: Added a 
+	  flag called deleted to indicate that the server side file no longer
+	  exists and should be ignored for update purposes and potentially
+	  notify the client that local files are obsolete.
+
+2007-11-27  Simon Goodall  <simon@worldforge.org>
+
 	* libwfut/Encoder.h, libwfut/IO.h: Added some doxygen comments.
 
 2007-11-27  Simon Goodall  <simon@worldforge.org>

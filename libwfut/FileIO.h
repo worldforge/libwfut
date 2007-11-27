@@ -21,6 +21,7 @@ static const std::string TAG_execute = "execute";
 static const std::string TAG_file = "file";
 static const std::string TAG_filelist = "fileList";
 static const std::string TAG_dir = "dir";
+static const std::string TAG_deleted = "deleted";
 
 int parseFileList(const std::string &filename, ChannelFileList &files);
 int parseFileListXML(const std::string &xml, ChannelFileList &files);

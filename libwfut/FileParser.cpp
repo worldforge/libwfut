@@ -21,9 +21,15 @@ static int parseFile(TiXmlElement *element, FileObject &file) {
   sscanf(element->Attribute(TAG_version), "%d", &file.version);
   sscanf(element->Attribute(TAG_crc32), "%lu", &file.crc32);
   sscanf(element->Attribute(TAG_size), "%ld", &file.size);
+  // Check for execute flag
   const char *exec = element->Attribute(TAG_execute);
-  if (exec && strlen(exec) >= 4 && strncmp(exec, "true", 4)) file.execute = false;
-  else file.execute = true;
+  if (exec && strlen(exec) >= 4 && strncmp(exec, "true", 4) != 0) file.execute = true;
+  else file.execute = false;
+
+  // Check for deleted flag
+  const char *deleted = element->Attribute(TAG_deleted);
+  if (deleted && strlen(deleted) >= 4 && strncmp(deleted, "true", 4) != 0) file.deleted = true;
+  else file.deleted = false;
 
   return 0;
 }

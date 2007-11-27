@@ -30,6 +30,7 @@ typedef struct {
   uLong crc32;
   long size;
   bool execute;
+  bool deleted;
 } FileObject;
 
 typedef std::list<FileObject> FileList;
