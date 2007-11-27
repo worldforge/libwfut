@@ -1,3 +1,7 @@
+2007-11-27  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut.dox: Add initial doxygen spec file.
+
 2007-09-11  Simon Goodall  <simon@worldforge.org>
 
 	* configure.ac: Fix second curl check.
