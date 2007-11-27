@@ -60,6 +60,7 @@ void WFUTClient::updateChannel(const ChannelFileList &updates,
   FileMap::const_iterator Iend = files.end();
   while (I != Iend) {
     const FileObject &f = (I++)->second;
+    if (f.deleted) continue;
 
     const std::string &url = urlPrefix + updates.getName() + "/" + f.filename;
     m_io->queueFile(pathPrefix, f.filename, url, f.crc32, f.execute);
@@ -71,6 +72,7 @@ void WFUTClient::updateFile(const FileObject &file,
                             const std::string &urlPrefix,
                             const std::string &pathPrefix) {
   assert (m_initialised == true);
+  if (file.deleted) return;
 
   const std::string &url = urlPrefix + "/" + file.filename;
   m_io->queueFile(pathPrefix, file.filename, url, file.crc32, false);
@@ -220,15 +222,22 @@ WFUTError WFUTClient::calculateUpdates(const ChannelFileList &server, const Chan
 
   for (; I !=  Iend; ++I) {
     const FileObject &server_obj = I->second;
+    // Server side deleted? Just ignore for now
+    if (server_obj.deleted) {
+      UpdateReason.emit(server_obj.filename, WFUT_UPDATE_DELETED);
+      continue;
+    }
     // find the matching local one
     FileMap::const_iterator sys_iter = system_map.find(I->first);
     FileMap::const_iterator loc_iter = local_map.find(I->first);
 
     if (loc_iter == local_map.end()) {
       if (sys_iter == system_map.end()) {
+        // No local version, or system version
         UpdateReason.emit(server_obj.filename, WFUT_UPDATE_NO_LOCAL);
         updates.addFile(server_obj);
       } else if (server_obj.version > sys_iter->second.version) {
+        // Servere version is newer than sys version, and no local version
         UpdateReason.emit(server_obj.filename, WFUT_UPDATE_SERVER_SYSTEM);
         updates.addFile(server_obj);
       } else {
@@ -237,7 +246,7 @@ WFUTError WFUTClient::calculateUpdates(const ChannelFileList &server, const Chan
         UpdateReason.emit(server_obj.filename, WFUT_UPDATE_NONE);
       }
     } else if (server_obj.version > loc_iter->second.version) {
-        UpdateReason.emit(server_obj.filename, WFUT_UPDATE_SERVER_LOCAL);
+      UpdateReason.emit(server_obj.filename, WFUT_UPDATE_SERVER_LOCAL);
       updates.addFile(server_obj);
     } else {
       // According to xml files, the local version is the same as the server

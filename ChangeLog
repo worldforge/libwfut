@@ -1,5 +1,10 @@
 2007-11-27  Simon Goodall  <simon@worldforge.org>
 
+	* libwfut/WFUT.cpp, libwfut/WFUT.h: Ignore FileObject's with the
+	  deleted flag set to true and add an appropriate UpdateReason.
+
+2007-11-27  Simon Goodall  <simon@worldforge.org>
+
 	* libwfut/FileParser.cpp: Fix error in strncmp use.
 
 2007-11-27  Simon Goodall  <simon@worldforge.org>

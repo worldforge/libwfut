@@ -33,7 +33,8 @@ typedef enum {
   WFUT_UPDATE_SERVER_SYSTEM, // Server copy is newer than system version
   WFUT_UPDATE_SERVER_LOCAL,  // Server copy is newer than local version
   WFUT_UPDATE_MISSING,       // Local copy is missing
-  WFUT_UPDATE_MODIFIED       // Local copy is modified
+  WFUT_UPDATE_MODIFIED,      // Local copy is modified
+  WFUT_UPDATE_DELETED        // Server copy has been deleted
 } WFUTUpdateReason;
 
 /** The WFUTClient class should be the main class that client applications use.
