@@ -11,13 +11,16 @@
 
 #include <cassert>
 #include <stdlib.h>
+#include <errno.h>
 #include <stdio.h>
-
-#include <map>
 
 #include <dirent.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
+#include <map>
+#include <string>
+#include <list>
 
 #include "libwfut/platform.h"
 
@@ -95,6 +98,29 @@ int os_set_executable(const std::string &file) {
   //        E.g., only user?
   return chmod(file.c_str(), S_IXGRP | S_IXOTH | S_IEXEC | S_IRUSR | S_IRGRP | S_IROTH | S_IWUSR);
 #endif
+}
+
+int os_dir_walk(const std::string &path, const std::list<std::string> &excludes, std::list<std::string> &files) {
+
+  DIR *d = opendir(path.c_str());
+  if (d != 0) {
+    struct dirent *dent = readdir(d);
+    while (dent != 0) {
+      const std::string d_name(dent->d_name);
+      if (d_name != "." && d_name != ".." && std::find(excludes.begin(), excludes.end(), d_name) == excludes.end()) {
+
+      if (dent->d_type == DT_DIR) {
+        const std::string &pathname = path + "/" + d_name;
+        os_dir_walk(pathname, excludes, files);
+      } else if (dent->d_type == DT_REG) { 
+        const std::string &filename = path + "/" + d_name;
+        files.push_back(filename);
+      }}
+      dent = readdir(d);
+    }
+  }
+
+  return 0;
 }
 
 

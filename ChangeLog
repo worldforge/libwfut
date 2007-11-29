@@ -1,3 +1,9 @@
+2007-11-29  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/platform.cpp, libwfut/platform.h: Added method to recursively 
+	  scan a directory structure and add files to an input list. A list of
+	  filenames (and dirnames) to exclude can also be passed in.
+
 2007-11-27  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/WFUT.cpp, libwfut/WFUT.h: Ignore FileObject's with the
