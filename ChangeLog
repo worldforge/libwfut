@@ -1,3 +1,8 @@
+2008-03-05  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/platform.cpp: Change how execute perms are set to try and
+	  avoid problems on some machine which end up with only execute perms.
+
 2007-11-29  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/platform.cpp, libwfut/platform.h: Added method to recursively 

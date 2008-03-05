@@ -94,9 +94,17 @@ int os_set_executable(const std::string &file) {
   // nothing to do for windows
   return 0;
 #else
-  // TODO: Should we restrict these permissions some more?
-  //        E.g., only user?
-  return chmod(file.c_str(), S_IXGRP | S_IXOTH | S_IEXEC | S_IRUSR | S_IRGRP | S_IROTH | S_IWUSR);
+ struct stat info;
+  if (::stat(file.c_str(), &info) == 0) {
+
+    mode_t mode = info.st_mode;
+    mode |= S_IXGRP | S_IXOTH | S_IXUSR;
+
+    // TODO: Should we restrict these permissions some more?
+    //        E.g., only user?
+    return chmod(file.c_str(), mode);
+  }
+  return 0;
 #endif
 }
 
