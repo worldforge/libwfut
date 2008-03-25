@@ -76,7 +76,9 @@ int parseFileListXML(const std::string &xml, ChannelFileList &files) {
 
   TiXmlDocument doc;
 
-  if (!doc.Parse(xml.c_str())) {
+  doc.Parse(xml.c_str());
+
+  if (doc.Error()) {
     // Error parsing file
     return 1;
   }

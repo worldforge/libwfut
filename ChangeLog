@@ -1,3 +1,9 @@
+2008-03-25  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/ChannelParser.cpp, libwfut/FileParser.cpp,
+	  libwfut/MirrorParser.cpp: Fix parse error detection when parsing an
+	  XML string.
+
 2008-03-05  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/platform.cpp: Change how execute perms are set to try and

@@ -60,7 +60,9 @@ int parseMirrorListXML(const std::string &xml, MirrorList &mirrors) {
 
   TiXmlDocument doc;
 
-  if (!doc.Parse(xml.c_str())) {
+  doc.Parse(xml.c_str());
+
+  if (doc.Error()) {
     return 1;
   }
 

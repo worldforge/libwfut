@@ -72,7 +72,12 @@ int parseChannelListXML(const std::string &xml, ChannelList &channels) {
 
   TiXmlDocument doc;
 
-  if (!doc.Parse(xml.c_str())) {
+  doc.Parse(xml.c_str());
+
+  if (doc.Error()) {
+
+    // printf("TixError %s\n", doc.ErrorDesc());
+
     return 1;
   }
 
