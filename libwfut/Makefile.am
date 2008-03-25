@@ -1,15 +1,15 @@
-lib_LTLIBRARIES = libwfut-0.1.la
+lib_LTLIBRARIES = libwfut-0.2.la
 
-libwfut_0_1_la_LDFLAGS = -version-info @LIBWFUT_VERSION_INFO@
-#libwfut_0_1_la_LIBADD = ../tinyxml/libtinyxml.a
+libwfut_0_2_la_LDFLAGS = -version-info @LIBWFUT_VERSION_INFO@
+#libwfut_0_2_la_LIBADD = ../tinyxml/libtinyxml.a
 
 INCLUDES=-I${top_srcdir}
 
 if BUILD_DLL
-libwfut_0_1_la_CPPFLAGS=-DBUILD_LIBWFUT_DLL
+libwfut_0_2_la_CPPFLAGS=-DBUILD_LIBWFUT_DLL
 endif
 
-libwfut_0_1_la_SOURCES = \
+libwfut_0_2_la_SOURCES = \
 	ChannelParser.cpp \
 	ChannelWriter.cpp \
 	crc32.cpp \
@@ -23,7 +23,7 @@ libwfut_0_1_la_SOURCES = \
 	tinystr.cpp tinyxml.cpp tinyxmlerror.cpp tinyxmlparser.cpp \
 	tinystr.h tinyxml.h
 
-libwfutdir = $(includedir)/libwfut-0.1/libwfut/
+libwfutdir = $(includedir)/libwfut-0.2/libwfut/
 
 libwfut_HEADERS = \
 	ChannelFileList.h \

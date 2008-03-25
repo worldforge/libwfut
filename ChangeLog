@@ -1,5 +1,11 @@
 2008-03-25  Simon Goodall  <simon@worldforge.org>
 
+	* Makefile.am, configure.ac, libwfut-0.1.pc.in, libwfut-0.2.pc.in,
+	  libwfut/Makefile.am, python/Makefile.am, tools/Makefile.am: Update
+	  version numbers to 0.2.0.
+
+2008-03-25  Simon Goodall  <simon@worldforge.org>
+
 	* libwfut/ChannelParser.cpp, libwfut/FileParser.cpp,
 	  libwfut/MirrorParser.cpp: Fix parse error detection when parsing an
 	  XML string.

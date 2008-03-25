@@ -1,4 +1,4 @@
-AC_INIT(libwfut, 0.1.0, simon@worldforge.org)
+AC_INIT(libwfut, 0.2.0, simon@worldforge.org)
 
 AC_CONFIG_SRCDIR([libwfut/WFUT.cpp])
 AC_CONFIG_HEADERS([config.h])
@@ -7,14 +7,19 @@ AC_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE()
 
-LIBWFUT_CURRENT=0
-LIBWFUT_REVISION=1
-LIBWFUT_AGE=0
+LIBWFUT_CURRENT=1   ## Increment if interface changes
+LIBWFUT_REVISION=0  ## Increment if source changes. 0 if current is incremented
+LIBWFUT_AGE=0       ## Increment if current is incremented, but interface is
+                    ## backwards compatible
 
 AC_PROG_CXX
 AC_PROG_LIBTOOL
 
-CXXFLAGS="$CXXFLAGS -Wall -DTIXML_USE_STL=1"
+## Enable all compiler warnings
+CXXFLAGS="$CXXFLAGS -Wall"
+
+## Tell Tiny XML to use STL classes.
+CXXFLAGS="$CXXFLAGS -DTIXML_USE_STL=1"
 
 AC_LANG_PUSH(C++)
 
@@ -59,7 +64,7 @@ AC_SUBST(CXXFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(LDFLAGS)
 
-LIBWFUT_LIB_SUFFIX="-0.1"
+LIBWFUT_LIB_SUFFIX="-0.2"
 LIBWFUT_LIBS="-lwfut$LIBWFUT_LIB_SUFFIX"
 LIBWFUT_VERSION_INFO=$LIBWFUT_CURRENT:$LIBWFUT_REVISION:$LIBWFUT_AGE
 
@@ -122,7 +127,7 @@ AM_CONDITIONAL(BUILD_DLL, test $BUILD_IT = true, true, false)
 AC_SUBST(BUILD_IT)
 
 AC_CONFIG_FILES([
-	libwfut-0.1.pc
+	libwfut-0.2.pc
 	Makefile
 	libwfut/Makefile
 	tools/Makefile

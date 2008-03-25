@@ -20,7 +20,7 @@ pythonfvs_PYTHON =
 pythonfvs_LTLIBRARIES = 
 
 pyWFUT_la_LDFLAGS = -module -avoid-version
-pyWFUT_la_LIBADD = ../libwfut/libwfut-0.1.la @LIBWFUT_LIBS@
+pyWFUT_la_LIBADD = ../libwfut/libwfut-0.2.la @LIBWFUT_LIBS@
 pyWFUT_la_SOURCES = WFUT.cxx 
 
 CLEANFILES = \
