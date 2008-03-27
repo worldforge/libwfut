@@ -1,3 +1,8 @@
+2008-03-27  Simon Goodall  <simon@worldforge.org>
+
+	* Makefile.am: Add autogen.sh, libwfut.spec, libwfut.spec.in and
+	  libwfut.dox as EXTRA_DIST files.
+
 2008-03-25  Simon Goodall  <simon@worldforge.org>
 
 	* Makefile.am, configure.ac, libwfut-0.1.pc.in, libwfut-0.2.pc.in,
