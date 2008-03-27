@@ -1,5 +1,10 @@
 2008-03-27  Simon Goodall  <simon@worldforge.org>
 
+	* python/WFUT.i: Create python equivalents for typedefs. Add
+	  UpdateReason callback.
+
+2008-03-27  Simon Goodall  <simon@worldforge.org>
+
 	* Makefile.am: Add autogen.sh, libwfut.spec, libwfut.spec.in and
 	  libwfut.dox as EXTRA_DIST files.
 

@@ -55,7 +55,29 @@
 
     Py_XDECREF(args);
   }
+
+  void cb_update_reason(const std::string &s1, const WFUT::WFUTUpdateReason wu, PyObject *f) {
+    PyObject *args = Py_BuildValue("(si)", s1.c_str(), wu);
+    assert(args != 0);
+
+    PyObject *r = PyObject_CallObject(f, args);
+    if (r != 0) {
+      Py_XDECREF(r);
+    } else {
+      // Failed -- Dont care
+      // Maybe we should re-throw the exception?
+    }
+
+    Py_XDECREF(args);
+  }
+
 %}
+
+%template(MirrorList) std::vector<WFUT::MirrorObject>;
+%template(FileList) std::vector<WFUT::FileObject>;
+%template(ChannelList) std::vector<WFUT::ChannelObject>;
+%template(FileMap) std::map<std::string, WFUT::FileObject>;
+
 
 ## Need to map uLong to a python type
 %typedef unsigned int uLong;
@@ -76,4 +98,8 @@
   void WFUT::WFUTClient::DownloadFailedCB(PyObject *f) {
     self->DownloadFailed.connect(sigc::bind(sigc::ptr_fun(cb_download_failed),f));
   }
+  void WFUT::WFUTClient::UpdateReasonCB(PyObject *f) {
+    self->UpdateReason.connect(sigc::bind(sigc::ptr_fun(cb_update_reason),f));
+  }
 }
+
