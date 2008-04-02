@@ -10,3 +10,10 @@ libwfut is split up into a number of classes. There are a number of XML reading 
 libwfut allows two modes of file download. The first mode is a blocking download. A call to WFUTClient::downloadFile with a source URL and destination filename.This function will return when the download completes successfully, or fails for some reason.
 The second mode places multiple files in a download queue. The queue is processed a bit at a time  by calling the poll function. Signals are fired when a download completes successfully or fails for some reason.
 
+
+Links
+-----
+
+Downloads: http://sourceforge.net/projects/worldforge/
+Bugs: http://launchpad.net/libwfut/
+
