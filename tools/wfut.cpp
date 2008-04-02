@@ -1,6 +1,6 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 - 2007 Simon Goodall
+// Copyright (C) 2005 - 2008 Simon Goodall
 
 #ifdef HAVE_CONFIG_H
   #include "config.h"
@@ -299,7 +299,7 @@ int main(int argc, char *argv[]) {
 
   // Save the completed download list
   wfut.saveLocalList(local, local_wfut);
-  // Delete tmpwut.xml if we get here. We only keep it around in case of 
+  // Delete tmpwfut.xml if we get here. We only keep it around in case of 
   // an abnormal exit and the real wfut.xml has not been saved.
   if (os_exists(tmp_wfut)) unlink(tmp_wfut.c_str());
 
