@@ -1,2 +1,15 @@
+2008-04-02 libwfut 0.2.0 Released
+
+libwfut has been released. This release contains a swig generated python interface, download mirror selection, improved error reporting, control over the number of simultaneous downloads and numerous other bug fixes and improvements.
+
+ * Python interface
+ * Mirrors
+ * Record deleted files
+ * Limit number of simultaneous downloads	
+ * Follow re-directs
+ * New default server linnk
+ * Pass back error messages to client
+ * Report an error rather than saving error pages.
+
 2007-03-17 libwfut 0.1.0 Released
-This is the first release of libefut, a C++ implementation of WFUT. It is intended for use with WorldForge clients to provide integrated media update capabilities.
+This is the first release of libwfut, a C++ implementation of WFUT. It is intended for use with WorldForge clients to provide integrated media update capabilities.
