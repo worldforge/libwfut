@@ -9,7 +9,7 @@ pythonfvsdir = $(pyexecdir)/libwfut
 EXTRA_pythonfvsdir = $(pyexecdir)/libwfut
 
 if HAVE_PYTHON
-EXTRA_pythonfvs_PYTHON = WFUT.py __init__.py
+EXTRA_pythonfvs_PYTHON = WFUT.py __init__.py wfut-python.py
 EXTRA_pythonfvs_LTLIBRARIES = pyWFUT.la
 else
 EXTRA_pythonfvs_PYTHON=

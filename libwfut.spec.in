@@ -1,0 +1,80 @@
+%define name	@PACKAGE@
+%define version	@VERSION@
+%define release 1
+%define prefix /usr
+
+Summary:	The WorldForge Update Tool client side library.	
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
+License:	LGPL
+Group:		System Environment/Libraries
+Source:		%{name}-%{version}.tar.gz
+Url:		http://www.worldforge.org/
+#Requires:	SDL >= @SDL_VERSION@
+#BuildRequires:	SDL-devel >= @SDL_VERSION@
+BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
+Prereq: /sbin/ldconfig
+#AutoReqProv: no
+
+%description
+libwfut is the WorldForge Update Tool (WFUT) client side implementation in C++ for use directly by WorldForge clients.
+
+%package devel
+Summary:	The WorldForge Update Tool client side library development files.	
+Group:		Development/Libraries
+Requires:	%{name} = %{version}
+
+%description devel
+libwfut is the WorldForge Update Tool (WFUT) client side implementation in C++ for use directly by WorldForge clients.
+
+%package python
+Summary:	The WorldForge Update Tool client side library python interface.	
+Group:		Development/Libraries
+Requires:	%{name} = %{version}
+
+%description python
+libwfut is the WorldForge Update Tool (WFUT) client side implementation in C++ for use directly by WorldForge clients.
+
+
+%prep
+%setup -q
+
+%build
+CXXFLAGS=$RPM_OPT_FLAGS %configure
+
+%install
+rm -rf $RPM_BUILD_ROOT
+%makeinstall
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+%files
+%defattr(-,root,root)
+%{_libdir}/libwfut.so.*
+%doc AUTHORS README COPYING NEWS
+
+%files devel
+%defattr(-,root,root)
+%{_includedir}/libwfut-0.2/libwfut/ChannelParser.h
+%{_libdir}/libwfut.a
+%{_libdir}/libwfut.so
+%{_libdir}/libwfut.la
+%{_libdir}/pkgconfig/libwut-0.2.pc
+#%{_mandir}/man3/sage.3.gz
+#%{_mandir}/man3/sage_init.3.gz
+
+%files python
+%defattr(-,root,root)
+%{_libdir}/pyWFUT.la
+%{_libdir}/__init__.py
+%{_libdir}/WFUT.py
+
+%changelog
+* Tue Mar 25 2008 Simon Goodall <simon@worldforge.org>
+- Initial spec file.

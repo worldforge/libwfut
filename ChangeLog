@@ -1,3 +1,8 @@
+2008-04-08  Simon Goodall  <simon@worldforge.org>
+
+	* python/Makefile.am, python/wfut-python.py: Added a sample python
+	  implementation of the wfut command line tool.
+
 2008-04-02  Simon Goodall  <simon@worldforge.org>
 
 	* NEWS: 0.2.0 Released.
