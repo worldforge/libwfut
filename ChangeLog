@@ -1,3 +1,9 @@
+2008-04-09  Simon Goodall  <simon@worldforge.org>
+
+	* python/wfut-client.py, python/WUFTCore.py, python/Makefile.am: Added
+	  a new file containing the core parts of the update process in a
+	  class and changed wfut-python.py to use this class.
+
 2008-04-08  Simon Goodall  <simon@worldforge.org>
 
 	* python/Makefile.am, python/wfut-python.py: Added a sample python
