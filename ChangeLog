@@ -1,3 +1,7 @@
+2008-05-16  Alexey Torkhov  <atorkhov@gmail.com>
+
+	* libwfut/platform.cpp: Fix to support gcc 4.3.
+
 2008-04-09  Simon Goodall  <simon@worldforge.org>
 
 	* python/wfut-client.py, python/WUFTCore.py, python/Makefile.am: Added
