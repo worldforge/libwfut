@@ -54,6 +54,19 @@ PKG_CHECK_MODULES(CURL_PIPE, libcurl >= 7.16.0,
 ]
 )
 
+# Try to find system-wide installation of tinyxml
+# If found, add define to config.h, set LIBS and add automake conditional
+AC_CHECK_LIB(tinyxml, main,
+	[
+		AC_DEFINE(HAVE_LIBTINYXML, 1, [Define to 1 if you have the `tinyxml' library (-ltinyxml).])
+		LIBS="-ltinyxml $LIBS"
+		have_tinyxml=true
+	],
+	[
+		have_tinyxml=false
+	]
+)
+AM_CONDITIONAL(HAVE_LIBTINYXML, [test x$have_tinyxml = xtrue])
 
 AC_LANG_POP(C++)
 

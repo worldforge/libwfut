@@ -22,6 +22,8 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
+#define FROM_TINYXML
+
 #include <ctype.h>
 #include "tinyxml.h"
 
