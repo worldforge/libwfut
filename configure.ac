@@ -5,7 +5,7 @@ AC_CONFIG_HEADERS([config.h])
 
 AC_CANONICAL_HOST
 
-AM_INIT_AUTOMAKE()
+AM_INIT_AUTOMAKE([nostdinc])
 
 LIBWFUT_CURRENT=1   ## Increment if interface changes
 LIBWFUT_REVISION=0  ## Increment if source changes. 0 if current is incremented

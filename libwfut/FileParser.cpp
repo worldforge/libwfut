@@ -14,20 +14,20 @@ namespace WFUT {
 static int parseFile(TiXmlElement *element, FileObject &file) {
   assert(element);
 
-  const char *fname = element->Attribute(TAG_filename);
+  const char *fname = element->Attribute(TAG_filename.c_str());
   if (fname != NULL) {
     file.filename = Encoder::decodeString(fname);
   }
-  sscanf(element->Attribute(TAG_version), "%d", &file.version);
-  sscanf(element->Attribute(TAG_crc32), "%lu", &file.crc32);
-  sscanf(element->Attribute(TAG_size), "%ld", &file.size);
+  sscanf(element->Attribute(TAG_version.c_str()), "%d", &file.version);
+  sscanf(element->Attribute(TAG_crc32.c_str()), "%lu", &file.crc32);
+  sscanf(element->Attribute(TAG_size.c_str()), "%ld", &file.size);
   // Check for execute flag
-  const char *exec = element->Attribute(TAG_execute);
+  const char *exec = element->Attribute(TAG_execute.c_str());
   if (exec && strlen(exec) >= 4 && strncmp(exec, "true", 4) == 0) file.execute = true;
   else file.execute = false;
 
   // Check for deleted flag
-  const char *deleted = element->Attribute(TAG_deleted);
+  const char *deleted = element->Attribute(TAG_deleted.c_str());
   if (deleted && strlen(deleted) >= 4 && strncmp(deleted, "true", 4) == 0) file.deleted = true;
   else file.deleted = false;
 
@@ -37,7 +37,7 @@ static int parseFile(TiXmlElement *element, FileObject &file) {
 static int parseFiles(TiXmlNode *node, ChannelFileList &files) {
   assert(node);
 
-  const char *dir = node->ToElement()->Attribute(TAG_dir);
+  const char *dir = node->ToElement()->Attribute(TAG_dir.c_str());
   if (dir) {
     files.setName(dir);
   } 

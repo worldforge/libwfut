@@ -3,7 +3,7 @@ lib_LTLIBRARIES = libwfut-0.2.la
 libwfut_0_2_la_LDFLAGS = -version-info @LIBWFUT_VERSION_INFO@
 #libwfut_0_2_la_LIBADD = ../tinyxml/libtinyxml.a
 
-INCLUDES=-I${top_srcdir}
+INCLUDES=-I${top_srcdir} -I$(top_builddir)
 
 if BUILD_DLL
 libwfut_0_2_la_CPPFLAGS=-DBUILD_LIBWFUT_DLL
@@ -19,9 +19,12 @@ libwfut_0_2_la_SOURCES = \
 	FileWriter.cpp \
 	MirrorParser.cpp \
 	WFUT.cpp \
-	platform.cpp\
-	tinystr.cpp tinyxml.cpp tinyxmlerror.cpp tinyxmlparser.cpp \
+	platform.cpp
+
+if !HAVE_LIBTINYXML
+libwfut_0_2_la_SOURCES += tinystr.cpp tinyxml.cpp tinyxmlerror.cpp tinyxmlparser.cpp \
 	tinystr.h tinyxml.h
+endif
 
 libwfutdir = $(includedir)/libwfut-0.2/libwfut/
 

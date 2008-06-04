@@ -22,6 +22,13 @@ must not be misrepresented as being the original software.
 distribution.
 */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_LIBTINYXML
+#include <tinyxml.h>
+#else
 
 #ifndef TINYXML_INCLUDED
 #define TINYXML_INCLUDED
@@ -1426,5 +1433,23 @@ private:
 
 } // namespace WFUT
 
+#ifndef FROM_TINYXML
+#define TiXmlAttribute WFUT::TiXmlAttribute
+#define TiXmlBase WFUT::TiXmlBase
+#define TiXmlComment WFUT::TiXmlComment
+#define TiXmlDeclaration WFUT::TiXmlDeclaration
+#define TiXmlElement WFUT::TiXmlElement
+#define TiXmlDocument WFUT::TiXmlDocument
+#define TiXmlNode WFUT::TiXmlNode
+#define TiXmlPrinter WFUT::TiXmlPrinter
+#define TiXmlText WFUT::TiXmlText
+#define TiXmlUnknown WFUT::TiXmlUnknown
+#define TiXmlVisitor WFUT::TiXmlVisitor
+#define TIXML_SUCCESS WFUT::TIXML_SUCCESS
+#define TIXML_NO_ATTRIBUTE WFUT::TIXML_NO_ATTRIBUTE
+#define TIXML_WRONG_TYPE WFUT::TIXML_WRONG_TYPE
 #endif
 
+#endif
+
+#endif // HAVE_LIBTINYXML

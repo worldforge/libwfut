@@ -1,3 +1,11 @@
+2008-06-04  Alexey Torkhov  <atorkhov@gmail.com>
+
+	* configure.ac, libwfut/ChannelParser.cpp, libwfut/FileParser.cpp,
+	  libwfut/Makefile.am, libwfut/tinyxml.cpp, libwfut/tinyxml.h,
+	  tools/Makefile.am: Last patch was applied to wrong incarnation of
+	  tinyxml. This is right one. Also this fixes compatibility with new
+	  version of tinyxml and compile problem.
+
 2008-05-30  Alexey Torkhov  <atorkhov@gmail.com>
 
 	* configure.ac, tinyxml/tinyxml.cpp, tinyxml/tinyxml.h: Use system

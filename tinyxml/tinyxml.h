@@ -1434,20 +1434,20 @@ private:
 } // namespace WFUT
 
 #ifndef FROM_TINYXML
-#define TiXmlAttribute Ember::TiXmlAttribute
-#define TiXmlBase Ember::TiXmlBase
-#define TiXmlComment Ember::TiXmlComment
-#define TiXmlDeclaration Ember::TiXmlDeclaration
-#define TiXmlElement Ember::TiXmlElement
-#define TiXmlDocument Ember::TiXmlDocument
-#define TiXmlNode Ember::TiXmlNode
-#define TiXmlPrinter Ember::TiXmlPrinter
-#define TiXmlText Ember::TiXmlText
-#define TiXmlUnknown Ember::TiXmlUnknown
-#define TiXmlVisitor Ember::TiXmlVisitor
-#define TIXML_SUCCESS Ember::TIXML_SUCCESS
-#define TIXML_NO_ATTRIBUTE Ember::TIXML_NO_ATTRIBUTE
-#define TIXML_WRONG_TYPE Ember::TIXML_WRONG_TYPE
+#define TiXmlAttribute WFUT::TiXmlAttribute
+#define TiXmlBase WFUT::TiXmlBase
+#define TiXmlComment WFUT::TiXmlComment
+#define TiXmlDeclaration WFUT::TiXmlDeclaration
+#define TiXmlElement WFUT::TiXmlElement
+#define TiXmlDocument WFUT::TiXmlDocument
+#define TiXmlNode WFUT::TiXmlNode
+#define TiXmlPrinter WFUT::TiXmlPrinter
+#define TiXmlText WFUT::TiXmlText
+#define TiXmlUnknown WFUT::TiXmlUnknown
+#define TiXmlVisitor WFUT::TiXmlVisitor
+#define TIXML_SUCCESS WFUT::TIXML_SUCCESS
+#define TIXML_NO_ATTRIBUTE WFUT::TIXML_NO_ATTRIBUTE
+#define TIXML_WRONG_TYPE WFUT::TIXML_WRONG_TYPE
 #endif
 
 #endif
