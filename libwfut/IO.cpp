@@ -1,6 +1,6 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 - 2007 Simon Goodall
+// Copyright (C) 2005 - 2008 Simon Goodall
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -24,7 +24,7 @@ static const bool debug = false;
 static int createParentDirs(const std::string &filename) {
   int err = 1;
   // TODO This function may not work correctly or be portable.
-  // Perhaps should only search for \\ on win32, / otherwise
+  // Perhaps should only search for '\\' on win32, '/' otherwise
   size_t pos = filename.find_last_of("\\/");
   // Return if no separator is found, or if it is the first
   // character, e.g. /home
@@ -36,6 +36,7 @@ static int createParentDirs(const std::string &filename) {
     // There was an error creating the parent path.
     return err;
   }
+
   // See if the directory already exists
   DIR *d = opendir(path.c_str());
   if (!d) {
@@ -329,6 +330,34 @@ int IO::poll() {
   }
 
   return num_handles;
+}
+
+/**
+ * Cancel all current and pending downloads.
+ * TODO: Perhaps we should add in user feedback? E.g. DownloadFailed signal?
+ */
+void IO::cancelAll() {
+  // Perhaps not the best way?
+  // What about a dequeue? Seems to allow list style access?
+  while (m_handles.empty() == false) {
+    m_handles.pop();
+  }
+
+  while (!m_files.empty()) {
+    DataStruct *ds = m_files.begin()->second;
+    if (ds->handle) {
+      // TODO: Might need to check to see if it has been added first...
+      curl_multi_remove_handle(m_mhandle, ds->handle);
+      curl_easy_cleanup(ds->handle);
+      ds->handle = NULL;
+    }
+    if (ds->fp) {
+      fclose(ds->fp);
+      ds->fp = NULL;
+    }
+    delete ds;
+    m_files.erase(m_files.begin());
+  }
 }
 
 } /* namespace WFUT */

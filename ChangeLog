@@ -1,3 +1,9 @@
+2008-10-11  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/IO.cpp, libwfut/IO.h, libwfut/WFUT.cpp, libwfut/WFUT.h:
+	  Added a cancelAll() method to abort all current and pending
+	  downloads.
+
 2008-07-09  Simon Goodall  <simon@worldforge.org>
 
 	* python/wfut-server.py: Added a simple server capable of serving HTTP

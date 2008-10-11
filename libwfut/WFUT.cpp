@@ -271,4 +271,8 @@ WFUTError WFUTClient::calculateUpdates(const ChannelFileList &server, const Chan
   return WFUT_NO_ERROR;
 }
 
+void WFUTClient::cancelAll() {
+  m_io->cancelAll();
+}
+
 }

@@ -1,6 +1,6 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU Lesser General Public License (See COPYING for details).
-// Copyright (C) 2005 - 2007 Simon Goodall
+// Copyright (C) 2005 - 2008 Simon Goodall
 
 #ifndef LIBWFUT_IO_H
 #define LIBWFUT_IO_H 1
@@ -18,6 +18,7 @@
 #include <libwfut/types.h>
 
 namespace WFUT {
+  // Internal data struct representing a single file being downloaded.
   typedef struct {
     std::string filename;
     std::string path;
@@ -111,6 +112,11 @@ public:
    * remote server is used.
    */ 
   void setMaxDownloads(int i) { m_num_to_process = i; }
+
+  /**
+   * Cancel all current and pending downloads.
+   */ 
+  void cancelAll();
 
 private:
   bool m_initialised;

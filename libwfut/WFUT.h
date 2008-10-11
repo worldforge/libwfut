@@ -165,6 +165,8 @@ public:
    */
   sigc::signal<void, const std::string&, const WFUTUpdateReason> UpdateReason;
 
+  void cancelAll();
+
 private:
   void onDownloadComplete(const std::string &url, const std::string &filename);
   void onDownloadFailed(const std::string &url, const std::string &filename, const std::string &reason);
