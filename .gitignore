@@ -16,4 +16,10 @@ libtool
 ltmain.sh
 missing
 stamp-h1
-libwfut-0.1.pc
+libwfut-0.2.pc
+*.o
+*.lo
+*.la
+.deps
+.libs
+py-compile
