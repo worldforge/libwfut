@@ -1,3 +1,7 @@
+2008-10-20  Simon Goodall  <simon@worldforge.org>
+
+	* python/wfut-server.py: Add python interpreter.
+
 2008-10-11  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/IO.cpp, libwfut/IO.h, libwfut/WFUT.cpp, libwfut/WFUT.h:

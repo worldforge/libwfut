@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import dbus, gobject, avahi
 from dbus.mainloop.glib import DBusGMainLoop
 
