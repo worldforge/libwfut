@@ -165,7 +165,15 @@ public:
    */
   sigc::signal<void, const std::string&, const WFUTUpdateReason> UpdateReason;
 
-  void cancelAll();
+  /** Abort all current and pending downloads.
+   * The DownloadFailed signal will be fired with an "Aborted" message. 
+   */
+  void abortAll();
+
+  /** Abort specified current or pending downloa .
+   * The DownloadFailed signal will be fired with an "Aborted" message. 
+   */
+  void abortDownload(const std::string &filename);
 
 private:
   void onDownloadComplete(const std::string &url, const std::string &filename);

@@ -271,8 +271,12 @@ WFUTError WFUTClient::calculateUpdates(const ChannelFileList &server, const Chan
   return WFUT_NO_ERROR;
 }
 
-void WFUTClient::cancelAll() {
-  m_io->cancelAll();
+void WFUTClient::abortDownload(const std::string &filename) {
+  m_io->abortDownload(filename);
+}
+
+void WFUTClient::abortAll() {
+  m_io->abortAll();
 }
 
 }

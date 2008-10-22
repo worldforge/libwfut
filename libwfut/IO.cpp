@@ -19,6 +19,7 @@
 namespace WFUT {
 
 static const bool debug = false;
+
 // Create the parent dir of the file.
 // TODO Does this work if the parent parent dir does not exist?
 static int createParentDirs(const std::string &filename) {
@@ -82,6 +83,8 @@ static int copy_file(FILE *fp, const std::string &target_filename) {
 static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp) {
   assert(userp != NULL);
   DataStruct *ds = reinterpret_cast<DataStruct*>(userp);
+  
+  // Need to create a file in fp is NULL
   if (ds->fp == NULL) {
     // Open File handle
     ds->fp = os_create_tmpfile();
@@ -95,19 +98,23 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb,void *userp) {
   }
 
   assert(ds->fp != NULL);
+
   // Update crc32 value
   ds->actual_crc32 = crc32(ds->actual_crc32, reinterpret_cast<Bytef*>(buffer), size * nmemb);
+
   // Write data to file
   return fwrite(buffer, size, nmemb, ds->fp);
 }
 
+/**
+ * Set some options that each handle needs
+ */
 static int setDefaultOpts(CURL *handle) {
   curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1);
   curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
   curl_easy_setopt(handle, CURLOPT_FAILONERROR, 1);
   return 0;
 }
-
 
 int IO::init() {
   assert (m_initialised == false);
@@ -218,6 +225,7 @@ int IO::queueFile(const std::string &path, const std::string &filename, const st
     // Url already in queue
     return 1;
   }
+
   DataStruct *ds = new DataStruct();
   ds->fp = NULL;
   ds->url = Encoder::encodeURL(url);
@@ -236,19 +244,20 @@ int IO::queueFile(const std::string &path, const std::string &filename, const st
 
   // Add handle to our queue instead of to curl directly so that
   // we can limit the number of connections we make to the server.
-  m_handles.push(ds->handle);
-//  curl_multi_add_handle(m_mhandle, ds->handle);
+  m_handles.push_back(ds->handle);
 
   return 0;
 }
 
 int IO::poll() {
+  // Do some work and get number of handles in progress
   int num_handles;
   curl_multi_perform(m_mhandle, &num_handles);
 
   struct CURLMsg *msg = NULL;
   int msgs;
 
+  // Get messages back out of CURL
   while ((msg = curl_multi_info_read(m_mhandle, &msgs)) != NULL) {
 
     DataStruct *ds = NULL;
@@ -274,6 +283,8 @@ int IO::poll() {
               errormsg = "Error copying file to target location.\n";
               failed = true;
             }
+
+            // Set executable if required
             if (ds->executable) {
               os_set_executable(ds->path + "/" + ds->filename);
             }
@@ -297,9 +308,11 @@ int IO::poll() {
     }
 
     if (debug) printf("Removing Handle\n");
+
     // Close handle	
     curl_multi_remove_handle(m_mhandle, msg->easy_handle);
 
+    // Clean up
     if (ds) {
       if (ds->fp) os_free_tmpfile(ds->fp);
       ds->fp = NULL;
@@ -320,10 +333,11 @@ int IO::poll() {
   int diff = m_num_to_process - num_handles;
   if (diff > 0) {
     while (diff--) {
+
       if (!m_handles.empty()) {
         // This is where we tell curl about our downloads.
         curl_multi_add_handle(m_mhandle, m_handles.front());
-        m_handles.pop();
+        m_handles.pop_front();
         ++num_handles;
       }
     }
@@ -333,31 +347,57 @@ int IO::poll() {
 }
 
 /**
- * Cancel all current and pending downloads.
- * TODO: Perhaps we should add in user feedback? E.g. DownloadFailed signal?
+ * Abort all current and pending downloads.
  */
-void IO::cancelAll() {
-  // Perhaps not the best way?
-  // What about a dequeue? Seems to allow list style access?
-  while (m_handles.empty() == false) {
-    m_handles.pop();
-  }
+void IO::abortAll() {
 
   while (!m_files.empty()) {
-    DataStruct *ds = m_files.begin()->second;
-    if (ds->handle) {
-      // TODO: Might need to check to see if it has been added first...
-      curl_multi_remove_handle(m_mhandle, ds->handle);
-      curl_easy_cleanup(ds->handle);
-      ds->handle = NULL;
-    }
-    if (ds->fp) {
-      fclose(ds->fp);
-      ds->fp = NULL;
-    }
+    DataStruct *ds = (m_files.begin())->second;
+    abortDownload(ds);
     delete ds;
     m_files.erase(m_files.begin());
   }
+}
+
+/**
+ * Abort all current and pending downloads.
+ */
+void IO::abortDownload(const std::string &filename) {
+  std::map<std::string, DataStruct*>::iterator I = m_files.find(filename);
+
+  if (I != m_files.end()) {
+    DataStruct *ds = I->second;
+    abortDownload(ds);
+    delete ds;
+    m_files.erase(I);
+  }
+}
+
+void IO::abortDownload(DataStruct *ds) {
+
+  if (ds->handle) {
+    // Find handle in pending list
+    std::deque<CURL*>::iterator I = std::find(m_handles.begin(), m_handles.end(), ds->handle);
+    // Not found? Must be currently downloading.
+    if (I != m_handles.end()) {
+      m_handles.erase(I);
+    } else {
+      curl_multi_remove_handle(m_mhandle, ds->handle);
+    }
+
+    // Clean up curl handle
+    curl_easy_cleanup(ds->handle);
+    ds->handle = NULL;
+  }
+
+  // Clean up file pointer
+  if (ds->fp) {
+    os_free_tmpfile(ds->fp);
+    ds->fp = NULL;
+  }
+
+  // Trigger user feedback
+  DownloadFailed.emit(ds->url, ds->filename, "Aborted");
 }
 
 } /* namespace WFUT */

@@ -8,7 +8,7 @@
 #include <cassert>
 #include <string>
 #include <map>
-#include <queue>
+#include <deque>
 #include <cstdio>
 
 #include <zlib.h>
@@ -114,15 +114,23 @@ public:
   void setMaxDownloads(int i) { m_num_to_process = i; }
 
   /**
-   * Cancel all current and pending downloads.
+   * Abort all current and pending downloads.
    */ 
-  void cancelAll();
+  void abortAll();
+
+  /**
+   * Abort the download of the specified file.
+   */ 
+  void abortDownload(const std::string &);
 
 private:
+
+  void abortDownload(DataStruct *ds);
+
   bool m_initialised;
   CURLM *m_mhandle;
   std::map<std::string, DataStruct*> m_files;
-  std::queue<CURL*> m_handles;
+  std::deque<CURL*> m_handles;
   int m_num_to_process;
 };
 
