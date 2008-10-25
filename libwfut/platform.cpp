@@ -111,6 +111,11 @@ int os_set_executable(const std::string &file) {
 
 int os_dir_walk(const std::string &path, const std::list<std::string> &excludes, std::list<std::string> &files) {
 
+#ifdef PLATFORM_WIN32
+  // No win32 support yet
+  
+  return 1;
+#else
   DIR *d = opendir(path.c_str());
   if (d != 0) {
     struct dirent *dent = readdir(d);
@@ -130,6 +135,7 @@ int os_dir_walk(const std::string &path, const std::list<std::string> &excludes,
   }
 
   return 0;
+#endif
 }
 
 

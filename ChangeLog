@@ -1,3 +1,11 @@
+2008-10-25  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/platform.cpp: Disable os_dir_walk for win32. 
+
+2008-10-23  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac: Bump version numbers in prep for release.
+
 2008-10-22  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/IO.cpp, libwfut/IO.h, libwfut/WFUT.cpp, libwfut/WFUT.h:
