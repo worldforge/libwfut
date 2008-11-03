@@ -1,3 +1,7 @@
+2008-11-03 libwfut 0.2.1 Released
+
+libwfut 0.2.1 has been released. This release allows downloads to be aborted, contains some sample python front-ends and fixes a few small bugs. This version will also use a systemwide installation of tinyxml if available.
+
 2008-04-02 libwfut 0.2.0 Released
 
 libwfut has been released. This release contains a swig generated python interface, download mirror selection, improved error reporting, control over the number of simultaneous downloads and numerous other bug fixes and improvements.
@@ -7,7 +11,7 @@ libwfut has been released. This release contains a swig generated python interfa
  * Record deleted files
  * Limit number of simultaneous downloads	
  * Follow re-directs
- * New default server linnk
+ * New default server link
  * Pass back error messages to client
  * Report an error rather than saving error pages.
 

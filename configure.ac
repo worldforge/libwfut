@@ -1,4 +1,4 @@
-AC_INIT(libwfut, 0.2.0, simon@worldforge.org)
+AC_INIT(libwfut, 0.2.1, simon@worldforge.org)
 
 AC_CONFIG_SRCDIR([libwfut/WFUT.cpp])
 AC_CONFIG_HEADERS([config.h])
@@ -7,9 +7,9 @@ AC_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE([nostdinc])
 
-LIBWFUT_CURRENT=1   ## Increment if interface changes
+LIBWFUT_CURRENT=2   ## Increment if interface changes
 LIBWFUT_REVISION=0  ## Increment if source changes. 0 if current is incremented
-LIBWFUT_AGE=0       ## Increment if current is incremented, but interface is
+LIBWFUT_AGE=1       ## Increment if current is incremented, but interface is
                     ## backwards compatible
 
 AC_PROG_CXX
@@ -140,6 +140,7 @@ AM_CONDITIONAL(BUILD_DLL, test $BUILD_IT = true, true, false)
 AC_SUBST(BUILD_IT)
 
 AC_CONFIG_FILES([
+	libwfut.spec
 	libwfut-0.2.pc
 	Makefile
 	libwfut/Makefile

@@ -17,6 +17,7 @@ ltmain.sh
 missing
 stamp-h1
 libwfut-0.2.pc
+libwfut.spec
 *.o
 *.lo
 *.la

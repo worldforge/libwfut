@@ -1,3 +1,7 @@
+2008-11-03  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut 0.2.1 released.
+
 2008-10-25  Simon Goodall  <simon@worldforge.org>
 
 	* libwfut/platform.cpp: Disable os_dir_walk for win32. 
