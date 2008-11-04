@@ -7,6 +7,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include <stdio.h>
+#include <algorithm>
 
 #include "libwfut/IO.h"
 #include "libwfut/Encoder.h"
