@@ -13,6 +13,7 @@
 #include <sys/types.h>
 
 #include <algorithm>
+#include <cstdio>
 
 #include <sigc++/bind.h>
 
