@@ -20,6 +20,21 @@ AC_PROG_LIBTOOL
 ## Enable all compiler warnings
 CXXFLAGS="$CXXFLAGS -Wall"
 
+
+AC_ARG_ENABLE(debug,
+  [  --enable-debug     enable debug information [default=no]],
+  [
+    if test "$enableval" = "yes"; then
+      CXXFLAGS="$CXXFLAGS -ggdb -O0 -DDEBUG"
+    else
+      CXXFLAGS="$CXXFLAGS -O3 -DNDEBUG"
+    fi
+  ],[
+    CXXFLAGS="$CXXFLAGS -O3 -DNDEBUG"
+  ]
+)
+
+
 ## Tell Tiny XML to use STL classes.
 CXXFLAGS="$CXXFLAGS -DTIXML_USE_STL=1"
 

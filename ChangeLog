@@ -1,5 +1,9 @@
 2009-07-12  Simon Goodall  <simon@worldforge.org>
 
+	* configure.ac: Added --enable-debug option to configure.
+
+2009-07-12  Simon Goodall  <simon@worldforge.org>
+
 	* configure.ac, python/Makefile.am: Use AC_CHECK_TOOL to find swig. 
 
 2009-07-12  Simon Goodall  <simon@worldforge.org>
