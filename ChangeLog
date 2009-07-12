@@ -1,5 +1,9 @@
 2009-07-12  Simon Goodall  <simon@worldforge.org>
 
+	* configure.ac, python/Makefile.am: Use AC_CHECK_TOOL to find swig. 
+
+2009-07-12  Simon Goodall  <simon@worldforge.org>
+
 	* configure.ac, Makefile.am: Update to specify separate m4 directory.
 
 2009-03-01  Alexey Torkhov  <atorkhov@gmail.com>

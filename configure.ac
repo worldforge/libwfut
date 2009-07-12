@@ -5,8 +5,9 @@ AC_CONFIG_SRCDIR([libwfut/WFUT.cpp])
 AC_CONFIG_HEADERS([config.h])
 
 AC_CANONICAL_HOST
-
 AM_INIT_AUTOMAKE([nostdinc])
+
+AC_CHECK_TOOL(SWIG, swig)
 
 LIBWFUT_CURRENT=2   ## Increment if interface changes
 LIBWFUT_REVISION=0  ## Increment if source changes. 0 if current is incremented

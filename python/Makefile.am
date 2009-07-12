@@ -1,7 +1,7 @@
 SUFFIXES: .cxx .i .lo .la .cpp .o  .obj
 
 .i.cxx:
-	swig -python -c++ -interface py$(@:.cxx=) -I$(top_srcdir) -o $@ $<
+	${SWIG} -python -c++ -interface py$(@:.cxx=) -I$(top_srcdir) -o $@ $<
 
 INCLUDES = -I${top_srcdir} @PYTHON_INCLUDES@
 
