@@ -1,8 +1,13 @@
 #!/usr/bin/python
 
-import dbus, gobject, avahi
+import string
+import gobject
+import avahi
+
+import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 
+## setup some globals 
 serviceName = "WFUT Server"
 serviceType = "_wfut._tcp"
 servicePort = 0;
@@ -74,23 +79,30 @@ def entry_group_state_changed(state, error):
         main_loop.quit()
         return
 
-
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 class WFUTHandler(BaseHTTPRequestHandler):
 
-	def do_GET(self):
-		try:
-			f = open(serverRoot + "/" + self.path)
-			self.send_response(200)
-			#self.send_header('Content-type', 'text/html');
-			self.send_header('Content-type', 'application/octet-stream');
-			self.end_headers();
-			self.wfile.write(f.read());
-			f.close();
-			return;
+  def do_GET(self):
 
-		except IOError:
-			self.send_error(404, 'File Not Found: %s'  % self.path)
+    ## If no path is specified, then stick up a little message
+    if self.path == "/":
+      self.wfile.write("WFUT Server")
+      return
+
+    try:
+      ## log file access
+      print(string.join(["Accessing:", self.path]))
+
+      ## open file and transmit content
+      f = open(serverRoot + "/" + self.path)
+      self.send_response(200)
+      self.send_header('Content-type', 'application/octet-stream');
+      self.end_headers();
+      self.wfile.write(f.read());
+      f.close();
+
+    except IOError:
+      self.send_error(404, 'File Not Found: %s' % self.path)
 
 
 if __name__ == '__main__':
@@ -99,9 +111,24 @@ if __name__ == '__main__':
     main_loop = gobject.MainLoop()
     bus = dbus.SystemBus()
 
-    ws = HTTPServer(('', 0), WFUTHandler)
-    print dir(ws);
-    print ws.server_port;
+    ## TODO; Read config file
+
+    import sys,getopt
+    optlist, args = getopt.getopt(sys.argv[1:], "p:")
+
+    for (arg, opt) in optlist:
+        ## Extract port number
+        if arg == '-p': servicePort = int(opt);
+
+    ## TODO: Bind to particular address?
+    ws = HTTPServer(('', servicePort), WFUTHandler)
+
+    ## Generate server url
+    url = string.join(["http://", ws.server_name, ":", str(ws.server_port), "/"], "");
+
+    print "Server URL is: " + url
+
+    ## Extract port number
     servicePort = ws.server_port;
 
     server = dbus.Interface(
@@ -113,16 +140,20 @@ if __name__ == '__main__':
 
     try:
 
-	context = main_loop.get_context()
+      context = main_loop.get_context()
 
-	while 1:
-		# Handle commands here
-		ws.handle_request();
-		context.iteration(True)
-#        main_loop.run()
+      while True:
+        # Handle commands here
+        ws.handle_request();
+
+        # Allow gobject/dbus/avahi to do something
+        context.iteration(True)
+
+        # main_loop.run()
+
     except KeyboardInterrupt:
-        pass
+      pass
 
     if not group is None:
-        group.Free()
+      group.Free()
 
