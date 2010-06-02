@@ -11,11 +11,11 @@ EXTRA_pythonfvsdir = $(pyexecdir)/libwfut
 if HAVE_PYTHON
 EXTRA_pythonfvs_PYTHON = \
 	__init__.py \
-	WFUT.py \
 	WFUTCore.py \
 	wfut-python.py \
 	wfut-server.py \
 	WFUTAvahiClient.py
+
 EXTRA_pythonfvs_LTLIBRARIES = pyWFUT.la
 else
 EXTRA_pythonfvs_PYTHON=
