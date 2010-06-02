@@ -43,10 +43,11 @@ server_root = config.get("general", "server_root");
 channel = ".";
 local_path = "./";
 system_path = "";
+use_avahi = False
 
 ## Arguments parsing function
 import getopt
-optlist, args = getopt.getopt(sys.argv[1:], "u:s:p:vS:h")
+optlist, args = getopt.getopt(sys.argv[1:], "u:s:p:vS:hL")
 
 for (arg, opt) in optlist:
 	if arg == '-u': channel = opt;
@@ -55,6 +56,22 @@ for (arg, opt) in optlist:
 	if arg == '-p': local_path = opt;	
 	if arg == '-v': pass
 	if arg == '-h': pass
+	if arg == '-L': use_avahi = True
+
+## If scan local network;
+if use_avahi:
+	try:
+		## Use wfut-avahi-client to return a sever root url
+		import WFUTAvahiClient;
+		server_root = WFUTAvahiClient.go();
+	except Exception as e:
+		print e;
+
+	
+
+## Check we have required data input
+if channel == ".":
+	print "No channel specified, will try using current directory";
 
 client = WFUTCore.Client();
 
