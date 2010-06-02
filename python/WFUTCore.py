@@ -106,6 +106,10 @@ class Client:
 				if (self.channel == "."):
 					 self.channel = self.local.getName();
 
+		## If channel name is still '.', then we cannot proceed.
+		if (self.channel == "."):
+			raise "Unable to determine local channel name";
+
 		## Look for tmpwfut.xml file and pull in extra updates.
 		if (os.path.exists(self.tmp_wfut)):
 			if (self.wfut.getLocalList(self.tmp_wfut, self.tmplist) > 0):
