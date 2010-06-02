@@ -14,7 +14,8 @@ EXTRA_pythonfvs_PYTHON = \
 	WFUT.py \
 	WFUTCore.py \
 	wfut-python.py \
-	wfut-server.py
+	wfut-server.py \
+	WFUTAvahiClient.py
 EXTRA_pythonfvs_LTLIBRARIES = pyWFUT.la
 else
 EXTRA_pythonfvs_PYTHON=
@@ -31,4 +32,4 @@ pyWFUT_la_SOURCES = WFUT.cxx
 CLEANFILES = \
 	WFUT.cxx WFUT.py
 
-EXTRA_DIST = __init__.py WFUT.i wfut-python.py WFUTCore.py wfut-server.py
+EXTRA_DIST = __init__.py WFUT.i wfut-python.py WFUTCore.py wfut-server.py WFUTAvahiClient.py
