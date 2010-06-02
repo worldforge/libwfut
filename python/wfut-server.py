@@ -13,7 +13,7 @@ serviceType = "_wfut._tcp"
 servicePort = 0;
 serviceTXT = ""
 
-domain = ""
+domain = "local"
 host = ""
 
 group = None
