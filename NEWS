@@ -1,3 +1,7 @@
+2010-06-03 libwfut 0.2.2 Released
+
+libwfut 0.2.2 has been released. This release primarily fixes compilation problms on recent compilers.
+
 2008-11-03 libwfut 0.2.1 Released
 
 libwfut 0.2.1 has been released. This release allows downloads to be aborted, contains some sample python front-ends and fixes a few small bugs. This version will also use a systemwide installation of tinyxml if available.

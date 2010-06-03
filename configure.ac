@@ -1,4 +1,4 @@
-AC_INIT(libwfut, 0.2.1, simon@worldforge.org)
+AC_INIT(libwfut, 0.2.2, simon@worldforge.org)
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([libwfut/WFUT.cpp])
@@ -10,7 +10,7 @@ AM_INIT_AUTOMAKE([nostdinc])
 AC_CHECK_TOOL(SWIG, swig)
 
 LIBWFUT_CURRENT=2   ## Increment if interface changes
-LIBWFUT_REVISION=0  ## Increment if source changes. 0 if current is incremented
+LIBWFUT_REVISION=1  ## Increment if source changes. 0 if current is incremented
 LIBWFUT_AGE=1       ## Increment if current is incremented, but interface is
                     ## backwards compatible
 
