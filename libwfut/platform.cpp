@@ -3,12 +3,6 @@
 // Copyright (C) 2007 Simon Goodall
 
 
-#if defined (WIN32) || defined (_WIN32) || defined( __WIN32__) 
-#define PLATFORM_WIN32
-#else
-#define PLATFORM_NIX
-#endif
-
 #include <cassert>
 #include <stdlib.h>
 #include <errno.h>
@@ -27,7 +21,7 @@
 
 namespace WFUT {
 
-#ifdef PLATFORM_WIN32
+#ifdef _WIN32
 // This is a bit of a nasty hack to make sure that when we
 // close a tmp file, we also delete it.
 typedef std::map<FILE *, char *> TmpFileMap;
@@ -35,7 +29,7 @@ static TmpFileMap tmp_file_map;
 #endif
 
 FILE *os_create_tmpfile() {
-#ifdef PLATFORM_WIN32
+#ifdef _WIN32
   // Check to see if there are temp dirs defined, else use current directory.
   static const char cwd[] = ".";
   const char *tmpdir = getenv("TMP");
@@ -56,7 +50,7 @@ FILE *os_create_tmpfile() {
 
 void os_free_tmpfile(FILE *fp) {
   assert(fp != 0);
-#ifdef PLATFORM_WIN32
+#ifdef _WIN32
   TmpFileMap::iterator I = tmp_file_map.find(fp);
   assert (I != tmp_file_map.end());
   fclose(I->first);       // Close file handle
@@ -70,7 +64,7 @@ void os_free_tmpfile(FILE *fp) {
 }
 
 int os_mkdir(const std::string &dir) {
-#ifdef PLATFORM_WIN32
+#ifdef _WIN32
   return mkdir(dir.c_str());
 #else
   return mkdir(dir.c_str(), 0700);
@@ -78,7 +72,7 @@ int os_mkdir(const std::string &dir) {
 }
 
 bool os_exists(const std::string &file) {
-//#ifdef PLATORM_WIN32
+//#ifdef _WIN32
   
 //#else
   struct stat info;
@@ -91,7 +85,7 @@ bool os_exists(const std::string &file) {
 }
 
 int os_set_executable(const std::string &file) {
-#ifdef PLATFORM_WIN32
+#ifdef _WIN32
   // nothing to do for windows
   return 0;
 #else
@@ -110,12 +104,6 @@ int os_set_executable(const std::string &file) {
 }
 
 int os_dir_walk(const std::string &path, const std::list<std::string> &excludes, std::list<std::string> &files) {
-
-#ifdef PLATFORM_WIN32
-  // No win32 support yet
-  
-  return 1;
-#else
   DIR *d = opendir(path.c_str());
   if (d != 0) {
     struct dirent *dent = readdir(d);
@@ -135,7 +123,6 @@ int os_dir_walk(const std::string &path, const std::list<std::string> &excludes,
   }
 
   return 0;
-#endif
 }
 
 
