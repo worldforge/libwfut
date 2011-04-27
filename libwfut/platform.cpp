@@ -19,14 +19,20 @@
 
 #include "libwfut/platform.h"
 
-namespace WFUT {
 
 #ifdef _WIN32
+#include <direct.h>
+#define mkdir(path,mode) _mkdir(path)
+#define stat _stat
 // This is a bit of a nasty hack to make sure that when we
 // close a tmp file, we also delete it.
+namespace WFUT {
 typedef std::map<FILE *, char *> TmpFileMap;
 static TmpFileMap tmp_file_map;
+}
 #endif
+
+namespace WFUT {
 
 FILE *os_create_tmpfile() {
 #ifdef _WIN32
@@ -64,24 +70,16 @@ void os_free_tmpfile(FILE *fp) {
 }
 
 int os_mkdir(const std::string &dir) {
-#ifdef _WIN32
-  return mkdir(dir.c_str());
-#else
   return mkdir(dir.c_str(), 0700);
-#endif
 }
 
 bool os_exists(const std::string &file) {
-//#ifdef _WIN32
-  
-//#else
   struct stat info;
   if (::stat(file.c_str(), &info) == 0) {
     return true;
   } else {
     return false;
   }
-//#endif
 }
 
 int os_set_executable(const std::string &file) {
