@@ -5,7 +5,9 @@
 #include <cstdio>
 
 #include "libwfut/Encoder.h"
-
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif
 namespace WFUT {
 
 std::string Encoder::encodeString(const std::string &str) {
