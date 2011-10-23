@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <stdio.h>
 
+//get MSVC header here: http://www.softagalleria.net/download/dirent/dirent-1.11.zip
 #include <dirent.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -29,16 +30,18 @@
 namespace WFUT {
 
 FILE *os_create_tmpfile() {
-#ifdef _WIN32
+#ifdef _MSC_VER
   char path[MAX_PATH];
   int ret = GetTempPathA(MAX_PATH, path);
-  if(ret > MAX_PATH || (ret == 0))
+  if(ret > MAX_PATH || (ret == 0)){
     strcpy(path, ".\\");
+  }
   char filename[MAX_PATH];
   //only 3 prefix characters allowed
   ret = GetTempFileNameA(path,"wfu",0,filename);
-  if(ret == 0)
+  if(ret == 0){
     sprintf(filename,"%swfut%d.tmp",path,rand());
+  }
   //There is a special 'D' sign, which means temporary and delete on close 
   //http://msdn.microsoft.com/en-us/library/yeby3zcb%28v=vs.71%29.aspx
   return fopen(filename, "w+bD");
@@ -92,11 +95,13 @@ int os_dir_walk(const std::string &path, const std::list<std::string> &excludes,
     while (dent != 0) {
       const std::string d_name(dent->d_name);
       if (d_name != "." && d_name != ".." && std::find(excludes.begin(), excludes.end(), d_name) == excludes.end()) {
-
-      if (dent->d_type == DT_DIR) {
+      //NOTE: dent->d_type member is not existing in mingw32, so we need to use stat.
+      struct stat filestat;
+      stat(d_name.c_str(), &filestat);
+      if (S_ISDIR(filestat.st_mode)) {
         const std::string &pathname = path + "/" + d_name;
         os_dir_walk(pathname, excludes, files);
-      } else if (dent->d_type == DT_REG) { 
+      } else if (S_ISREG(filestat.st_mode)) { 
         const std::string &filename = path + "/" + d_name;
         files.push_back(filename);
       }}
