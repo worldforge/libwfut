@@ -17,9 +17,6 @@ LIBWFUT_AGE=1       ## Increment if current is incremented, but interface is
 AC_PROG_CXX
 AC_PROG_LIBTOOL
 
-## Enable all compiler warnings
-CXXFLAGS="$CXXFLAGS -Wall"
-
 
 AC_ARG_ENABLE(debug,
   [  --enable-debug     enable debug information [default=no]],
