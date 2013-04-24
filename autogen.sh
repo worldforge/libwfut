@@ -1,6 +1,8 @@
 #! /bin/sh
 
 rm -f config.cache
+#We currently have no scripts in the m4 directory, so we need to create it. Remove this once we have any scripts there.
+mkdir -p m4
 
 #Check if the autoreconf command is available, and use that if so.
 if command -v autoreconf >/dev/null 2>&1 ; then
