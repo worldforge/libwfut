@@ -6,6 +6,7 @@ AC_CONFIG_HEADERS([config.h])
 
 AC_CANONICAL_HOST
 AM_INIT_AUTOMAKE([tar-ustar nostdinc dist-bzip2])
+AM_SILENT_RULES([yes])
 
 AC_CHECK_TOOL(SWIG, swig)
 
