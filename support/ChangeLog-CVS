@@ -1,0 +1,526 @@
+2010-06-03  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac, NEWS: 0.2.2 Release
+
+2010-06-02  Simon Goodall  <simon@worldforge.org>
+
+	* python/Makefile.am, python/wfut-python.py, python/wfut-server.py,
+	  python/WFUTAvahiClient.py, python/WFUTCore.py: Integrate an Avahi
+	  client into wfut-python to find local servers. 
+
+2009-07-12  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac: Added --enable-debug option to configure.
+
+2009-07-12  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac, python/Makefile.am: Use AC_CHECK_TOOL to find swig. 
+
+2009-07-12  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac, Makefile.am: Update to specify separate m4 directory.
+
+2009-03-01  Alexey Torkhov  <atorkhov@gmail.com>
+
+	* libwfut/Encoder.cpp, tools/wfut.cpp: Fixing build on recent compilers.
+
+2008-11-04  Alexey Torkhov  <atorkhov@gmail.com>
+
+	* libwfut/IO.cpp: Fixing build on GCC 4.3.
+
+2008-11-03  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut 0.2.1 released.
+
+2008-10-25  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/platform.cpp: Disable os_dir_walk for win32. 
+
+2008-10-23  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac: Bump version numbers in prep for release.
+
+2008-10-22  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/IO.cpp, libwfut/IO.h, libwfut/WFUT.cpp, libwfut/WFUT.h:
+	  Rename cancel to abort and improve clean up.
+
+2008-10-20  Simon Goodall  <simon@worldforge.org>
+
+	* python/wfut-server.py: Add python interpreter.
+
+2008-10-11  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/IO.cpp, libwfut/IO.h, libwfut/WFUT.cpp, libwfut/WFUT.h:
+	  Added a cancelAll() method to abort all current and pending
+	  downloads.
+
+2008-07-09  Simon Goodall  <simon@worldforge.org>
+
+	* python/wfut-server.py: Added a simple server capable of serving HTTP
+	  requests for a wfut repository. Uses avahi to broadcast URL.
+
+2008-06-04  Alexey Torkhov  <atorkhov@gmail.com>
+
+	* configure.ac, libwfut/ChannelParser.cpp, libwfut/FileParser.cpp,
+	  libwfut/Makefile.am, libwfut/tinyxml.cpp, libwfut/tinyxml.h,
+	  tools/Makefile.am: Last patch was applied to wrong incarnation of
+	  tinyxml. This is right one. Also this fixes compatibility with new
+	  version of tinyxml and compile problem.
+
+2008-05-30  Alexey Torkhov  <atorkhov@gmail.com>
+
+	* configure.ac, tinyxml/tinyxml.cpp, tinyxml/tinyxml.h: Use system
+	  tinyxml library if available.
+
+2008-05-16  Alexey Torkhov  <atorkhov@gmail.com>
+
+	* libwfut/platform.cpp: Fix to support gcc 4.3.
+
+2008-04-09  Simon Goodall  <simon@worldforge.org>
+
+	* python/wfut-client.py, python/WUFTCore.py, python/Makefile.am: Added
+	  a new file containing the core parts of the update process in a
+	  class and changed wfut-python.py to use this class.
+
+2008-04-08  Simon Goodall  <simon@worldforge.org>
+
+	* python/Makefile.am, python/wfut-python.py: Added a sample python
+	  implementation of the wfut command line tool.
+
+2008-04-02  Simon Goodall  <simon@worldforge.org>
+
+	* NEWS: 0.2.0 Released.
+
+2008-03-27  Simon Goodall  <simon@worldforge.org>
+
+	* python/WFUT.i: Create python equivalents for typedefs. Add
+	  UpdateReason callback.
+
+2008-03-27  Simon Goodall  <simon@worldforge.org>
+
+	* Makefile.am: Add autogen.sh, libwfut.spec, libwfut.spec.in and
+	  libwfut.dox as EXTRA_DIST files.
+
+2008-03-25  Simon Goodall  <simon@worldforge.org>
+
+	* Makefile.am, configure.ac, libwfut-0.1.pc.in, libwfut-0.2.pc.in,
+	  libwfut/Makefile.am, python/Makefile.am, tools/Makefile.am: Update
+	  version numbers to 0.2.0.
+
+2008-03-25  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/ChannelParser.cpp, libwfut/FileParser.cpp,
+	  libwfut/MirrorParser.cpp: Fix parse error detection when parsing an
+	  XML string.
+
+2008-03-05  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/platform.cpp: Change how execute perms are set to try and
+	  avoid problems on some machine which end up with only execute perms.
+
+2007-11-29  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/platform.cpp, libwfut/platform.h: Added method to recursively 
+	  scan a directory structure and add files to an input list. A list of
+	  filenames (and dirnames) to exclude can also be passed in.
+
+2007-11-27  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/WFUT.cpp, libwfut/WFUT.h: Ignore FileObject's with the
+	  deleted flag set to true and add an appropriate UpdateReason.
+
+2007-11-27  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/FileParser.cpp: Fix error in strncmp use.
+
+2007-11-27  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/types.h, libwfut/FileIO.h, libwfut/FileParser.cpp: Added a 
+	  flag called deleted to indicate that the server side file no longer
+	  exists and should be ignored for update purposes and potentially
+	  notify the client that local files are obsolete.
+
+2007-11-27  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/Encoder.h, libwfut/IO.h: Added some doxygen comments.
+
+2007-11-27  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/ChannelFileList.h: Make getFile return a const ref. Added
+	  some comments for doxygen.
+
+2007-11-27  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut.dox: Add initial doxygen spec file.
+
+2007-09-11  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac: Fix second curl check.
+
+2007-09-11  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/WFUT.h: Call shutdown in the destructor if required.
+
+2007-09-11  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac, libwfut/IO.cpp: Add a configure check to make sure
+	  that curl is recent enough to support CURLMOPT_PIPELINING.
+
+2007-09-11  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/ChannelParser.cpp: Fix includes for make distcheck.
+
+2007-09-05  Simon Goodall  <simon@worldforge.org>
+
+	* acinclude.m4: Include extra python detection macros.
+
+2007-09-03  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac, Makefile.am, python/Makefile.am, python/WFUT.i,
+	  python/__init__.py: Use swig to generate python bindings for
+	  libwfut.
+
+2007-09-02  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/IO.cpp, libwfut/IO.h: Move the common curl options to a
+	  separate function. Limit the number of files being downloaded
+	  simultaneously. Use IO::get/setMaxDownloads to control this value.
+	  It defaults to a value of one, meaning sequential file downloading.
+	  This will avoid swamping a web server with connection requests for
+	  every single file queued at once.
+
+2007-08-27  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/IO.cpp, libwfut.h: Follow 301 server redirects. Move
+	  DataStruct declaration outside of the IO class namespace.
+
+	* tools/wfut.cpp: Update default update server URL.
+
+2007-08-15  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/IO.cpp: Include curl error reason in error message when a
+	  file fails to download during polling.
+
+2007-05-16  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/IO.cpp: Cause curl to return an error instead of error pages
+	  e.g. for a 404.
+
+2007-05-06  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/ChannelFileList.h: Added a size() method to return the number
+	  of files being stored.
+
+2007-05-02  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/FileWriter.cpp: Fix bug where unsigned longs were being 
+	  written as signed values into XML file.
+
+	* libwfut/IO.cpp: Fix bug where empty files could cause a segfault.
+
+	* tools/wfut.cpp: Print reason for download failure.
+
+2007-04-12  Simon Goodall  <simon@worldforge.org>
+
+	* tools/wfut.cpp: Add a win32 check around the srand48 call.
+
+2007-04-12  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/MirrorParser.cpp, libwfut/ChannelIO.h, libwfut/types.h,
+	  libwfut/WFUT.cpp, libwfut/WFUT.h, libwfut/Makefile.am: Allow a list of
+	  mirrors to be specified.
+
+	* tools/wfut.cpp: Randomly select a mirror from the mirror list.
+
+2007-04-12  Simon Goodall  <simon@worldforge.org>
+
+	* libwfut/ChannelFileList.h: Added a clear method to clear the map.
+
+2007-04-11  Simon Goodall  <simon@worldforge.org>
+
+	* configure.ac, AUTHORS: Change contact email.
+
+2007-03-22  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/WFUT.cpp, libwfut/WFUT.h: Added a new signal, UpdateReasons,
+	  which is fired during the caclulateUpdates function. This feeds back
+	  reasons why (or not) a file is updated to the client application.
+
+	* libwfut/platform.cpp: Fixed the permissions set for executable files.
+
+	* tools/wfut.cpp: Added callback for UpdateReason
+
+2007-03-17  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* configure.ac: Bump version numbers.
+
+	* Release version 0.1.0
+
+2007-03-04  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/IO.cpp, libwfut/IO.h: Fix compiler warning. Added an
+	  executable flag to DataStruct and to the queueFile function to set the
+	  executable permissions of a file on sucessful download.
+
+	* libwfut/platform.cpp: Fix error in os_set_executable.
+
+	* libwftut/WFUT.cpp: Update to new queueFile signature.
+
+2007-03-04  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/IO.cpp: Bug fix from Erik where where paths such as /home
+	  would fail in the createParentDirs function.
+
+	* libwfut/platform.cpp, libwfut/platform.h: Added functions to check for
+	  file existance and setting world executable permissions.
+
+	* tools/wfut.cpp: Display usage when no arguments are specified. Delete
+	  the tempwfut.xml after the real wfut.xml file has been saved. Use
+	  os_exists instead of the local file_exists function.
+
+2007-02-20  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/IO.cpp: Added some more error checks.
+
+	* tools/wfut.cpp: Updated some formatting and comments.
+
+2007-02-20  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* tools/wfut.cpp: Added simple usage information.
+
+2007-02-19  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/platform.cpp: Check %TMP%, %TEMP% then "." as possible tmp
+	  file locations. Delete Win32 temp files on close.
+
+2007-02-16  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* tools/wfut.cpp: Fix compiler warning.
+
+2007-02-16  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* man/man1/wfut.1, configure.ac, Makefile.am, man/Makefile.am,
+	  man/man1/Makefile.am: Added initial man page for wfut.
+
+2007-02-16  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/Encoder.cpp, libwfut/Encoder.h: Renamed encode/decode to
+	  encodeString and decodeString. Added an encodeURL method to encode
+	  strings for suitable use as a URL.
+
+	* libwfut/FileParser.cpp, libwfut/FileWriter.cpp, libwfut/IO.cpp,
+	  tools/wfut.cpp: Updated calls to encode/decode. Make sure urls are
+	  properly encoded before storing/using them.
+
+2007-02-16  Kai Blin  <kai.blin@gmail.com>
+	* configure.ac: Fix installing the wfut binary.
+
+	* libwfut/FileWriter.cpp, libwfut/FileParser.cpp, 
+	  libwfut/ChannelWriter.cpp, libwfut/ChannelParser.cpp: Fix tinyxml
+	  include now that tinyxml is in the main source.
+
+2007-02-16  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* configure.ac: Removed tinyxml Makefile from generated files list.
+
+2007-02-13  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/Makefile.am, libwfut/platform.cpp, libwfut/platform.h,
+	  libwfut/IO.cpp, libwfut/WFUT.cpp: Created a platform class with
+	  platform specific code. Currently provides a wrapper for mkdir and a
+	  fake tmpfile implementation for win32 as the default one only works 
+	  for administrator accounts.
+
+	* configure.ac: Remove -ansi as this stops some win32 functions being
+	  defined.
+
+2007-02-13  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* Makefile.am: Install pkg-config file.
+
+2007-02-13  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/Makefile.am, libwfut/tinyxml.cpp, libwfut/tinystr.cpp,
+	  libwfut/tinyxmlerror.cpp, libwfut/tinyxmlparser.cpp, 
+	  libwfut/tinystr.h, libwfut/tinyxml.h: Added tinyxml to the main source
+	  tree to avoid linking problems when built as a static library.
+
+	* Makefile.am: Remove tinyxml subdir.
+
+	* configure.ac: Removed tinyxml subdir. Fixed LIBWFUT_LIBS declaration.
+	  Added libwfut-0.1.pc to build.
+
+	* libwfut-0.1.pc.in: Added pkg-config file.
+
+2007-02-11  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/IO.cpp: Fixed curl handle leak.
+
+2007-02-11  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* configure.ac: Added check for zlib.
+
+2007-02-11  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/IO.cpp, libwfut/IO.h: Added new downloadFile function which
+	  takes a FILE * instead of a filename.
+
+	* libwfut/WFUT.cpp: Reworked the getFileList and getChannelList
+	  functions to use more cross-platform functions. The files are now 
+	  downloaded into a tmpfile and then read into memory before parsing.
+	  This avoids using *nix only functions.
+
+2007-02-11  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/IO.cpp: Add in win32 check for different usage of mkdir on 
+	  win32 platforms.
+
+2007-02-10  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/WFUT.cpp, libwut/WFUT.h: Added a function to queue a single
+	  FileObject for updating.
+
+	* libwfut/IO.cpp: Some cleanups.
+
+2007-02-10  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/WFUT.cpp, libwfut/WFUT.h: Commented the header file. Added an
+	  enum to describe the returned error codes.
+
+2007-02-10  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	*  configure.ac, tools/Makefile.am: Added pkgconfig check for curl.
+	   Removed hardcoded link to curl.
+
+2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* configure.ac: Fix version number, remove sigc 1.x check.
+
+	* libwfut/WFUT.cpp: Return error when failing parse local list.
+
+	* tools/wfut.cpp: Implement the use of a tmpfile to record files as they	  are updated.
+
+2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/IO.cpp: Fix some spelling errors.
+
+	* libwfut/WFUT.cpp: Change some of the textual output.
+
+	* tools/wfut.cpp: Added command line args to specify the
+	  system/reference location and a prefix/destination location. Added
+	  lots of comments. Actually save the correct file list (local list and
+	  successful updates) and make a note of errors.
+
+2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/ChannelFileList.h, libwfut/ChannelIO.h,
+	  libwfut/ChannelParser.cpp, libwfut/ChannelWriter.cpp,
+	  libwfut/Encoder.cpp, libwfut/FileIO.h, libwfut/FileParser.cpp,
+	  libwfut/FileWriter.cpp, libwfut/IO.h, libwfut/Makefile.am,
+	  libwfut/WFUT.cpp, libwfut/crc32.h, libwfut/header.h, libwfut/types.h:
+	  Updated for make distcheck and copyright years.
+
+2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* configure.ac, Makefile.am, tools/Makefile.am: Added a tools subdir.
+
+	* tools/wfut.cpp: Added a basic command line updater program.
+
+	* libwfut/IO.cpp, libwfut/IO.h: Download files into a tmp file first,
+	  then copy to target location only on a successfull download. Fix
+	  createParentDirs so that it will recursively create the required dirs.
+	  Changed the download stucture to contain a path prefix and the
+	  filename relative to the path so the filename can be used as a key
+	  when passed in a signal.
+
+	* libwfut/WFUT.cpp: Updated for new queueFile syntax.
+
+2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/WFUT.cpp, libwfut/WFUT.h: Change functions to return error
+	  codes and take Channel Lists as by ref arguments instead. Create a
+	  DownloadComplete and DownloadFailed signal for client apps to hook
+	  into.
+
+2007-02-09  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/Makefile.am, libwfut/Encoder.cpp, libwfut/Encoder.h: Added
+	  some function to encode and decode strings so they are suitable for
+	  storage in XML files.
+
+	* libwfut/FileParser.cpp, libwfut/FileWriter.cpp: Use the encode and
+	  decode functions.
+
+2007-02-07  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/Makefile.am: Add crc32 files to build.
+
+	* libwfut/WFUT.cpp, libwfut/WFUT.h: Added function to calculate the 
+	  list of files that need updating.
+
+	* libwfut/crc32.cpp, libwfut/crc32.h: Created header, fixed compiler
+	  errors.
+
+2006-07-12  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* tinyxml/*: Add tinyxml to source. Make it part of the WFUT namespace
+	  to avoid potential namespace conflicts with other tinyxml versions.
+
+	* libwfut/ChannelFileList.h: Wrapper class around FileList to also
+	  contain channel name.
+
+	* libwfut/types.h: Create a FileMap type, mapping filename to a 
+	  FileObject.
+
+	* configure.ac, Makefile.am: Added extra dirs.
+
+	* libwfut/FileIO.h, libwfut/FileParser.cpp, libwfut/FileWriter.cpp,
+	  libwfut/WFUT.h, libwfut/WFUT.cpp, tests/test3.cpp: Update for
+	  ChannelFileList and read/write dir attribute.
+
+	* libwfut/crc32.cpp: Use zlib uLong type.
+
+2006-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/WFUT.cpp, libwfut/WFUT.h: Rename class to WFUTClient to avoid
+	  clashing with namespace. Change the updateChannel method to take a url
+	  and path prefix to add to the filenames and source URLS. Create some
+	  temporary callbacks to the IO::DownloadComplete and IO::DownloadFailed
+	  signals. Download channel and file lists to a location in /tmp (needs
+	  to be made platform independant) before parsing. Implement poll
+	  method. It is now possible to download a list of channels, a filelist
+	  for a given channel and download all the files into a given location.
+
+2006-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/ChannelParser.cpp: Name is an attribute, not an element.
+
+	* libwfut/FileParser.cpp: CRC32 is a unsigned long. Fix some parsing
+	  problems.
+
+	* libwfut/types.h: Add WFUT namespace.
+
+	* libwfut/IO.cpp, libwfut/IO.h: Add function to create dirs if they 
+	  don't exist. Sets dir perms to 0700. DownloadFailed signal now takes
+	  a third string containing an error message. Added downloadFile to
+	  download a single file. This function blocks until the download
+	  completes or fails.
+
+2006-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/types.h, libwfut/IO.h, libwfut/IO.cpp, libwfut/WFUT.cpp: Add
+	  checks for CRC32 value calculation. The IO::queueFile now takes the 
+	  expected CRC32 value of the downloaded file. Set to 0 to ignore the 
+	  calculated CRC32 value.
+
+2006-02-12  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* libwfut/IO.cpp: Fix poll function so download failures are reported 
+	  as such. Fix queueFile to set DataStruct as private data for the 
+	  handle. The low-level file download code is now fairly complete,
+	  however some work is required for better error handling.
+
+2005-11-27  Simon Goodall  <libwfut@simongoodall.co.uk>
+
+	* Initial ChangeLog entry.
