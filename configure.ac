@@ -5,7 +5,7 @@ AC_CONFIG_SRCDIR([libwfut/WFUT.cpp])
 AC_CONFIG_HEADERS([config.h])
 
 AC_CANONICAL_HOST
-AM_INIT_AUTOMAKE([nostdinc])
+AM_INIT_AUTOMAKE([tar-ustar nostdinc dist-bzip2])
 
 AC_CHECK_TOOL(SWIG, swig)
 
