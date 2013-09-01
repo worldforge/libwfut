@@ -1,3 +1,7 @@
+2012-09-01 libwfut 0.2.3 Released
+
+libwfut 0.2.3 has been released. This release primarily fixes compilation problems on the win32 platform.
+
 2010-06-03 libwfut 0.2.2 Released
 
 libwfut 0.2.2 has been released. This release primarily fixes compilation problems on recent compilers.

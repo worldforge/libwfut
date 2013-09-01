@@ -1,4 +1,4 @@
-AC_INIT(libwfut, 0.2.2, simon@worldforge.org)
+AC_INIT(libwfut, 0.2.3, erik@ogenvik.org)
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([libwfut/WFUT.cpp])
