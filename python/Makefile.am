@@ -3,7 +3,7 @@ SUFFIXES: .cxx .i .lo .la .cpp .o  .obj
 .i.cxx:
 	${SWIG} -python -c++ -interface py$(@:.cxx=) -I$(top_srcdir) -o $@ $<
 
-INCLUDES = -I${top_srcdir} @PYTHON_INCLUDES@
+AM_CPPFLAGS = -I${top_srcdir} @PYTHON_INCLUDES@
 
 pythonfvsdir = $(pyexecdir)/libwfut
 EXTRA_pythonfvsdir = $(pyexecdir)/libwfut
