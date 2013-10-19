@@ -3,10 +3,9 @@ lib_LTLIBRARIES = libwfut-0.2.la
 libwfut_0_2_la_LDFLAGS = -version-info @LIBWFUT_VERSION_INFO@
 #libwfut_0_2_la_LIBADD = ../tinyxml/libtinyxml.a
 
-AM_CPPFLAGS=-I${top_srcdir} -I$(top_builddir)
-
+libwfut_0_2_la_CPPFLAGS = -I${top_srcdir} -I$(top_builddir)
 if BUILD_DLL
-libwfut_0_2_la_CPPFLAGS=-DBUILD_LIBWFUT_DLL
+libwfut_0_2_la_CPPFLAGS += -DBUILD_LIBWFUT_DLL
 endif
 
 libwfut_0_2_la_SOURCES = \
