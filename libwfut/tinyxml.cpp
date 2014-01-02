@@ -125,10 +125,7 @@ void TiXmlBase::PutString( const TIXML_STRING& str, TIXML_STRING* outString )
 TiXmlBase::StringToBuffer::StringToBuffer( const TIXML_STRING& str )
 {
 	buffer = new char[ str.length()+1 ];
-	if ( buffer )
-	{
-		strcpy( buffer, str.c_str() );
-	}
+	strcpy( buffer, str.c_str() );
 }
 
 
@@ -742,15 +739,7 @@ void TiXmlElement::SetAttribute( const char * name, const char * _value )
 	}
 
 	TiXmlAttribute* attrib = new TiXmlAttribute( name, _value );
-	if ( attrib )
-	{
-		attributeSet.Add( attrib );
-	}
-	else
-	{
-		TiXmlDocument* document = GetDocument();
-		if ( document ) document->SetError( TIXML_ERROR_OUT_OF_MEMORY, 0, 0, TIXML_ENCODING_UNKNOWN );
-	}
+	attributeSet.Add( attrib );
 }
 
 void TiXmlElement::Print( FILE* cfile, int depth ) const
@@ -861,8 +850,6 @@ void TiXmlElement::CopyTo( TiXmlElement* target ) const
 TiXmlNode* TiXmlElement::Clone() const
 {
 	TiXmlElement* clone = new TiXmlElement( Value() );
-	if ( !clone )
-		return 0;
 
 	CopyTo( clone );
 	return clone;
@@ -1006,7 +993,7 @@ void TiXmlDocument::CopyTo( TiXmlDocument* target ) const
 	TiXmlNode::CopyTo( target );
 
 	target->error = error;
-	target->errorDesc = errorDesc.c_str ();
+	target->errorDesc = errorDesc;
 
 	TiXmlNode* node = 0;
 	for ( node = firstChild; node; node = node->NextSibling() )
@@ -1019,8 +1006,6 @@ void TiXmlDocument::CopyTo( TiXmlDocument* target ) const
 TiXmlNode* TiXmlDocument::Clone() const
 {
 	TiXmlDocument* clone = new TiXmlDocument();
-	if ( !clone )
-		return 0;
 
 	CopyTo( clone );
 	return clone;
@@ -1201,9 +1186,6 @@ TiXmlNode* TiXmlComment::Clone() const
 {
 	TiXmlComment* clone = new TiXmlComment();
 
-	if ( !clone )
-		return 0;
-
 	CopyTo( clone );
 	return clone;
 }
@@ -1233,9 +1215,6 @@ TiXmlNode* TiXmlText::Clone() const
 {	
 	TiXmlText* clone = 0;
 	clone = new TiXmlText( "" );
-
-	if ( !clone )
-		return 0;
 
 	CopyTo( clone );
 	return clone;
@@ -1333,9 +1312,6 @@ TiXmlNode* TiXmlDeclaration::Clone() const
 {	
 	TiXmlDeclaration* clone = new TiXmlDeclaration();
 
-	if ( !clone )
-		return 0;
-
 	CopyTo( clone );
 	return clone;
 }
@@ -1364,9 +1340,6 @@ void TiXmlUnknown::CopyTo( TiXmlUnknown* target ) const
 TiXmlNode* TiXmlUnknown::Clone() const
 {
 	TiXmlUnknown* clone = new TiXmlUnknown();
-
-	if ( !clone )
-		return 0;
 
 	CopyTo( clone );
 	return clone;
