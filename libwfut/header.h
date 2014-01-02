@@ -9,7 +9,7 @@
 
 #define EXTERN extern
 
-#if defined (WIN32) || defined (_WIN32) || defined( __WIN32__)
+#if defined (_WIN32)
 #define WINDOWS_BUILD 1
 #endif
 

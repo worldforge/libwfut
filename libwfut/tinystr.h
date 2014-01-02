@@ -30,11 +30,6 @@ distribution.
 #ifndef TIXML_STRING_INCLUDED
 #define TIXML_STRING_INCLUDED
 
-#ifdef _MSC_VER
-#pragma warning( disable : 4530 )
-#pragma warning( disable : 4786 )
-#endif
-
 #include <assert.h>
 
 namespace WFUT {
@@ -242,11 +237,6 @@ public :
         return (* this);
     }
 } ;
-
-#ifdef _MSC_VER
-#pragma warning( default : 4530 )
-#pragma warning( default : 4786 )
-#endif
 
 } // namespace WFUT
 

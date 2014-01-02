@@ -33,10 +33,6 @@ distribution.
 #ifndef TINYXML_INCLUDED
 #define TINYXML_INCLUDED
 
-#ifdef _MSC_VER
-#pragma warning( disable : 4530 )
-#pragma warning( disable : 4786 )
-#endif
 
 #include <ctype.h>
 #include <stdio.h>
@@ -1425,11 +1421,6 @@ public:
 private:
 	TiXmlNode* node;
 };
-
-#ifdef _MSC_VER
-#pragma warning( default : 4530 )
-#pragma warning( default : 4786 )
-#endif
 
 } // namespace WFUT
 
