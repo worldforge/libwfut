@@ -140,6 +140,7 @@ int IO::shutdown(){
 
   while (!m_files.empty()) {
     DataStruct *ds = m_files.begin()->second;
+	assert(ds);
     if (ds->handle) {
       curl_easy_cleanup(ds->handle);
       ds->handle = NULL;
