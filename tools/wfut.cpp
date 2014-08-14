@@ -303,7 +303,7 @@ int main(int argc, char *argv[]) {
   wfut.saveLocalList(local, local_wfut);
   // Delete tmpwfut.xml if we get here. We only keep it around in case of 
   // an abnormal exit and the real wfut.xml has not been saved.
-  if (os_exists(tmp_wfut)) unlink(tmp_wfut.c_str());
+  if (os_exists(tmp_wfut)) remove(tmp_wfut.c_str());
 
   // Clean up WFUT. Closes curl handles
   wfut.shutdown();
