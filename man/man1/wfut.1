@@ -1,11 +1,11 @@
 .TH wfut 1 "Febuary 16, 2007"
 .SH NAME
-wfut
+wfut \- WorldForge update tool
 
 .SH SYNOPSIS
 .B wfut
 [ options ]
--u 
+\-u 
 .I channel_name
 
 .SH DESCRIPTION
@@ -38,10 +38,12 @@ as the base URL on the server in which channels are kept.
 
 .SH EXAMPLES
 The following command will update the channel
-.I sear-media.
-This will look for a directory called sear-media in $HOME/.wfut/, or create one if necessary and download updates into there. It will also look in /usr/share/wfut/sear-media for existing files.
+.I sear\-media.
+This will look for a directory called sear\-media in $HOME/.wfut/,
+or create one if necessary and download updates into there.
+It will also look in /usr/share/wfut/sear\-media for existing files.
 
-wfut -s /usr/share/wfut/ -p $HOME/.wfut/ -u sear-media
+wfut \-s /usr/share/wfut/ \-p $HOME/.wfut/ \-u sear\-media
 
 .SH NOTES
 wfut uses curl internally.
