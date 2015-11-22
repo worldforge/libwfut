@@ -17,7 +17,6 @@
 #include <libwfut/IO.h>
 #include <libwfut/WFUT.h>
 #include <sigc++/bind.h>
-#include <sigc++/object_slot.h>
 
 //Fix for missing SWIGPY_SLICE_ARG with some versions of swig.
 #if PY_VERSION_HEX >= 0x03020000
