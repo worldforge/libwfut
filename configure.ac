@@ -34,7 +34,7 @@ AC_ARG_ENABLE(debug,
 
 
 ## Tell Tiny XML to use STL classes.
-CXXFLAGS="$CXXFLAGS -DTIXML_USE_STL=1"
+CXXFLAGS="$CXXFLAGS -DTIXML_USE_STL=1 -Wall -std=c++11"
 
 AC_LANG_PUSH(C++)
 
