@@ -57,6 +57,11 @@ macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
 
 endmacro()
 
+# Required for crc32 calculation
+find_package(ZLIB REQUIRED)
+include_directories(${ZLIB_INCLUDE_DIRS})
+link_libraries(${ZLIB_LIBRARIES})
+
 pkg_check_modules(WF REQUIRED sigc++-2.0>=2.0.0 libcurl>=7.16.0)
 
 link_directories(${WF_LIBRARY_DIRS})
