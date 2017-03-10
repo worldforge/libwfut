@@ -57,6 +57,9 @@ macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
 
 endmacro()
 
+#Add a "check" make target for tests to sync with other Worldforge components.
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+
 pkg_check_modules(WF REQUIRED sigc++-2.0>=2.0.0 libcurl>=7.16.0)
 
 link_directories(${WF_LIBRARY_DIRS})
