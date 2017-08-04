@@ -120,12 +120,13 @@ install(FILES man/man1/wfut.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
 
 # Doxygen support, exports a "docs" target.
 
+configure_file(libwfut.dox.in libwfut.dox @ONLY)
 find_package(Doxygen)
 
 if (DOXYGEN_FOUND)
 
-    set(DOXYGEN_INPUT Doxyfile)
-    set(DOXYGEN_OUTPUT doc)
+    set(DOXYGEN_INPUT ${CMAKE_CURRENT_BINARY_DIR}/libwfut.dox)
+    set(DOXYGEN_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/doc)
 
     add_custom_command(
             OUTPUT ${DOXYGEN_OUTPUT}
