@@ -62,6 +62,9 @@ find_package(ZLIB REQUIRED)
 include_directories(${ZLIB_INCLUDE_DIRS})
 link_libraries(${ZLIB_LIBRARIES})
 
+#Add a "check" make target for tests to sync with other Worldforge components.
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+
 pkg_check_modules(WF REQUIRED sigc++-2.0>=2.0.0 libcurl>=7.16.0)
 
 link_directories(${WF_LIBRARY_DIRS})
@@ -122,12 +125,13 @@ install(FILES man/man1/wfut.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
 
 # Doxygen support, exports a "docs" target.
 
+configure_file(libwfut.dox.in libwfut.dox @ONLY)
 find_package(Doxygen)
 
 if (DOXYGEN_FOUND)
 
-    set(DOXYGEN_INPUT Doxyfile)
-    set(DOXYGEN_OUTPUT doc)
+    set(DOXYGEN_INPUT ${CMAKE_CURRENT_BINARY_DIR}/libwfut.dox)
+    set(DOXYGEN_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/doc)
 
     add_custom_command(
             OUTPUT ${DOXYGEN_OUTPUT}
@@ -153,7 +157,7 @@ add_custom_target(changelog DEPENDS ChangeLog)
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${DESCRIPTION})
 set(CPACK_PACKAGE_VENDOR "Worldforge")
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/README")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING")
 set(CPACK_PACKAGE_VERSION_MAJOR "${LIBWFUT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${LIBWFUT_VERSION_MINOR}")
