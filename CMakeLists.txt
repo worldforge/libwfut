@@ -57,6 +57,11 @@ macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
 
 endmacro()
 
+# Required for crc32 calculation
+find_package(ZLIB REQUIRED)
+include_directories(${ZLIB_INCLUDE_DIRS})
+link_libraries(${ZLIB_LIBRARIES})
+
 #Add a "check" make target for tests to sync with other Worldforge components.
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
