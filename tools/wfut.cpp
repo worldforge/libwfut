@@ -65,50 +65,52 @@ static void recordUpdate(const FileObject &fo, const std::string &tmpfile) {
 
 }
 
+namespace {
 // Signal handler called when a file is sicessfully downloaded
 // We use this to update the local file list with the updated details
-void onDownloadComplete(const std::string &u, const std::string &f, const ChannelFileList &updates, ChannelFileList *local, const std::string &tmpfile)  {
-  printf("Downloaded: %s\n", f.c_str());
+void onDownloadComplete(const std::string& u, const std::string& f, const ChannelFileList& updates, ChannelFileList* local, const std::string& tmpfile) {
+	printf("Downloaded: %s\n", f.c_str());
 
-  const WFUT::FileMap &ulist = updates.getFiles();
-  WFUT::FileMap::const_iterator I = ulist.find(f);
-  // The fileobject should exist, otherwise how did we get here?
-  assert (I != ulist.end());
-  // Add the updated file record to the local list.
-  // addFile will overwrite any existing fileobject with the same
-  // filename
-  local->addFile(I->second);
+	const WFUT::FileMap& ulist = updates.getFiles();
+	WFUT::FileMap::const_iterator I = ulist.find(f);
+	// The fileobject should exist, otherwise how did we get here?
+	assert (I != ulist.end());
+	// Add the updated file record to the local list.
+	// addFile will overwrite any existing fileobject with the same
+	// filename
+	local->addFile(I->second);
 
-  // We store in a tmp file the fact that we sucessfully downloaded
-  // this file, incase of a crash.
-  recordUpdate(I->second, tmpfile);
+	// We store in a tmp file the fact that we sucessfully downloaded
+	// this file, incase of a crash.
+	recordUpdate(I->second, tmpfile);
 }
 
 // Signal handler called when a download fails.
-void onDownloadFailed(const std::string &u, const std::string &f, const std::string &r, int *error)  {
-  fprintf(stderr, "Error downloading: %s - %s\n", u.c_str(), r.c_str());
-  // Increment error count
-  ++error;
+void onDownloadFailed(const std::string& u, const std::string& f, const std::string& r, int* error) {
+	fprintf(stderr, "Error downloading: %s - %s\n", u.c_str(), r.c_str());
+	// Increment error count
+	++error;
 }
 
-void onUpdateReason(const std::string &filename, const WFUT::WFUTUpdateReason wu) {
-  if (wu == WFUT::WFUT_UPDATE_MODIFIED) {
-    printf("%s has been modified, will not update.\n", filename.c_str());
-  }
+void onUpdateReason(const std::string& filename, const WFUT::WFUTUpdateReason wu) {
+	if (wu == WFUT::WFUT_UPDATE_MODIFIED) {
+		printf("%s has been modified, will not update.\n", filename.c_str());
+	}
 }
 
-void print_usage(const char *name) {
-  printf("WFUT Version: %s\n", VERSION);
-  printf("Usage: %s [options]\n", name);
-  printf("\nOptions:\n");
-  printf("\t-p, --prefix channel_name -- The destination directory. (Optional)\n");
-  printf("\t-s, --system channel_name -- The system channels directory. (Optional)\n");
-  printf("\t-S, --server channel_name -- The URL to the update server.(Optional)\n");
-  printf("\t-u, --update channel_name -- The name of the channel to update.\n");
-  printf("\t-v, --version -- Display the version information.\n");
-  printf("\t-h, --help -- Display this message.\n");
+void print_usage(const char* name) {
+	printf("WFUT Version: %s\n", VERSION);
+	printf("Usage: %s [options]\n", name);
+	printf("\nOptions:\n");
+	printf("\t-p, --prefix channel_name -- The destination directory. (Optional)\n");
+	printf("\t-s, --system channel_name -- The system channels directory. (Optional)\n");
+	printf("\t-S, --server channel_name -- The URL to the update server.(Optional)\n");
+	printf("\t-u, --update channel_name -- The name of the channel to update.\n");
+	printf("\t-v, --version -- Display the version information.\n");
+	printf("\t-h, --help -- Display this message.\n");
 }
 
+}
 int main(int argc, char *argv[]) {
 
   // Set some default values which we can override with command line parameters.

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 
 project(libwfut)
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
 include(GNUInstallDirs)
 include(FindPkgConfig)
 
@@ -21,7 +22,7 @@ math(EXPR LIBWFUT_SOVERSION ${LIBWFUT_ABI_CURRENT}-${LIBWFUT_ABI_AGE})
 set(LIBWFUT_ABI_VERSION ${LIBWFUT_SOVERSION}.${LIBWFUT_ABI_AGE}.${LIBWFUT_ABI_REVISION})
 
 # Set compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+set(WF_WARNING_FLAGS -Wall -Winit-self -Wcast-qual -Wwrite-strings -Wextra -Wundef -Wmissing-declarations -Wno-unused-parameter -Wshadow -Wno-missing-field-initializers -Wno-long-long)
 
 include_directories("${PROJECT_SOURCE_DIR}")
 # Tell Tiny XML to use STL classes.
@@ -105,9 +106,11 @@ set(HEADER_FILES
         libwfut/WFUT.h)
 
 wf_add_library(${LIBNAME} SOURCE_FILES HEADER_FILES)
+target_compile_options(${LIBNAME} PRIVATE ${WF_WARNING_FLAGS})
 
 # The "wfut" tool
 add_executable(wfut tools/wfut.cpp)
+target_compile_options(wfut PRIVATE ${WF_WARNING_FLAGS})
 target_link_libraries(wfut ${LIBNAME})
 install(TARGETS wfut
         DESTINATION ${CMAKE_INSTALL_BINDIR})
