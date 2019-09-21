@@ -3,7 +3,7 @@
 // Copyright (C) 2005 - 2007 Simon Goodall
 
 
-#include "libwfut/tinyxml.h"
+#include "external/tinyxml/tinyxml.h"
 
 #include "libwfut/types.h"
 #include "libwfut/ChannelIO.h"

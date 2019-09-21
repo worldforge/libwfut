@@ -4,7 +4,7 @@
 
 #include  <sstream>
 
-#include "tinyxml.h"
+#include "external/tinyxml/tinyxml.h"
 
 #include "libwfut/types.h"
 #include "libwfut/FileIO.h"

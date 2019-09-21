@@ -6,6 +6,7 @@
 #include <string>
 #include <stdio.h>
 
+#include "crc32.h"
 namespace WFUT {
 
 int calcCRC32(const std::string &filename, uLong &crc) {

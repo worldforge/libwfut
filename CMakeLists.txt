@@ -10,13 +10,13 @@ include(FindPkgConfig)
 
 set(LIBWFUT_VERSION_MAJOR 0)
 set(LIBWFUT_VERSION_MINOR 2)
-set(LIBWFUT_VERSION_PATCH 3)
+set(LIBWFUT_VERSION_PATCH 4)
 
 set(VERSION ${LIBWFUT_VERSION_MAJOR}.${LIBWFUT_VERSION_MINOR}.${LIBWFUT_VERSION_PATCH})
 set(SUFFIX -${LIBWFUT_VERSION_MAJOR}.${LIBWFUT_VERSION_MINOR})
 
 set(LIBWFUT_ABI_CURRENT 2)
-set(LIBWFUT_ABI_REVISION 1)
+set(LIBWFUT_ABI_REVISION 2)
 set(LIBWFUT_ABI_AGE 1)
 math(EXPR LIBWFUT_SOVERSION ${LIBWFUT_ABI_CURRENT}-${LIBWFUT_ABI_AGE})
 set(LIBWFUT_ABI_VERSION ${LIBWFUT_SOVERSION}.${LIBWFUT_ABI_AGE}.${LIBWFUT_ABI_REVISION})
@@ -75,6 +75,14 @@ set(REQUIRES "sigc++-2.0 libcurl")
 
 # Define source files for libraries
 
+add_subdirectory("external")
+
+#add_library(tinyxml
+#        libwfut/tinystr.cpp
+#        libwfut/tinyxml.cpp
+#        libwfut/tinyxmlerror.cpp
+#        libwfut/tinyxmlparser.cpp)
+
 set(SOURCE_FILES
         libwfut/ChannelParser.cpp
         libwfut/ChannelWriter.cpp
@@ -85,10 +93,6 @@ set(SOURCE_FILES
         libwfut/IO.cpp
         libwfut/MirrorParser.cpp
         libwfut/platform.cpp
-        libwfut/tinystr.cpp
-        libwfut/tinyxml.cpp
-        libwfut/tinyxmlerror.cpp
-        libwfut/tinyxmlparser.cpp
         libwfut/WFUT.cpp)
 
 set(HEADER_FILES
@@ -100,13 +104,12 @@ set(HEADER_FILES
         libwfut/header.h
         libwfut/IO.h
         libwfut/platform.h
-        libwfut/tinystr.h
-        libwfut/tinyxml.h
         libwfut/types.h
         libwfut/WFUT.h)
 
 wf_add_library(${LIBNAME} SOURCE_FILES HEADER_FILES)
 target_compile_options(${LIBNAME} PRIVATE ${WF_WARNING_FLAGS})
+target_link_libraries(${LIBNAME} tinyxml)
 
 # The "wfut" tool
 add_executable(wfut tools/wfut.cpp)
