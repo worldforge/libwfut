@@ -2,7 +2,7 @@
 // the GNU Lesser General Public License (See COPYING for details).
 // Copyright (C) 2005 - 2007 Simon Goodall
 
-#include "external/tinyxml/tinyxml.h"
+#include "tinyxml/tinyxml.h"
 
 #include "libwfut/types.h"
 #include "libwfut/FileIO.h"

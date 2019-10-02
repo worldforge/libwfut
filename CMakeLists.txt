@@ -24,7 +24,7 @@ set(LIBWFUT_ABI_VERSION ${LIBWFUT_SOVERSION}.${LIBWFUT_ABI_AGE}.${LIBWFUT_ABI_RE
 # Set compiler flags
 set(WF_WARNING_FLAGS -Wall -Winit-self -Wcast-qual -Wwrite-strings -Wextra -Wundef -Wmissing-declarations -Wno-unused-parameter -Wshadow -Wno-missing-field-initializers -Wno-long-long)
 
-include_directories("${PROJECT_SOURCE_DIR}")
+include_directories("${PROJECT_SOURCE_DIR}/src" "${PROJECT_SOURCE_DIR}/external")
 # Tell Tiny XML to use STL classes.
 add_definitions(-DTIXML_USE_STL=1)
 add_definitions(-DVERSION="${VERSION}")
@@ -43,6 +43,7 @@ macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
             VERSION ${LIBWFUT_ABI_VERSION}
             SOVERSION ${LIBWFUT_SOVERSION}
             )
+    target_compile_options(${_LIB_NAME} PRIVATE ${WF_WARNING_FLAGS})
 
     install(TARGETS ${_LIB_NAME}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
@@ -51,8 +52,6 @@ macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
         get_filename_component(dir ${file} DIRECTORY)
         install(FILES ${file} DESTINATION include/${PROJECT_NAME}${SUFFIX}/${dir})
     endforeach ()
-
-    set(PKG_CONFIG_LIBS "-l${_LIB_NAME} ${PKG_CONFIG_LIBS}")
 
     target_link_libraries(${_LIB_NAME} ${WF_LIBRARIES})
 
@@ -76,62 +75,27 @@ set(REQUIRES "sigc++-2.0 libcurl")
 # Define source files for libraries
 
 add_subdirectory("external")
-
+add_subdirectory(src)
 #add_library(tinyxml
 #        libwfut/tinystr.cpp
 #        libwfut/tinyxml.cpp
 #        libwfut/tinyxmlerror.cpp
 #        libwfut/tinyxmlparser.cpp)
 
-set(SOURCE_FILES
-        libwfut/ChannelParser.cpp
-        libwfut/ChannelWriter.cpp
-        libwfut/crc32.cpp
-        libwfut/Encoder.cpp
-        libwfut/FileParser.cpp
-        libwfut/FileWriter.cpp
-        libwfut/IO.cpp
-        libwfut/MirrorParser.cpp
-        libwfut/platform.cpp
-        libwfut/WFUT.cpp)
-
-set(HEADER_FILES
-        libwfut/ChannelFileList.h
-        libwfut/ChannelIO.h
-        libwfut/crc32.h
-        libwfut/Encoder.h
-        libwfut/FileIO.h
-        libwfut/header.h
-        libwfut/IO.h
-        libwfut/platform.h
-        libwfut/types.h
-        libwfut/WFUT.h)
-
-wf_add_library(${LIBNAME} SOURCE_FILES HEADER_FILES)
-target_compile_options(${LIBNAME} PRIVATE ${WF_WARNING_FLAGS})
-target_link_libraries(${LIBNAME} tinyxml)
-
-# The "wfut" tool
-add_executable(wfut tools/wfut.cpp)
-target_compile_options(wfut PRIVATE ${WF_WARNING_FLAGS})
-target_link_libraries(wfut ${LIBNAME})
-install(TARGETS wfut
-        DESTINATION ${CMAKE_INSTALL_BINDIR})
-
 # pkg-config files
-configure_file(${PROJECT_NAME}.pc.in ${PROJECT_NAME}${SUFFIX}.pc @ONLY)
+configure_file(tools/${PROJECT_NAME}.pc.in ${PROJECT_NAME}${SUFFIX}.pc @ONLY)
 install(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}${SUFFIX}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # RPM spec files
 #TODO: fix these
-configure_file(${PROJECT_NAME}.spec.in ${PROJECT_NAME}.spec @ONLY)
+configure_file(tools/${PROJECT_NAME}.spec.in ${PROJECT_NAME}.spec @ONLY)
 
 # man files
-install(FILES man/man1/wfut.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
+install(FILES docs/man/man1/wfut.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
 
 # Doxygen support, exports a "docs" target.
 
-configure_file(libwfut.dox.in libwfut.dox @ONLY)
+configure_file(docs/libwfut.dox.in libwfut.dox @ONLY)
 find_package(Doxygen)
 
 if (DOXYGEN_FOUND)

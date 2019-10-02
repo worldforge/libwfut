@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import os, sys
 from ConfigParser import ConfigParser
-from libwfut import WFUT
 from libwfut import WFUTCore
 
 ## Read global/local config files
