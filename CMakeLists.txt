@@ -32,7 +32,7 @@ add_definitions(-DVERSION="${VERSION}")
 # Meta data
 
 set(LIBNAME "wfut${SUFFIX}")
-set(DESCRIPTION "A client side C++ implementation of WFUT (WorldForge Update Tool). It is designed to be used by client applications in downloading data file updates from a web server.")
+set(DESCRIPTION "A client side C++ implementation of WFUT (WorldForge Update Tool).")
 
 
 # This macro defines a library
@@ -93,15 +93,15 @@ configure_file(tools/${PROJECT_NAME}.spec.in ${PROJECT_NAME}.spec @ONLY)
 # man files
 install(FILES docs/man/man1/wfut.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
 
-# Doxygen support, exports a "docs" target.
+# Doxygen support, exports a "dox" target.
 
-configure_file(docs/libwfut.dox.in libwfut.dox @ONLY)
+configure_file(docs/Doxyfile.in Doxyfile @ONLY)
 find_package(Doxygen)
 
 if (DOXYGEN_FOUND)
 
-    set(DOXYGEN_INPUT ${CMAKE_CURRENT_BINARY_DIR}/libwfut.dox)
-    set(DOXYGEN_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/doc)
+    set(DOXYGEN_INPUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+    set(DOXYGEN_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/docs)
 
     add_custom_command(
             OUTPUT ${DOXYGEN_OUTPUT}
@@ -112,7 +112,7 @@ if (DOXYGEN_FOUND)
             DEPENDS ${DOXYGEN_INPUT}
     )
 
-    add_custom_target(docs DEPENDS ${DOXYGEN_OUTPUT})
+    add_custom_target(dox DEPENDS ${DOXYGEN_OUTPUT})
 
 endif (DOXYGEN_FOUND)
 
