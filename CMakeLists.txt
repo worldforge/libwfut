@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.2)
 
-project(libwfut)
+project(wfut)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/tools/cmake)
 include(GNUInstallDirs)
 include(FindPkgConfig)
 
@@ -38,7 +39,7 @@ set(DESCRIPTION "A client side C++ implementation of WFUT (WorldForge Update Too
 # This macro defines a library
 macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
 
-    add_library(${_LIB_NAME} SHARED ${${_SOURCE_FILES_VAR}})
+    add_library(${_LIB_NAME} ${${_SOURCE_FILES_VAR}})
     set_target_properties(${_LIB_NAME} PROPERTIES
             VERSION ${LIBWFUT_ABI_VERSION}
             SOVERSION ${LIBWFUT_SOVERSION}
@@ -57,30 +58,49 @@ macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
 
 endmacro()
 
+set(WF_LIBRARY_DIRS)
+set(WF_INCLUDE_DIRS)
+set(WF_LIBRARIES)
+
+if(EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    MESSAGE("Using Conan for dependency resolution.")
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup()
+endif()
+
+find_package(SigC++
+        2.0
+        REQUIRED)
+list(APPEND WF_LIBRARIES ${SIGC++_LIBRARY})
+list(APPEND WF_LIBRARY_DIRS ${SIGC++_LIBRARY_DIRS})
+list(APPEND WF_INCLUDE_DIRS ${SIGC++_INCLUDE_DIR})
+
 # Required for crc32 calculation
 find_package(ZLIB REQUIRED)
-include_directories(${ZLIB_INCLUDE_DIRS})
-link_libraries(${ZLIB_LIBRARIES})
+list(APPEND WF_LIBRARIES ${ZLIB_LIBRARIES})
+list(APPEND WF_INCLUDE_DIRS ${ZLIB_INCLUDE_DIR})
+list(APPEND WF_LIBRARY_DIRS ${ZLIB_LIBRARY_DIR})
+
+find_package(CURL 7 REQUIRED)
+list(APPEND WF_LIBRARIES ${CURL_LIBRARIES})
+list(APPEND WF_INCLUDE_DIRS ${CURL_INCLUDE_DIR})
+list(APPEND WF_LIBRARY_DIRS ${CURL_LIBRARY_DIR})
 
 #Add a "check" make target for tests to sync with other Worldforge components.
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
-pkg_check_modules(WF REQUIRED sigc++-2.0>=2.0.0 libcurl>=7.16.0)
+
 
 link_directories(${WF_LIBRARY_DIRS})
 include_directories(${WF_INCLUDE_DIRS})
+link_libraries(${WF_LIBRARIES})
 # Populate for pkg-config
 set(REQUIRES "sigc++-2.0 libcurl")
 
 # Define source files for libraries
 
-add_subdirectory("external")
+add_subdirectory(external)
 add_subdirectory(src)
-#add_library(tinyxml
-#        libwfut/tinystr.cpp
-#        libwfut/tinyxml.cpp
-#        libwfut/tinyxmlerror.cpp
-#        libwfut/tinyxmlparser.cpp)
 
 # pkg-config files
 configure_file(tools/${PROJECT_NAME}.pc.in ${PROJECT_NAME}${SUFFIX}.pc @ONLY)
