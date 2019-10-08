@@ -16,7 +16,7 @@ class LibWFUTConan(ConanFile):
     generators = "cmake"
     requires = ["sigc++/2.10.0@bincrafters/stable",
                 "zlib/1.2.11",
-                "libcurl/7.64.1@bincrafters/stable"]
+                "libcurl/7.66.0@bincrafters/stable"]
 
     scm = {
         "type": "git",
