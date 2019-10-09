@@ -24,7 +24,7 @@ set(LIBWFUT_ABI_VERSION ${LIBWFUT_SOVERSION}.${LIBWFUT_ABI_AGE}.${LIBWFUT_ABI_RE
 
 # Set compiler flags
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    set(WF_WARNING_FLAGS /Wall)
+    set(WF_WARNING_FLAGS /W3)
 else ()
     set(WF_WARNING_FLAGS -Wall -Winit-self -Wcast-qual -Wwrite-strings -Wextra -Wundef -Wmissing-declarations -Wno-unused-parameter -Wshadow -Wno-missing-field-initializers -Wno-long-long)
 endif ()
