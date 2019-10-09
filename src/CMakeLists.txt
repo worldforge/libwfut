@@ -8,7 +8,8 @@ set(SOURCE_FILES
         libwfut/IO.cpp
         libwfut/MirrorParser.cpp
         libwfut/platform.cpp
-        libwfut/WFUT.cpp)
+        libwfut/WFUT.cpp
+        $<TARGET_OBJECTS:tinyxml>)
 
 set(HEADER_FILES
         libwfut/ChannelFileList.h
@@ -23,7 +24,6 @@ set(HEADER_FILES
         libwfut/WFUT.h)
 
 wf_add_library(${LIBNAME} SOURCE_FILES HEADER_FILES)
-target_link_libraries(${LIBNAME} tinyxml)
 
 # The "wfut" tool
 add_executable(wfut wfut.cpp)
