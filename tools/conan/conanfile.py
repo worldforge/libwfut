@@ -14,7 +14,7 @@ class LibWFUTConan(ConanFile):
     options = {"shared": [False, True]}
     default_options = {"shared": False}
     generators = "cmake"
-    requires = ["sigc++/2.10.2@worldforge/stable",
+    requires = ["sigc++/2.10.0@worldforge/stable",
                 "zlib/1.2.11",
                 "libcurl/7.66.0@worldforge/stable"]
 
