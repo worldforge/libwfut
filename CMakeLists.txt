@@ -52,7 +52,7 @@ macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
             )
     target_compile_options(${_LIB_NAME} PRIVATE ${WF_WARNING_FLAGS})
 
-    install(TARGETS ${_LIB_NAME}
+    install(TARGETS ${_LIB_NAME} EXPORT
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
@@ -61,7 +61,7 @@ macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
         install(FILES ${file} DESTINATION include/${PROJECT_NAME}${SUFFIX}/${dir})
     endforeach ()
 
-    target_link_libraries(${_LIB_NAME} ${WF_LIBRARIES})
+    target_link_libraries(${_LIB_NAME} PUBLIC ${WF_LIBRARIES})
 
 endmacro()
 
