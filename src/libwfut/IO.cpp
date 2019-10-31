@@ -2,11 +2,8 @@
 // the GNU Lesser General Public License (See COPYING for details).
 // Copyright (C) 2005 - 2008 Simon Goodall
 
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <dirent.h>
-#include <errno.h>
-#include <stdio.h>
+#include <cstdio>
 #include <algorithm>
 
 #include "libwfut/IO.h"

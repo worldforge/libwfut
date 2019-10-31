@@ -16,8 +16,8 @@ namespace WFUT {
  */ 
 class ChannelFileList {
 public:
-  ChannelFileList() {}
-  virtual ~ChannelFileList() {}
+  ChannelFileList() = default;
+  virtual ~ChannelFileList() = default;
 
   /**
    * Returns the name of the channel.
@@ -44,7 +44,7 @@ public:
    * Removes a FileObject from this channel by it's filename.
    */ 
   void removeFile(const std::string &filename) {
-    FileMap::iterator I = m_fileMap.find(filename);
+    auto I = m_fileMap.find(filename);
     if (I != m_fileMap.end()) m_fileMap.erase(I);
   }
 

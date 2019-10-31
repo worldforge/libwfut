@@ -4,7 +4,7 @@
 
 #include <zlib.h>
 #include <string>
-#include <stdio.h>
+#include <cstdio>
 
 #include "crc32.h"
 namespace WFUT {
