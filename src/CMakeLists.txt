@@ -25,13 +25,19 @@ set(HEADER_FILES
 
 wf_add_library(${LIBNAME} SOURCE_FILES HEADER_FILES)
 
-# The "wfut" tool
-add_executable(wfut wfut.cpp)
-target_compile_options(wfut PRIVATE ${WF_WARNING_FLAGS})
-target_link_libraries(wfut ${LIBNAME})
-if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
-    conan_target_link_libraries(wfut)
-endif ()
+if (WIN32)
+	target_include_directories(${LIBNAME} PRIVATE "../external/dirent")
+endif()
 
-install(TARGETS wfut
-        DESTINATION ${CMAKE_INSTALL_BINDIR})
+if (NOT WIN32)
+	# The "wfut" tool
+	add_executable(wfut wfut.cpp)
+	target_compile_options(wfut PRIVATE ${WF_WARNING_FLAGS})
+	target_link_libraries(wfut ${LIBNAME})
+	if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+		conan_target_link_libraries(wfut)
+	endif ()
+
+	install(TARGETS wfut
+			DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
