@@ -47,8 +47,8 @@ script:
     fi
   - conan install ../tools/conan -pr default --build=missing
   - cmake -DBUILD_SHARED_LIBS=OFF ..
-  - make
-  - make check
+  - make || travis_terminate 1
+  - make check || travis_terminate 1
   #  - if [ "$TRAVIS_OS_NAME" != "osx" -a "$CC" == "gcc" ]; then make dox; fi
   - |
     if [[ x"$CONAN_PASSWORD" != "x" && x"$CONAN_LOGIN_USERNAME" != "x" ]]; then
