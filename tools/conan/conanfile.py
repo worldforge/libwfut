@@ -11,8 +11,8 @@ class LibWFUTConan(ConanFile):
     description = "A client side C++ implementation of WFUT (WorldForge Update Tool)."
     topics = ("mmorpg", "worldforge")
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [False, True]}
-    default_options = {"shared": False}
+    options = {"shared": [False, True], "fPIC": [True, False]}
+    default_options = {"shared": False, "fPIC": True}
     generators = "cmake"
     requires = ["sigc++/2.10.0@worldforge/stable",
                 "zlib/1.2.11",
