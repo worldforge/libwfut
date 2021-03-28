@@ -26,8 +26,7 @@ jobs:
     - name: Install autotools
       shell: bash
       run: |
-            env
-            if [[ "$ImageOS" == "macos10" ]]; then
+            if [[ "$ImageOS" == "macos1015" ]]; then
               brew install autoconf automake
             fi
     
