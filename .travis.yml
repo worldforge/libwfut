@@ -66,5 +66,5 @@ script:
       conan user -p $CONAN_PASSWORD -r worldforge $CONAN_LOGIN_USERNAME
       conan remove -f libwfut/*
       conan create ../tools/conan worldforge/testing -pr default --build outdated
-      conan upload "libwfut/*@worldforge/testing" -r worldforge -c --all
+      conan upload "*" -r worldforge -c --all
     fi
