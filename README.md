@@ -2,7 +2,8 @@
 
 [![Join us on Gitter!](https://badges.gitter.im/Worldforge.svg)](https://gitter.im/Worldforge/Lobby)
 [![Appveyor build status](https://ci.appveyor.com/api/projects/status/github/worldforge/libwfut?branch=master&svg=true)](https://ci.appveyor.com/project/erikogenvik/libwfut)
-[![Travis build Status](https://travis-ci.com/worldforge/libwfut.svg?branch=master)](https://travis-ci.com/worldforge/libwfut)
+[![Travis build status](https://travis-ci.com/worldforge/libwfut.svg?branch=master)](https://travis-ci.com/worldforge/libwfut)
+[![Github build status](https://github.com/worldforge/libwfut/actions/workflows/cmake.yml/badge.svg)](https://github.com/worldforge/libwfut/actions/workflows/cmake.yml)
 
 libwfut is a C++ implementation of the client side of the 
 [WorldForge](http://worldforge.org/ "The main Worldforge site") Update Tool (WFUT).
@@ -19,7 +20,7 @@ components used by Worldforge.
 
 Alternatively you can use [Conan](https://www.conan.io) to install all dependencies. 
 ```bash
-conan remote add worldforge https://api.bintray.com/conan/worldforge/worldforge-conan
+conan remote add worldforge https://artifactory.ogenvik.org/artifactory/api/conan/conan
 mkdir build && cd build
 conan install ../tools/conan --build missing
 cmake ..
