@@ -2,5 +2,5 @@
 #include <libwfut/WFUT.h>
 
 int main() {
-    WFUT::WFUTClient tested();
+    WFUT::WFUTClient tested;
 }
