@@ -79,9 +79,9 @@ endif ()
 find_package(SigC++
         2.0
         REQUIRED)
-list(APPEND WF_LIBRARIES ${SIGC++_LIBRARY})
-list(APPEND WF_LIBRARY_DIRS ${SIGC++_LIBRARY_DIRS})
-list(APPEND WF_INCLUDE_DIRS ${SIGC++_INCLUDE_DIR})
+list(APPEND WF_LIBRARIES ${SigC++_LIBRARY})
+list(APPEND WF_LIBRARY_DIRS ${SigC++_LIBRARY_DIRS})
+list(APPEND WF_INCLUDE_DIRS ${SigC++_INCLUDE_DIR})
 
 # Required for crc32 calculation
 find_package(ZLIB REQUIRED)
