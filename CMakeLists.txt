@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.23)
 
 project(wfut)
 set(CMAKE_CXX_STANDARD 14)
@@ -9,18 +9,18 @@ include(FindPkgConfig)
 
 # Version setup
 
-set(LIBWFUT_VERSION_MAJOR 0)
-set(LIBWFUT_VERSION_MINOR 2)
-set(LIBWFUT_VERSION_PATCH 4)
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 2)
+set(VERSION_PATCH 4)
 
-set(VERSION ${LIBWFUT_VERSION_MAJOR}.${LIBWFUT_VERSION_MINOR}.${LIBWFUT_VERSION_PATCH})
-set(SUFFIX -${LIBWFUT_VERSION_MAJOR}.${LIBWFUT_VERSION_MINOR})
+set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+set(SUFFIX -${VERSION_MAJOR}.${VERSION_MINOR})
 
-set(LIBWFUT_ABI_CURRENT 2)
-set(LIBWFUT_ABI_REVISION 2)
-set(LIBWFUT_ABI_AGE 1)
-math(EXPR LIBWFUT_SOVERSION ${LIBWFUT_ABI_CURRENT}-${LIBWFUT_ABI_AGE})
-set(LIBWFUT_ABI_VERSION ${LIBWFUT_SOVERSION}.${LIBWFUT_ABI_AGE}.${LIBWFUT_ABI_REVISION})
+set(ABI_CURRENT 2)
+set(ABI_REVISION 2)
+set(ABI_AGE 1)
+math(EXPR SOVERSION ${ABI_CURRENT}-${ABI_AGE})
+set(ABI_VERSION ${SOVERSION}.${ABI_AGE}.${ABI_REVISION})
 
 option(BUILD_SHARED_LIBS "Build libraries as shared as opposed to static." ON)
 
@@ -39,7 +39,7 @@ add_definitions(-DVERSION="${VERSION}")
 
 # Meta data
 
-set(LIBNAME "wfut${SUFFIX}")
+set(LIBNAME "wfut")
 set(DESCRIPTION "A client side C++ implementation of WFUT (WorldForge Update Tool).")
 
 
@@ -48,59 +48,46 @@ macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
 
     add_library(${_LIB_NAME} ${${_SOURCE_FILES_VAR}})
     set_target_properties(${_LIB_NAME} PROPERTIES
-            VERSION ${LIBWFUT_ABI_VERSION}
-            SOVERSION ${LIBWFUT_SOVERSION}
+            VERSION ${ABI_VERSION}
+            SOVERSION ${SOVERSION}
             )
-    target_compile_options(${_LIB_NAME} PRIVATE ${WF_WARNING_FLAGS})
-
-    install(TARGETS ${_LIB_NAME} EXPORT
+    target_compile_options(${_LIB_NAME} PUBLIC ${WF_WARNING_FLAGS})
+    target_sources(${_LIB_NAME} PUBLIC FILE_SET headers TYPE HEADERS FILES
+            ${${_HEADER_FILES_VAR}})
+    target_include_directories(${_LIB_NAME}
+            PUBLIC
+            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
+            "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
+            )
+    install(TARGETS ${_LIB_NAME}
+            EXPORT "${PROJECT_NAME}Targets"
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
-    foreach (file ${${_HEADER_FILES_VAR}})
-        get_filename_component(dir ${file} DIRECTORY)
-        install(FILES ${file} DESTINATION include/${PROJECT_NAME}${SUFFIX}/${dir})
-    endforeach ()
-
-    target_link_libraries(${_LIB_NAME} PUBLIC ${WF_LIBRARIES})
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            FILE_SET headers DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+            )
 
 endmacro()
 
-set(WF_LIBRARY_DIRS)
-set(WF_INCLUDE_DIRS)
-set(WF_LIBRARIES)
 
-if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
-    MESSAGE("Using Conan for dependency resolution.")
-    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    conan_basic_setup()
+if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
+    message(STATUS "Using Conan for dependency resolution.")
+    include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 endif ()
 
-find_package(SigC++
+find_package(sigc++
         2.0
         REQUIRED)
-list(APPEND WF_LIBRARIES ${SigC++_LIBRARY})
-list(APPEND WF_LIBRARY_DIRS ${SigC++_LIBRARY_DIRS})
-list(APPEND WF_INCLUDE_DIRS ${SigC++_INCLUDE_DIR})
 
 # Required for crc32 calculation
 find_package(ZLIB REQUIRED)
-list(APPEND WF_LIBRARIES ${ZLIB_LIBRARIES})
-list(APPEND WF_INCLUDE_DIRS ${ZLIB_INCLUDE_DIR})
-list(APPEND WF_LIBRARY_DIRS ${ZLIB_LIBRARY_DIR})
 
 find_package(CURL 7 REQUIRED)
-list(APPEND WF_LIBRARIES ${CURL_LIBRARIES})
-list(APPEND WF_INCLUDE_DIRS ${CURL_INCLUDE_DIR})
-list(APPEND WF_LIBRARY_DIRS ${CURL_LIBRARY_DIR})
 
 #Add a "check" make target for tests to sync with other Worldforge components.
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
-
-link_directories(${WF_LIBRARY_DIRS})
-include_directories(${WF_INCLUDE_DIRS})
-link_libraries(${WF_LIBRARIES})
 # Populate for pkg-config
 set(REQUIRES "sigc++-2.0 libcurl")
 
@@ -110,8 +97,8 @@ add_subdirectory(external)
 add_subdirectory(src)
 
 # pkg-config files
-configure_file(tools/${PROJECT_NAME}.pc.in ${PROJECT_NAME}${SUFFIX}.pc @ONLY)
-install(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}${SUFFIX}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+configure_file(tools/${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc @ONLY)
+install(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # RPM spec files
 #TODO: fix these
@@ -153,6 +140,11 @@ add_custom_target(changelog DEPENDS ChangeLog)
 # CMake config files
 include(CMakePackageConfigHelpers)
 
+install(EXPORT "${PROJECT_NAME}Targets"
+        FILE "${PROJECT_NAME}Targets.cmake"
+        NAMESPACE "${PROJECT_NAME}::"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+        )
 configure_package_config_file(tools/Config.cmake.in ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}Config.cmake
         INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
         PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR)
@@ -171,9 +163,9 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${DESCRIPTION})
 set(CPACK_PACKAGE_VENDOR "Worldforge")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING")
-set(CPACK_PACKAGE_VERSION_MAJOR "${LIBWFUT_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${LIBWFUT_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH "${LIBWFUT_VERSION_PATCH}")
+set(CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${VERSION_PATCH}")
 #set(CPACK_INSTALL_SCRIPT "sh ${CMAKE_SOURCE_DIR}/support/generate-ChangeLog.sh ${CMAKE_SOURCE_DIR} ${CPACK_PACKAGE_INSTALL_DIRECTORY} 8bd480b053190ffde2afe33af66f484953036f5a")
 
 set(CPACK_SOURCE_GENERATOR TBZ2 ZIP)

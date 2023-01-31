@@ -8,8 +8,7 @@ set(SOURCE_FILES
         libwfut/IO.cpp
         libwfut/MirrorParser.cpp
         libwfut/platform.cpp
-        libwfut/WFUT.cpp
-        $<TARGET_OBJECTS:tinyxml>)
+        libwfut/WFUT.cpp)
 
 set(HEADER_FILES
         libwfut/ChannelFileList.h
@@ -24,20 +23,25 @@ set(HEADER_FILES
         libwfut/WFUT.h)
 
 wf_add_library(${LIBNAME} SOURCE_FILES HEADER_FILES)
+target_link_libraries(${LIBNAME} PRIVATE
+        tinyxml)
+target_link_libraries(${LIBNAME} PUBLIC
+        sigc++::sigc++
+        CURL::libcurl
+        ZLIB::ZLIB)
 
 if (WIN32)
-	target_include_directories(${LIBNAME} PRIVATE "../external/dirent")
-endif()
+    target_include_directories(${LIBNAME} PRIVATE "../external/dirent")
+endif ()
 
 if (NOT WIN32)
-	# The "wfut" tool
-	add_executable(wfut wfut.cpp)
-	target_compile_options(wfut PRIVATE ${WF_WARNING_FLAGS})
-	target_link_libraries(wfut ${LIBNAME})
-	if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
-		conan_target_link_libraries(wfut)
-	endif ()
-
-	install(TARGETS wfut
-			DESTINATION ${CMAKE_INSTALL_BINDIR})
-endif()
+    # The "wfut" tool
+    add_executable(wfut-bin wfut.cpp)
+    target_compile_options(wfut-bin PRIVATE ${WF_WARNING_FLAGS})
+    target_link_libraries(wfut-bin PUBLIC
+            ${LIBNAME})
+    set_target_properties(wfut-bin
+            PROPERTIES OUTPUT_NAME wfut)
+    install(TARGETS wfut-bin
+            DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif ()
