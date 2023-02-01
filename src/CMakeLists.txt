@@ -23,8 +23,8 @@ set(HEADER_FILES
         libwfut/WFUT.h)
 
 wf_add_library(${LIBNAME} SOURCE_FILES HEADER_FILES)
-target_link_libraries(${LIBNAME} PRIVATE
-        tinyxml)
+target_sources(${LIBNAME} PRIVATE $<TARGET_OBJECTS:tinyxml>)
+
 target_link_libraries(${LIBNAME} PUBLIC
         sigc++::sigc++
         CURL::libcurl

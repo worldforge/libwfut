@@ -1,4 +1,4 @@
-add_library(tinyxml STATIC
+add_library(tinyxml OBJECT
         tinystr.cpp
         tinyxml.cpp
         tinyxmlerror.cpp
