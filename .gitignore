@@ -27,3 +27,4 @@ abi_report
 cmake-*
 .idea
 build
+CMakeUserPresets.json
