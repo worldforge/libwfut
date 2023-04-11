@@ -74,16 +74,6 @@ macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
 
 endmacro()
 
-
-if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
-    message(STATUS "Using Conan for dependency resolution.")
-    include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
-    if (${CONAN_CMAKE_POSITION_INDEPENDENT_CODE})
-        message(STATUS "Enabling position independent code")
-        set(CMAKE_POSITION_INDEPENDENT_CODE ${CONAN_CMAKE_POSITION_INDEPENDENT_CODE})
-    endif ()
-endif ()
-
 find_package(sigc++
         2.0
         REQUIRED)
