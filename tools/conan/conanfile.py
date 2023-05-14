@@ -8,7 +8,7 @@ from conans.errors import ConanException
 
 
 class LibWFUTConan(ConanFile):
-    name = "libwfut"
+    name = "wfut"
     version = "0.2.4"
     license = "GPL-2.0+"
     author = "Erik Ogenvik <erik@ogenvik.org>"
@@ -20,10 +20,13 @@ class LibWFUTConan(ConanFile):
     options = {"shared": [False, True], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
     generators = "CMakeToolchain", "CMakeDeps"
-    requires = ["libsigcpp/2.10.8",
-                "zlib/1.2.13",
-                "libcurl/7.87.0"]
     user = "worldforge"
+    package_type = "library"
+
+    def requirements(self):
+        self.requires("libsigcpp/2.10.8", transitive_headers=True)
+        self.requires("zlib/1.2.13")
+        self.requires("libcurl/7.87.0")
 
     def export(self):
         git = Git(self, self.recipe_folder)

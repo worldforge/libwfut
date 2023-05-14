@@ -3,7 +3,7 @@ project(PackageTest CXX)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 
-find_package(libwfut CONFIG REQUIRED)
+find_package(wfut CONFIG REQUIRED)
 
 add_executable(example example.cpp)
-target_link_libraries(example libwfut::libwfut)
+target_link_libraries(example wfut::wfut)
