@@ -24,7 +24,7 @@ class LibWFUTConan(ConanFile):
     package_type = "library"
 
     def requirements(self):
-        self.requires("libsigcpp/2.10.8", transitive_headers=True)
+        self.requires("sigc++/2.10.0@worldforge", transitive_headers=True)
         self.requires("zlib/1.2.13")
         self.requires("libcurl/7.87.0")
 
