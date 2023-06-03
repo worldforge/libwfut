@@ -21,6 +21,7 @@
 #include <libwfut/WFUT.h>
 #include <libwfut/Encoder.h>
 #include <libwfut/platform.h>
+#include <random>
 
 using namespace WFUT;
 
@@ -197,8 +198,10 @@ int main(int argc, char *argv[]) {
 #else
     srand48((unsigned)time(NULL)); 
 #endif
+	std::random_device rd;
+	std::mt19937 g(rd());
     // Shuffle mirror list
-    std::random_shuffle(mirrors.begin(), mirrors.end());
+    std::shuffle(mirrors.begin(), mirrors.end(), g);
     // Pick first mirror
     server_root = (*mirrors.begin()).url;
   }
