@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 project(wfut)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/tools/cmake)
 include(GNUInstallDirs)
@@ -74,9 +74,7 @@ macro(wf_add_library _LIB_NAME _SOURCE_FILES_VAR _HEADER_FILES_VAR)
 
 endmacro()
 
-find_package(sigc++
-        2.0
-        REQUIRED)
+find_package(sigc++-3 3.0 REQUIRED)
 
 # Required for crc32 calculation
 find_package(ZLIB REQUIRED)
@@ -87,7 +85,7 @@ find_package(CURL 7 REQUIRED)
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
 # Populate for pkg-config
-set(REQUIRES "sigc++-2.0 libcurl")
+set(REQUIRES "sigc++-3.0 libcurl")
 
 # Define source files for libraries
 

@@ -26,12 +26,12 @@ WFUTError WFUTClient::init() {
   m_io = new IO();
   if (m_io->init()) {
     delete m_io;
-    m_io = NULL;
+    m_io = nullptr;
     return WFUT_GENERAL_ERROR;
   }
  
-  m_io->DownloadComplete.connect(sigc::mem_fun(this, &WFUTClient::onDownloadComplete));
-  m_io->DownloadFailed.connect(sigc::mem_fun(this, &WFUTClient::onDownloadFailed));
+  m_io->DownloadComplete.connect(sigc::mem_fun(*this, &WFUTClient::onDownloadComplete));
+  m_io->DownloadFailed.connect(sigc::mem_fun(*this, &WFUTClient::onDownloadFailed));
 
   m_initialised = true;
 
@@ -43,7 +43,7 @@ WFUTError WFUTClient::shutdown() {
 
   m_io->shutdown();
   delete m_io;
-  m_io = NULL;
+  m_io = nullptr;
 
   m_initialised = false;
 

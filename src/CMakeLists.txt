@@ -26,7 +26,7 @@ wf_add_library(${LIBNAME} SOURCE_FILES HEADER_FILES)
 target_sources(${LIBNAME} PRIVATE $<TARGET_OBJECTS:tinyxml>)
 
 target_link_libraries(${LIBNAME} PUBLIC
-        sigc++::sigc++
+        libsigcpp::sigc++
         CURL::libcurl
         ZLIB::ZLIB)
 

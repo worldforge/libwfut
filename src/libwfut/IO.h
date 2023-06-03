@@ -95,12 +95,12 @@ public:
   /**
    * The DownloadComplete signal is fired when a file is successfully downloade.
    */
-  sigc::signal<void, const std::string&, const std::string&> DownloadComplete;
+  sigc::signal<void(const std::string&, const std::string&)> DownloadComplete;
   /**
    * The DownloadFailed signal is fired when a file fails to download 
    * successfully.
    */
-  sigc::signal<void, const std::string&, const std::string&, const std::string&> DownloadFailed;
+  sigc::signal<void(const std::string&, const std::string&, const std::string&)> DownloadFailed;
 
   /**
    * Returns the maximum number of simultaneous downloads allowed.

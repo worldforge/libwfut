@@ -146,7 +146,7 @@ public:
     * downloaded. The first argument is the source url and the second argument
     * is the filename from the FileObject.
     */
-  sigc::signal<void, const std::string&, const std::string&> DownloadComplete;
+  sigc::signal<void(const std::string&, const std::string&)> DownloadComplete;
 
    /** The DownloadFailed signal is fired when there was a problem downloading 
     * a file. This could happen due to a broken url, or a problem saving the
@@ -155,7 +155,7 @@ public:
     * is the filename from the FileObject. The third argument is a message 
     * indicating a general reason why the download failed.
     */
-  sigc::signal<void, const std::string&, const std::string&, const std::string&> DownloadFailed;
+  sigc::signal<void(const std::string&, const std::string&, const std::string&)> DownloadFailed;
 
   /** The UpdateReason signal is fired every time a FileObject is processed
    * in the calculateUpdates function. If WFUT_UPDATE_MODIFIED is passed as a
@@ -163,7 +163,7 @@ public:
    * there are modifications to the local file. If an update is required, this
    * file can be manually added to the updates list.
    */
-  sigc::signal<void, const std::string&, const WFUTUpdateReason> UpdateReason;
+  sigc::signal<void(const std::string&, const WFUTUpdateReason)> UpdateReason;
 
   /** Abort all current and pending downloads.
    * The DownloadFailed signal will be fired with an "Aborted" message. 
