@@ -25,8 +25,8 @@ class LibWFUTConan(ConanFile):
 
     def requirements(self):
         self.requires("libsigcpp/3.0.7", transitive_headers=True)
-        self.requires("zlib/1.2.13")
-        self.requires("libcurl/7.88.1")
+        self.requires("zlib/1.2.13", transitive_headers=True)
+        self.requires("libcurl/7.88.1", transitive_headers=True)
 
     def export(self):
         git = Git(self, self.recipe_folder)
